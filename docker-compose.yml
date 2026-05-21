@@ -187,6 +187,18 @@ services:
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       AUTH_SERVICE_URL: http://katm-auth:8081
+      KATM_AUTH_URL: http://katm-auth:8081
+      KATM_CLIENT_URL: http://katm-client:8087
+      KATM_CLAIM_URL: http://katm-claim:8085
+      KATM_CONTRACT_URL: http://katm-contract:8086
+      KATM_REPORT_URL: http://katm-report:8084
+      KATM_NOTIFICATION_URL: http://katm-notification:8088
+      KATM_MIP_URL: http://katm-mip:8089
+      KATM_SCHEDULER_URL: http://katm-scheduler:8091
+      SPRING_CLOUD_KUBERNETES_ENABLED: 'false'
+      SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED: 'false'
+      SPRING_CLOUD_KUBERNETES_LOADBALANCER_ENABLED: 'false'
+      ACCESS_CHECK_ENABLED: 'false'
       ZIPKIN_URL: http://zipkin:9411
     depends_on:
       - keycloak
@@ -209,10 +221,12 @@ services:
       DB_SERVICE: ${DB_SERVICE}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      MIP_SERVICE_URL: http://katm-mip:8089
       ZIPKIN_URL: http://zipkin:9411
     depends_on:
       - keycloak
       - kafka
+      - katm-mip
     networks:
       - katm-network
 
@@ -231,12 +245,14 @@ services:
       DB_SERVICE: ${DB_SERVICE}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      MIP_SERVICE_URL: http://katm-mip:8089
       S3_ENDPOINT: http://minio:9000
       ZIPKIN_URL: http://zipkin:9411
     depends_on:
       - keycloak
       - kafka
       - minio
+      - katm-mip
     networks:
       - katm-network
 
@@ -269,15 +285,21 @@ services:
       dockerfile: services/katm-notification/Dockerfile
     container_name: katm-notification
     ports:
-      - "8082:8082"
+      - "8088:8088"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
-      KAFKA_SERVERS: kafka:29092
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-1521}
+      DB_SERVICE: ${DB_SERVICE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
       SMTP_HOST: ${SMTP_HOST:-smtp.gmail.com}
       SMTP_USER: ${SMTP_USER}
       SMTP_PASS: ${SMTP_PASS}
       ZIPKIN_URL: http://zipkin:9411
     depends_on:
+      - keycloak
       - kafka
     networks:
       - katm-network
@@ -311,10 +333,9 @@ services:
       dockerfile: services/katm-scheduler/Dockerfile
     container_name: katm-scheduler
     ports:
-      - "8088:8088"
+      - "8091:8091"
     environment:
-      KEYCLOAK_URL: http://keycloak:8080
-      KAFKA_SERVERS: kafka:29092
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
       DB_HOST: ${DB_HOST}
       DB_PORT: ${DB_PORT:-1521}
       DB_SERVICE: ${DB_SERVICE}
@@ -336,11 +357,12 @@ services:
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       KAFKA_SERVERS: kafka:29092
-      DB_HOST: ${DB_HOST}
-      DB_PORT: ${DB_PORT:-1521}
-      DB_SERVICE: ${DB_SERVICE}
-      DB_USER: ${DB_USER}
-      DB_PASSWORD: ${DB_PASSWORD}
+      MIP_WS_ID: ${MIP_WS_ID:-KATM}
+      MIP_CITIZEN_ENDPOINT: ${MIP_CITIZEN_ENDPOINT}
+      MIP_DOC_ENDPOINT: ${MIP_DOC_ENDPOINT}
+      MIP_TAX_ENDPOINT: ${MIP_TAX_ENDPOINT}
+      MIP_TIN_ENDPOINT: ${MIP_TIN_ENDPOINT}
+      MIP_DEBT_ENDPOINT: ${MIP_DEBT_ENDPOINT}
       ZIPKIN_URL: http://zipkin:9411
     depends_on:
       - kafka

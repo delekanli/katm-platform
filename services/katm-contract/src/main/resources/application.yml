@@ -5,8 +5,8 @@ spring:
   application:
     name: katm-contract
   datasource:
-    url: jdbc:oracle:thin:@//localhost:1521/KATMDB
-    username: katm_contract
+    url: jdbc:oracle:thin:@//${DB_HOST:localhost}:${DB_PORT:1521}/${DB_SERVICE:KATMDB}
+    username: ${DB_USER:katm_contract}
     password: ${DB_PASSWORD:katm_pass}
     driver-class-name: oracle.jdbc.OracleDriver
     hikari:

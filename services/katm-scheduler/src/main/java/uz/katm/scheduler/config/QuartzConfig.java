@@ -3,6 +3,7 @@ package uz.katm.scheduler.config;
 import org.jspecify.annotations.NullMarked;
 import org.quartz.*;
 import org.quartz.spi.TriggerFiredBundle;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.config.AutowireCapableBeanFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -32,7 +33,7 @@ public class QuartzConfig {
     }
 
     @Bean
-    public Trigger creditSyncTrigger(JobDetail creditSyncJobDetail) {
+    public Trigger creditSyncTrigger(@Qualifier("creditSyncJobDetail") JobDetail creditSyncJobDetail) {
         return TriggerBuilder.newTrigger()
                 .forJob(creditSyncJobDetail)
                 .withIdentity("creditSyncTrigger")
@@ -51,7 +52,7 @@ public class QuartzConfig {
     }
 
     @Bean
-    public Trigger smsSendTrigger(JobDetail smsSendJobDetail) {
+    public Trigger smsSendTrigger(@Qualifier("smsSendJobDetail") JobDetail smsSendJobDetail) {
         return TriggerBuilder.newTrigger()
                 .forJob(smsSendJobDetail)
                 .withIdentity("smsSendTrigger")

@@ -1,0 +1,185 @@
+# Infrastructure-only compose for local IDE development.
+# Run: docker-compose -f docker-compose.infra.yml up -d
+# Then start each service from IntelliJ using the run configs in .idea/runConfigurations/
+
+networks:
+  katm-network:
+    driver: bridge
+
+volumes:
+  keycloak-data:
+  kafka-data:
+  zookeeper-data:
+  minio-data:
+  grafana-data:
+  prometheus-data:
+  redis-data:
+
+services:
+
+  # ─── Zookeeper ────────────────────────────────────────────────
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.0
+    container_name: katm-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper/data
+    networks:
+      - katm-network
+
+  # ─── Kafka ────────────────────────────────────────────────────
+  # Accessible from IDE at localhost:9092
+  # Accessible between containers at kafka:29092
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: katm-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    networks:
+      - katm-network
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ─── Kafka UI ─────────────────────────────────────────────────
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: katm-kafka-ui
+    depends_on:
+      - kafka
+    ports:
+      - "8090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: katm-local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+    networks:
+      - katm-network
+
+  # ─── Keycloak ─────────────────────────────────────────────────
+  # Admin UI: http://localhost:8180  admin/admin
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.3
+    container_name: katm-keycloak
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+      KC_DB: dev-file
+      KC_HOSTNAME_STRICT: 'false'
+      KC_HTTP_ENABLED: 'true'
+    ports:
+      - "8180:8080"
+    volumes:
+      - keycloak-data:/opt/keycloak/data
+      - ./infra/keycloak/katm-realm.json:/opt/keycloak/data/import/realm-export.json
+    networks:
+      - katm-network
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\r\nHost: localhost\r\n\r\n' >&3 && cat <&3 | grep -q '200'"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+
+  # ─── MinIO (S3-compatible) ────────────────────────────────────
+  # API: http://localhost:9000  Console: http://localhost:9001  minioadmin/minioadmin
+  minio:
+    image: minio/minio:latest
+    container_name: katm-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    networks:
+      - katm-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  # ─── Zipkin ───────────────────────────────────────────────────
+  # UI: http://localhost:9411
+  zipkin:
+    image: openzipkin/zipkin:3
+    container_name: katm-zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - katm-network
+
+  # ─── Prometheus ───────────────────────────────────────────────
+  # UI: http://localhost:9090
+  prometheus:
+    image: prom/prometheus:v2.51.2
+    container_name: katm-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    networks:
+      - katm-network
+
+  # ─── Redis ────────────────────────────────────────────────────
+  # Used by: katm-client (session cache), katm-mip (response cache)
+  redis:
+    image: redis:7.4-alpine
+    container_name: katm-redis
+    command: redis-server --requirepass katm_redis_dev
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - katm-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "-a", "katm_redis_dev", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # ─── Grafana ──────────────────────────────────────────────────
+  # UI: http://localhost:3000  admin/admin
+  grafana:
+    image: grafana/grafana:10.4.2
+    container_name: katm-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: 'false'
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    networks:
+      - katm-network

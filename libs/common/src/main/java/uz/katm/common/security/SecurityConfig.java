@@ -1,5 +1,6 @@
 package uz.katm.common.security;
 
+import org.springframework.boot.autoconfigure.condition.ConditionalOnWebApplication;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.core.convert.converter.Converter;
@@ -23,11 +24,14 @@ import java.util.stream.Collectors;
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity
+@ConditionalOnWebApplication(type = ConditionalOnWebApplication.Type.SERVLET)
 public class SecurityConfig {
 
     private static final String[] PUBLIC_ENDPOINTS = {
-        "/actuator/health", "/actuator/health/**", "/actuator/info",
-        "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html"
+        "/actuator/health", "/actuator/health/**", "/actuator/info", "/actuator/**",
+        "/v3/api-docs/**", "/swagger-ui/**", "/swagger-ui.html", "/webjars/**",
+        "/api/v1/auth/**",
+        "/internal/**"
     };
 
     @Bean

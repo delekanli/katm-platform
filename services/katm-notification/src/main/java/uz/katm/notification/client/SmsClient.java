@@ -45,14 +45,14 @@ public class SmsClient {
     }
 
     public String sendSms(String recipient, String text, String messageId) {
-        PlayMobileRequest request = buildRequest(List.of(new Message(recipient, messageId, text)));
+        PlayMobileRequest request = buildRequest(List.of(new Message(recipient, messageId, 8, text)));
         log.debug("Sending SMS to recipient={}, messageId={}", recipient, messageId);
         return doPost("/broker-api/send", request);
     }
 
     public String sendBulkSms(List<String> recipients, String text) {
         List<Message> messages = recipients.stream()
-                .map(r -> new Message(r, UUID.randomUUID().toString().replace("-", "").substring(0, 20), text))
+                .map(r -> new Message(r, UUID.randomUUID().toString().replace("-", "").substring(0, 20), null, text))
                 .toList();
         PlayMobileRequest request = buildRequest(messages);
         log.debug("Sending bulk SMS to {} recipients", recipients.size());
@@ -65,6 +65,7 @@ public class SmsClient {
                         .map(m -> new PlayMobileMessage(
                                 m.recipient(),
                                 m.messageId(),
+                                m.priority(),
                                 new PlayMobileSms(sender, new PlayMobileContent(m.text()))
                         ))
                         .toList()
@@ -84,5 +85,5 @@ public class SmsClient {
         }
     }
 
-    private record Message(String recipient, String messageId, String text) {}
+    private record Message(String recipient, String messageId, Integer priority, String text) {}
 }

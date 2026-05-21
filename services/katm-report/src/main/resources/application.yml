@@ -5,8 +5,8 @@ spring:
   application:
     name: katm-report
   datasource:
-    url: jdbc:oracle:thin:@//localhost:1521/KATMDB
-    username: katm_report
+    url: jdbc:oracle:thin:@//${DB_HOST:localhost}:${DB_PORT:1521}/${DB_SERVICE:KATMDB}
+    username: ${DB_USER:katm_report}
     password: ${DB_PASSWORD:katm_pass}
     driver-class-name: oracle.jdbc.OracleDriver
     hikari:
@@ -41,9 +41,9 @@ management:
     web:
       exposure:
         include: health,info,prometheus
-  metrics:
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: true
   tracing:
     sampling:

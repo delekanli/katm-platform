@@ -18,117 +18,117 @@ spring:
           issuer-uri: ${KEYCLOAK_URL:http://localhost:8180}/realms/katm
   cloud:
     kubernetes:
+      enabled: ${SPRING_CLOUD_KUBERNETES_ENABLED:false}
       discovery:
-        enabled: true
+        enabled: ${SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED:false}
         all-namespaces: false
       loadbalancer:
+        enabled: ${SPRING_CLOUD_KUBERNETES_LOADBALANCER_ENABLED:false}
         mode: SERVICE
     gateway:
-      default-filters:
-        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
-      routes:
-        # --- Business services ---
-        - id: katm-auth
-          uri: ${KATM_AUTH_URL:lb://katm-auth}
-          predicates:
-            - Path=/api/v1/auth/**
-          filters:
-            - StripPrefix=0
-        - id: katm-client
-          uri: ${KATM_CLIENT_URL:lb://katm-client}
-          predicates:
-            - Path=/api/v1/clients/**
-          filters:
-            - StripPrefix=0
-            - name: CircuitBreaker
-              args:
-                name: katm-client
-                fallbackUri: forward:/fallback
-        - id: katm-claim
-          uri: ${KATM_CLAIM_URL:lb://katm-claim}
-          predicates:
-            - Path=/api/v1/claims/**
-          filters:
-            - StripPrefix=0
-        - id: katm-contract
-          uri: ${KATM_CONTRACT_URL:lb://katm-contract}
-          predicates:
-            - Path=/api/v1/contracts/**
-          filters:
-            - StripPrefix=0
-        - id: katm-report
-          uri: ${KATM_REPORT_URL:lb://katm-report}
-          predicates:
-            - Path=/api/v1/reports/**
-          filters:
-            - StripPrefix=0
-        - id: katm-notification
-          uri: ${KATM_NOTIFICATION_URL:lb://katm-notification}
-          predicates:
-            - Path=/api/v1/notifications/**
-          filters:
-            - StripPrefix=0
-        - id: katm-mip
-          uri: ${KATM_MIP_URL:lb://katm-mip}
-          predicates:
-            - Path=/api/v1/mip/**
-          filters:
-            - StripPrefix=0
-        - id: katm-scheduler
-          uri: ${KATM_SCHEDULER_URL:lb://katm-scheduler}
-          predicates:
-            - Path=/api/v1/scheduler/**
-          filters:
-            - StripPrefix=0
-        # --- Swagger aggregation: /v3/api-docs/{service} → lb://service/v3/api-docs ---
-        - id: swagger-auth
-          uri: ${KATM_AUTH_URL:lb://katm-auth}
-          predicates:
-            - Path=/v3/api-docs/auth
-          filters:
-            - RewritePath=/v3/api-docs/auth, /v3/api-docs
-        - id: swagger-client
-          uri: ${KATM_CLIENT_URL:lb://katm-client}
-          predicates:
-            - Path=/v3/api-docs/client
-          filters:
-            - RewritePath=/v3/api-docs/client, /v3/api-docs
-        - id: swagger-claim
-          uri: ${KATM_CLAIM_URL:lb://katm-claim}
-          predicates:
-            - Path=/v3/api-docs/claim
-          filters:
-            - RewritePath=/v3/api-docs/claim, /v3/api-docs
-        - id: swagger-contract
-          uri: ${KATM_CONTRACT_URL:lb://katm-contract}
-          predicates:
-            - Path=/v3/api-docs/contract
-          filters:
-            - RewritePath=/v3/api-docs/contract, /v3/api-docs
-        - id: swagger-report
-          uri: ${KATM_REPORT_URL:lb://katm-report}
-          predicates:
-            - Path=/v3/api-docs/report
-          filters:
-            - RewritePath=/v3/api-docs/report, /v3/api-docs
-        - id: swagger-notification
-          uri: ${KATM_NOTIFICATION_URL:lb://katm-notification}
-          predicates:
-            - Path=/v3/api-docs/notification
-          filters:
-            - RewritePath=/v3/api-docs/notification, /v3/api-docs
-        - id: swagger-mip
-          uri: ${KATM_MIP_URL:lb://katm-mip}
-          predicates:
-            - Path=/v3/api-docs/mip
-          filters:
-            - RewritePath=/v3/api-docs/mip, /v3/api-docs
-        - id: swagger-scheduler
-          uri: ${KATM_SCHEDULER_URL:lb://katm-scheduler}
-          predicates:
-            - Path=/v3/api-docs/scheduler
-          filters:
-            - RewritePath=/v3/api-docs/scheduler, /v3/api-docs
+      server:
+        webflux:
+          default-filters:
+            - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+          routes:
+            # --- Business services ---
+            - id: katm-auth
+              uri: ${KATM_AUTH_URL:http://localhost:8081}
+              predicates:
+                - Path=/api/v1/auth/**
+              filters:
+                - StripPrefix=0
+            - id: katm-client
+              uri: ${KATM_CLIENT_URL:http://localhost:8087}
+              predicates:
+                - Path=/api/v1/clients/**
+              filters:
+                - StripPrefix=0
+            - id: katm-claim
+              uri: ${KATM_CLAIM_URL:http://localhost:8085}
+              predicates:
+                - Path=/api/v1/claims/**
+              filters:
+                - StripPrefix=0
+            - id: katm-contract
+              uri: ${KATM_CONTRACT_URL:http://localhost:8086}
+              predicates:
+                - Path=/api/v1/contracts/**
+              filters:
+                - StripPrefix=0
+            - id: katm-report
+              uri: ${KATM_REPORT_URL:http://localhost:8084}
+              predicates:
+                - Path=/api/v1/reports/**
+              filters:
+                - StripPrefix=0
+            - id: katm-notification
+              uri: ${KATM_NOTIFICATION_URL:http://localhost:8088}
+              predicates:
+                - Path=/api/v1/notifications/**
+              filters:
+                - StripPrefix=0
+            - id: katm-mip
+              uri: ${KATM_MIP_URL:http://localhost:8089}
+              predicates:
+                - Path=/api/v1/mip/**
+              filters:
+                - StripPrefix=0
+            - id: katm-scheduler
+              uri: ${KATM_SCHEDULER_URL:http://localhost:8091}
+              predicates:
+                - Path=/api/v1/scheduler/**
+              filters:
+                - StripPrefix=0
+            # --- Swagger aggregation ---
+            - id: swagger-auth
+              uri: ${KATM_AUTH_URL:http://localhost:8081}
+              predicates:
+                - Path=/v3/api-docs/auth
+              filters:
+                - RewritePath=/v3/api-docs/auth, /v3/api-docs
+            - id: swagger-client
+              uri: ${KATM_CLIENT_URL:http://localhost:8087}
+              predicates:
+                - Path=/v3/api-docs/client
+              filters:
+                - RewritePath=/v3/api-docs/client, /v3/api-docs
+            - id: swagger-claim
+              uri: ${KATM_CLAIM_URL:http://localhost:8085}
+              predicates:
+                - Path=/v3/api-docs/claim
+              filters:
+                - RewritePath=/v3/api-docs/claim, /v3/api-docs
+            - id: swagger-contract
+              uri: ${KATM_CONTRACT_URL:http://localhost:8086}
+              predicates:
+                - Path=/v3/api-docs/contract
+              filters:
+                - RewritePath=/v3/api-docs/contract, /v3/api-docs
+            - id: swagger-report
+              uri: ${KATM_REPORT_URL:http://localhost:8084}
+              predicates:
+                - Path=/v3/api-docs/report
+              filters:
+                - RewritePath=/v3/api-docs/report, /v3/api-docs
+            - id: swagger-notification
+              uri: ${KATM_NOTIFICATION_URL:http://localhost:8088}
+              predicates:
+                - Path=/v3/api-docs/notification
+              filters:
+                - RewritePath=/v3/api-docs/notification, /v3/api-docs
+            - id: swagger-mip
+              uri: ${KATM_MIP_URL:http://localhost:8089}
+              predicates:
+                - Path=/v3/api-docs/mip
+              filters:
+                - RewritePath=/v3/api-docs/mip, /v3/api-docs
+            - id: swagger-scheduler
+              uri: ${KATM_SCHEDULER_URL:http://localhost:8091}
+              predicates:
+                - Path=/v3/api-docs/scheduler
+              filters:
+                - RewritePath=/v3/api-docs/scheduler, /v3/api-docs
 
 katm:
   auth-service.url: ${AUTH_SERVICE_URL:http://localhost:8081}
@@ -168,8 +168,9 @@ management:
   metrics:
     tags:
       application: ${spring.application.name}
-    export:
-      prometheus:
+  prometheus:
+    metrics:
+      export:
         enabled: true
   tracing:
     sampling:
