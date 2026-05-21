@@ -1,0 +1,245 @@
+{
+  "realm": "katm",
+  "displayName": "KATM Platform",
+  "enabled": true,
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": false,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": false,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "permanentLockout": false,
+  "maxFailureWaitSeconds": 900,
+  "minimumQuickLoginWaitSeconds": 60,
+  "waitIncrementSeconds": 60,
+  "quickLoginCheckMilliSeconds": 1000,
+  "maxDeltaTimeSeconds": 43200,
+  "failureFactor": 30,
+  "accessTokenLifespan": 300,
+  "accessTokenLifespanForImplicitFlow": 900,
+  "ssoSessionIdleTimeout": 1800,
+  "ssoSessionMaxLifespan": 36000,
+  "offlineSessionIdleTimeout": 2592000,
+  "roles": {
+    "realm": [
+      {
+        "name": "ADMIN",
+        "description": "Системный администратор KATM",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "BANK",
+        "description": "Сотрудник банка",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "INSURANCE",
+        "description": "Страховой сотрудник",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "LEASING",
+        "description": "Сотрудник лизинговой компании",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "RETAILER",
+        "description": "Сотрудник ритейлера",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "LOMBARD",
+        "description": "Сотрудник ломбарда",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "MKO",
+        "description": "Сотрудник микрокредитной организации",
+        "composite": false,
+        "clientRole": false
+      },
+      {
+        "name": "ORG",
+        "description": "Сотрудник организации",
+        "composite": false,
+        "clientRole": false
+      }
+    ]
+  },
+  "clients": [
+    {
+      "clientId": "katm-service",
+      "name": "KATM Service",
+      "description": "Основной клиент KATM (ROPC / M2M)",
+      "enabled": true,
+      "publicClient": false,
+      "secret": "changeme",
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": false,
+      "implicitFlowEnabled": false,
+      "serviceAccountsEnabled": true,
+      "authorizationServicesEnabled": false,
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "http://localhost:8080/*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "clientAuthenticatorType": "client-secret",
+      "defaultClientScopes": [
+        "web-origins",
+        "acr",
+        "profile",
+        "roles",
+        "email"
+      ],
+      "optionalClientScopes": [
+        "address",
+        "phone",
+        "offline_access",
+        "microprofile-jwt"
+      ],
+      "protocolMappers": [
+        {
+          "name": "head",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "head",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "head",
+            "jsonType.label": "String",
+            "userinfo.token.claim": "true"
+          }
+        },
+        {
+          "name": "code",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "code",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "code",
+            "jsonType.label": "String",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    },
+    {
+      "clientId": "katm-swagger",
+      "name": "KATM Swagger UI",
+      "description": "Публичный клиент для Swagger / Postman",
+      "enabled": true,
+      "publicClient": true,
+      "directAccessGrantsEnabled": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "protocol": "openid-connect",
+      "redirectUris": [
+        "http://localhost:8080/*",
+        "http://localhost:8081/*",
+        "http://localhost:8082/*",
+        "http://localhost:8083/*",
+        "http://localhost:8084/*",
+        "http://localhost:8085/*",
+        "http://localhost:8086/*",
+        "http://localhost:8087/*",
+        "http://localhost:8088/*",
+        "http://localhost:8089/*",
+        "http://localhost:8090/*",
+        "http://localhost:8091/*",
+        "http://localhost:8092/*",
+        "http://localhost:8095/*"
+      ],
+      "webOrigins": [
+        "*"
+      ],
+      "clientAuthenticatorType": "client-secret"
+    }
+  ],
+  "users": [
+    {
+      "username": "administrator",
+      "enabled": true,
+      "firstName": "Administrator",
+      "lastName": "User",
+      "email": "administrator@katm.uz",
+      "emailVerified": true,
+      "credentials": [
+        {
+          "type": "password",
+          "value": "administrator",
+          "temporary": false
+        }
+      ],
+      "attributes": {
+        "head": "002",
+        "code": "00450"
+      },
+      "realmRoles": [
+        "ADMIN",
+        "BANK",
+        "INSURANCE",
+        "LEASING",
+        "RETAILER",
+        "LOMBARD",
+        "MKO",
+        "ORG"
+      ]
+    }
+  ],
+  "clientScopes": [
+    {
+      "name": "katm-claims",
+      "description": "KATM custom claims: head, code",
+      "protocol": "openid-connect",
+      "attributes": {
+        "include.in.token.scope": "true",
+        "display.on.consent.screen": "false"
+      },
+      "protocolMappers": [
+        {
+          "name": "head",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "head",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "head",
+            "jsonType.label": "String",
+            "userinfo.token.claim": "true"
+          }
+        },
+        {
+          "name": "code",
+          "protocol": "openid-connect",
+          "protocolMapper": "oidc-usermodel-attribute-mapper",
+          "consentRequired": false,
+          "config": {
+            "user.attribute": "code",
+            "id.token.claim": "true",
+            "access.token.claim": "true",
+            "claim.name": "code",
+            "jsonType.label": "String",
+            "userinfo.token.claim": "true"
+          }
+        }
+      ]
+    }
+  ]
+}

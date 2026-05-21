@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: katm-notification
+  namespace: katm
+  labels:
+    app: katm-notification
+spec:
+  type: ClusterIP
+  selector:
+    app: katm-notification
+  ports:
+    - port: 8088
+      targetPort: 8088
+      protocol: TCP
+      name: http

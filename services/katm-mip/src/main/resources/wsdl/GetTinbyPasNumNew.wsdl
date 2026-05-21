@@ -1,0 +1,143 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:mw="http://www.mobicware.com" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="urn:megaware:/mediate/ips/STC/GetTinbyPasNumNew/GetTinbyPasNumNew.wsdl" xmlns:wsa="http://www.w3.org/2005/08/addressing" targetNamespace="urn:megaware:/mediate/ips/STC/GetTinbyPasNumNew/GetTinbyPasNumNew.wsdl">
+	<types>
+		<s:schema targetNamespace="urn:megaware:/mediate/ips/STC/GetTinbyPasNumNew/GetTinbyPasNumNew.wsdl">
+			<s:element mw:isEncrypt="no" name="GetTinbyPas">
+				<s:complexType>
+					<s:sequence>
+						<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="action" type="s:string"/>
+						<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pass_ser" type="s:string"/>
+						<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pass_num" type="s:string"/>
+						<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="lang" type="s:string"/>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+			<s:element mw:isEncrypt="no" name="FormData">
+				<s:complexType>
+					<s:sequence>
+						<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="err_code" type="s:string"/>
+						<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="err_text" type="s:string"/>
+						<s:element mw:isEncrypt="no" name="root">
+							<s:complexType>
+								<s:sequence>
+									<s:element mw:isEncrypt="no" name="list">
+										<s:complexType>
+											<s:sequence>
+												<s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="tin_url" type="s:string"/>
+												<s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="tin" type="s:string"/>
+												<s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="fio" type="s:string"/>
+											</s:sequence>
+										</s:complexType>
+									</s:element>
+								</s:sequence>
+							</s:complexType>
+						</s:element>
+					</s:sequence>
+				</s:complexType>
+			</s:element>
+		</s:schema>
+	</types>
+	<message name="rEQInputMessage">
+		<part element="tns:GetTinbyPas" name="rEQInput"/>
+	</message>
+	<message name="rEQOutputMessage">
+		<part element="tns:FormData" name="rEQOutput"/>
+	</message>
+	<portType name="GetTinbyPasNumNewPortType">
+		<operation name="rEQ">
+			<input message="tns:rEQInputMessage" name="rEQInput"/>
+			<output message="tns:rEQOutputMessage" name="rEQOutput"/>
+		</operation>
+	</portType>
+	<binding name="GetTinbyPasNumNewSOAP12Binding" type="tns:GetTinbyPasNumNewPortType">
+		<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="rEQ">
+			<soap12:operation soapAction="/mediate/ips/STC/GetTinbyPasNumNew" style="document"/>
+			<input name="rEQInput">
+				<soap12:body use="literal"/>
+			</input>
+			<output name="rEQOutput">
+				<soap12:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<binding name="GetTinbyPasNumNewSOAP11Binding" type="tns:GetTinbyPasNumNewPortType">
+		<soap11:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+		<operation name="rEQ">
+			<soap11:operation soapAction="/mediate/ips/STC/GetTinbyPasNumNew" style="document"/>
+			<input name="rEQInput">
+				<soap11:body use="literal"/>
+			</input>
+			<output name="rEQOutput">
+				<soap11:body use="literal"/>
+			</output>
+		</operation>
+	</binding>
+	<binding name="GetTinbyPasNumNewHTTPGETBinding" type="tns:GetTinbyPasNumNewPortType">
+		<http:binding verb="GET"/>
+		<operation name="rEQ">
+			<http:operation location="/GetTinbyPas"/>
+			<input name="rEQInput">
+				<http:urlEncoded/>
+			</input>
+			<output name="rEQOutput">
+				<mime:mimeXml part="Body"/>
+			</output>
+		</operation>
+	</binding>
+	<binding name="GetTinbyPasNumNewHTTPPOSTXMLBinding" type="tns:GetTinbyPasNumNewPortType">
+		<http:binding verb="POST"/>
+		<operation name="rEQ">
+			<http:operation location="/GetTinbyPas"/>
+			<input name="rEQInput">
+				<mime:content part="rEQInput" type="application/xml"/>
+			</input>
+			<output name="rEQOutput">
+				<mime:mimeXml part="Body"/>
+			</output>
+		</operation>
+	</binding>
+	<binding name="GetTinbyPasNumNewHTTPPOSTFORMBinding" type="tns:GetTinbyPasNumNewPortType">
+		<http:binding verb="POST"/>
+		<operation name="rEQ">
+			<http:operation location="/GetTinbyPas"/>
+			<input name="rEQInput">
+				<mime:content part="rEQInput" type="application/x-www-form-urlencoded"/>
+			</input>
+			<output name="rEQOutput">
+				<mime:mimeXml part="Body"/>
+			</output>
+		</operation>
+	</binding>
+	<binding name="GetTinbyPasNumNewHTTPPOSTJSONBinding" type="tns:GetTinbyPasNumNewPortType">
+		<http:binding verb="POST"/>
+		<operation name="rEQ">
+			<http:operation location="/GetTinbyPas"/>
+			<input name="rEQInput">
+				<mime:content part="rEQInput" type="application/json"/>
+			</input>
+			<output name="rEQOutput">
+				<mime:mimeXml part="Body"/>
+			</output>
+		</operation>
+	</binding>
+	<service name="GetTinbyPasNumNewService">
+		<port binding="tns:GetTinbyPasNumNewSOAP12Binding" name="GetTinbyPasNumNewSOAP12BindingPort">
+			<soap12:address location="https://ips.gov.uz:443/mediate/ips/STC/GetTinbyPasNumNew"/>
+		</port>
+		<port binding="tns:GetTinbyPasNumNewSOAP11Binding" name="GetTinbyPasNumNewSOAP11BindingPort">
+			<soap11:address location="https://ips.gov.uz:443/mediate/ips/STC/GetTinbyPasNumNew"/>
+		</port>
+		<port binding="tns:GetTinbyPasNumNewHTTPGETBinding" name="GetTinbyPasNumNewHTTPGETBindingPort">
+			<http:address location="https://ips.gov.uz:443/mediate/ips/STC/GetTinbyPasNumNew"/>
+		</port>
+		<port binding="tns:GetTinbyPasNumNewHTTPPOSTXMLBinding" name="GetTinbyPasNumNewHTTPPOSTXMLBindingPort">
+			<http:address location="https://ips.gov.uz:443/mediate/ips/STC/GetTinbyPasNumNew"/>
+		</port>
+		<port binding="tns:GetTinbyPasNumNewHTTPPOSTFORMBinding" name="GetTinbyPasNumNewHTTPPOSTFORMBindingPort">
+			<http:address location="https://ips.gov.uz:443/mediate/ips/STC/GetTinbyPasNumNew"/>
+		</port>
+		<port binding="tns:GetTinbyPasNumNewHTTPPOSTJSONBinding" name="GetTinbyPasNumNewHTTPPOSTJSONBindingPort">
+			<http:address location="https://ips.gov.uz:443/mediate/ips/STC/GetTinbyPasNumNew"/>
+		</port>
+	</service>
+</definitions>

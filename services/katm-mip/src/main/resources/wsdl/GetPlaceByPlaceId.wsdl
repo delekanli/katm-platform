@@ -1,0 +1,174 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:mw="http://www.mobicware.com"
+             xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:tns="urn:megaware:/mediate/ips/MOI/GetPlaceByPlaceId/GetPlaceByPlaceId.wsdl"
+             xmlns:wsa="http://www.w3.org/2005/08/addressing"
+             targetNamespace="urn:megaware:/mediate/ips/MOI/GetPlaceByPlaceId/GetPlaceByPlaceId.wsdl">
+    <types>
+        <s:schema targetNamespace="urn:megaware:/mediate/ips/MOI/GetPlaceByPlaceId/GetPlaceByPlaceId.wsdl">
+            <s:element mw:isEncrypt="no" mw:typeName="getPlaceByPlaceId" name="getPlaceByPlaceId">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="id" type="s:long"/>
+                        <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" mw:tableName=""
+                                   name="AuthInfo">
+                            <s:complexType>
+                                <s:sequence>
+                                    <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="userSessionId" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="WS_ID" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="LE_ID" type="s:string"/>
+                                </s:sequence>
+                            </s:complexType>
+                        </s:element>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element mw:isEncrypt="no" mw:typeName="getPlaceByPlaceIdResponse" name="getPlaceByPlaceIdResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" mw:tableName=""
+                                   mw:typeName="name" name="return">
+                            <s:complexType>
+                                <s:sequence>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name00" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name01" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name02" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name03" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name04" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name05" type="s:string"/>
+                                </s:sequence>
+                            </s:complexType>
+                        </s:element>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+        </s:schema>
+    </types>
+    <message name="receive1InputMessage">
+        <part element="tns:getPlaceByPlaceId" name="receive1Input"/>
+    </message>
+    <message name="receive1OutputMessage">
+        <part element="tns:getPlaceByPlaceIdResponse" name="receive1Output"/>
+    </message>
+    <portType name="GetPlaceByPlaceIdPortType">
+        <operation name="receive1">
+            <input message="tns:receive1InputMessage" name="receive1Input"/>
+            <output message="tns:receive1OutputMessage" name="receive1Output"/>
+        </operation>
+    </portType>
+    <binding name="GetPlaceByPlaceIdSOAP12Binding" type="tns:GetPlaceByPlaceIdPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="receive1">
+            <soap12:operation soapAction="/mediate/ips/MOI/GetPlaceByPlaceId" style="document"/>
+            <input name="receive1Input">
+                <soap12:body use="literal"/>
+            </input>
+            <output name="receive1Output">
+                <soap12:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetPlaceByPlaceIdSOAP11Binding" type="tns:GetPlaceByPlaceIdPortType">
+        <soap11:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="receive1">
+            <soap11:operation soapAction="/mediate/ips/MOI/GetPlaceByPlaceId" style="document"/>
+            <input name="receive1Input">
+                <soap11:body use="literal"/>
+            </input>
+            <output name="receive1Output">
+                <soap11:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetPlaceByPlaceIdHTTPGETBinding" type="tns:GetPlaceByPlaceIdPortType">
+        <http:binding verb="GET"/>
+        <operation name="receive1">
+            <http:operation location="/getPlaceByPlaceId"/>
+            <input name="receive1Input">
+                <http:urlEncoded/>
+            </input>
+            <output name="receive1Output">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetPlaceByPlaceIdHTTPPOSTXMLBinding" type="tns:GetPlaceByPlaceIdPortType">
+        <http:binding verb="POST"/>
+        <operation name="receive1">
+            <http:operation location="/getPlaceByPlaceId"/>
+            <input name="receive1Input">
+                <mime:content part="receive1Input" type="application/xml"/>
+            </input>
+            <output name="receive1Output">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetPlaceByPlaceIdHTTPPOSTFORMBinding" type="tns:GetPlaceByPlaceIdPortType">
+        <http:binding verb="POST"/>
+        <operation name="receive1">
+            <http:operation location="/getPlaceByPlaceId"/>
+            <input name="receive1Input">
+                <mime:content part="receive1Input" type="application/x-www-form-urlencoded"/>
+            </input>
+            <output name="receive1Output">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetPlaceByPlaceIdHTTPPOSTJSONBinding" type="tns:GetPlaceByPlaceIdPortType">
+        <http:binding verb="POST"/>
+        <operation name="receive1">
+            <http:operation location="/getPlaceByPlaceId"/>
+            <input name="receive1Input">
+                <mime:content part="receive1Input" type="application/json"/>
+            </input>
+            <output name="receive1Output">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GetPlaceByPlaceIdService">
+        <port binding="tns:GetPlaceByPlaceIdSOAP12Binding" name="GetPlaceByPlaceIdSOAP12BindingPort">
+            <soap12:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetPlaceByPlaceId"/>
+        </port>
+        <port binding="tns:GetPlaceByPlaceIdSOAP11Binding" name="GetPlaceByPlaceIdSOAP11BindingPort">
+            <soap11:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetPlaceByPlaceId"/>
+        </port>
+        <port binding="tns:GetPlaceByPlaceIdHTTPGETBinding" name="GetPlaceByPlaceIdHTTPGETBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetPlaceByPlaceId"/>
+        </port>
+        <port binding="tns:GetPlaceByPlaceIdHTTPPOSTXMLBinding" name="GetPlaceByPlaceIdHTTPPOSTXMLBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetPlaceByPlaceId"/>
+        </port>
+        <port binding="tns:GetPlaceByPlaceIdHTTPPOSTFORMBinding" name="GetPlaceByPlaceIdHTTPPOSTFORMBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetPlaceByPlaceId"/>
+        </port>
+        <port binding="tns:GetPlaceByPlaceIdHTTPPOSTJSONBinding" name="GetPlaceByPlaceIdHTTPPOSTJSONBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetPlaceByPlaceId"/>
+        </port>
+    </service>
+</definitions>

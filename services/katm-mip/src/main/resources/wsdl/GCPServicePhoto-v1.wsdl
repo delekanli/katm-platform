@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://fido.com/IdmsEGMICServices" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://fido.com/IdmsEGMICServices" xmlns:sch="http://fido.com/IdmsEGMICServices" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://fido.com/IdmsEGMICServices" xmlns:s="http://fido.com/IdmsEGMICServices" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:element name="GetDataByPinppRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Data" type="xs:string"/>
+                        <xs:element name="Signature" type="xs:string"/>
+                        <xs:element name="PublicCert" type="xs:string"/>
+                        <xs:element name="SignDate" type="xs:dateTime"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="GetDataByPinppResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Result" type="xs:string"/>
+                        <xs:element name="Data" type="xs:string"/>
+                        <xs:element name="Comments" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="GetDataByPinppResponse">
+    <wsdl:part name="GetDataByPinppResponse" element="tns:GetDataByPinppResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="GetDataByPinppRequest">
+    <wsdl:part name="GetDataByPinppRequest" element="tns:GetDataByPinppRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="getDatabyPinpp">
+    <wsdl:operation name="GetDataByPinpp">
+      <wsdl:input name="GetDataByPinppRequest" message="tns:GetDataByPinppRequest">
+    </wsdl:input>
+      <wsdl:output name="GetDataByPinppResponse" message="tns:GetDataByPinppResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="getDatabyPinppSoap11" type="tns:getDatabyPinpp">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="GetDataByPinpp">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="GetDataByPinppRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="GetDataByPinppResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="getDatabyPinppService">
+    <wsdl:port name="getDatabyPinppSoap11" binding="tns:getDatabyPinppSoap11">
+      <soap:address location="https://apimgw.egov.uz:8243/gcp/photoservice/v1"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

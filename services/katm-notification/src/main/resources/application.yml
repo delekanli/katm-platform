@@ -1,0 +1,63 @@
+server:
+  port: 8088
+
+spring:
+  application:
+    name: katm-notification
+
+  datasource:
+    url: jdbc:oracle:thin:@//${DB_HOST:oracle-host}:${DB_PORT:1521}/${DB_SERVICE:KATM}
+    username: ${DB_USER:katm}
+    password: ${DB_PASSWORD}
+    driver-class-name: oracle.jdbc.OracleDriver
+
+  kafka:
+    bootstrap-servers: ${KAFKA_BOOTSTRAP_SERVERS:kafka:9092}
+    consumer:
+      group-id: notification-service
+      auto-offset-reset: earliest
+      key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+      value-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+
+  mail:
+    host: ${SMTP_HOST:smtp.gov.uz}
+    port: ${SMTP_PORT:587}
+    username: ${SMTP_USER}
+    password: ${SMTP_PASSWORD}
+    protocol: smtp
+    test-connection: false
+    properties:
+      mail.smtp.auth: true
+      mail.smtp.ssl.enable: false
+      mail.smtp.ssl.trust: mail.katm.local
+      mail.smtp.connectiontimeout: 5000
+      mail.smtp.timeout: 5000
+      mail.smtp.writetimeout: 5000
+      mail.debug: false
+      mail.smtp.starttls.enable: false
+      mail.smtp.starttls.required: false
+
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL:http://keycloak:8080}/realms/katm
+
+katm:
+  sms:
+    provider-url: ${SMS_PROVIDER_URL}
+    username: ${SMS_USERNAME}
+    api-key: ${SMS_API_KEY}
+    sender: ${SMS_SENDER:KATM.GOV.UZ}
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+  metrics:
+    tags:
+      application: ${spring.application.name}
+  tracing:
+    sampling:
+      probability: 1.0

@@ -1,0 +1,58 @@
+{
+  "realm": "katm",
+  "enabled": true,
+  "displayName": "KATM Platform",
+  "sslRequired": "external",
+  "registrationAllowed": false,
+  "loginWithEmailAllowed": true,
+  "duplicateEmailsAllowed": false,
+  "resetPasswordAllowed": true,
+  "editUsernameAllowed": false,
+  "bruteForceProtected": true,
+  "accessTokenLifespan": 300,
+  "refreshTokenMaxReuse": 0,
+  "clients": [
+    {
+      "clientId": "katm-gateway",
+      "enabled": true,
+      "publicClient": false,
+      "bearerOnly": false,
+      "standardFlowEnabled": true,
+      "directAccessGrantsEnabled": true,
+      "serviceAccountsEnabled": true,
+      "secret": "katm-gateway-secret-change-me",
+      "redirectUris": ["http://localhost:8080/*"],
+      "webOrigins": ["*"],
+      "defaultClientScopes": ["profile", "email", "roles"]
+    },
+    {
+      "clientId": "katm-frontend",
+      "enabled": true,
+      "publicClient": true,
+      "standardFlowEnabled": true,
+      "implicitFlowEnabled": false,
+      "directAccessGrantsEnabled": false,
+      "redirectUris": ["http://localhost:3000/*", "http://localhost:4200/*"],
+      "webOrigins": ["*"]
+    }
+  ],
+  "roles": {
+    "realm": [
+      {"name": "ADMIN", "description": "Platform administrator"},
+      {"name": "MANAGER", "description": "Insurance manager"},
+      {"name": "USER", "description": "Standard user"},
+      {"name": "AGENT", "description": "Insurance agent"},
+      {"name": "VIEWER", "description": "Read-only access"}
+    ]
+  },
+  "groups": [
+    {
+      "name": "administrators",
+      "realmRoles": ["ADMIN"]
+    },
+    {
+      "name": "managers",
+      "realmRoles": ["MANAGER"]
+    }
+  ]
+}

@@ -1,0 +1,11 @@
+target/
+*.jar
+*.war
+*.class
+.env.local
+.idea/
+*.iml
+.DS_Store
+*.log
+*.tmp
+/docker/oracle/oradata/

@@ -1,0 +1,166 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:mw="http://www.mobicware.com"
+             xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="urn:megaware:/mediate/ips/PC/PersonDocInfoService/PersonDocInfoService.wsdl"
+             xmlns:wsa="http://www.w3.org/2005/08/addressing"
+             targetNamespace="urn:megaware:/mediate/ips/PC/PersonDocInfoService/PersonDocInfoService.wsdl">
+    <types>
+        <s:schema targetNamespace="urn:megaware:/mediate/ips/PC/PersonDocInfoService/PersonDocInfoService.wsdl">
+            <s:element mw:isEncrypt="no" name="CEPRequest">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" mw:tableName=""
+                                   name="AuthInfo">
+                            <s:complexType>
+                                <s:sequence>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="userSessionId"
+                                               type="s:string"></s:element>
+                                    <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="WS_ID" type="s:string"></s:element>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="LE_ID" type="s:string"></s:element>
+                                </s:sequence>
+                            </s:complexType>
+                        </s:element>
+                        <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="Data" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="Signature" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="PublicCert" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="SignDate" type="s:string"></s:element>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element mw:isEncrypt="no" name="CEPResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="Result" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="Data" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="Comments" type="s:string"></s:element>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+        </s:schema>
+    </types>
+    <message name="soapMsg_ReceiveInputMessage">
+        <part element="tns:CEPRequest" name="soapMsg_ReceiveInput"></part>
+    </message>
+    <message name="soapMsg_ReceiveOutputMessage">
+        <part element="tns:CEPResponse" name="soapMsg_ReceiveOutput"></part>
+    </message>
+    <portType name="PersonDocInfoServicePortType">
+        <operation name="soapMsg_Receive">
+            <input message="tns:soapMsg_ReceiveInputMessage" name="soapMsg_ReceiveInput"></input>
+            <output message="tns:soapMsg_ReceiveOutputMessage" name="soapMsg_ReceiveOutput"></output>
+        </operation>
+    </portType>
+    <binding name="PersonDocInfoServiceSOAP12Binding" type="tns:PersonDocInfoServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"></soap12:binding>
+        <operation name="soapMsg_Receive">
+            <soap12:operation soapAction="/mediate/ips/PC/PersonDocInfoService" style="document"></soap12:operation>
+            <input name="soapMsg_ReceiveInput">
+                <soap12:body use="literal"></soap12:body>
+            </input>
+            <output name="soapMsg_ReceiveOutput">
+                <soap12:body use="literal"></soap12:body>
+            </output>
+        </operation>
+    </binding>
+    <binding name="PersonDocInfoServiceSOAP11Binding" type="tns:PersonDocInfoServicePortType">
+        <soap11:binding transport="http://schemas.xmlsoap.org/soap/http"></soap11:binding>
+        <operation name="soapMsg_Receive">
+            <soap11:operation soapAction="/mediate/ips/PC/PersonDocInfoService" style="document"></soap11:operation>
+            <input name="soapMsg_ReceiveInput">
+                <soap11:body use="literal"></soap11:body>
+            </input>
+            <output name="soapMsg_ReceiveOutput">
+                <soap11:body use="literal"></soap11:body>
+            </output>
+        </operation>
+    </binding>
+    <binding name="PersonDocInfoServiceHTTPGETBinding" type="tns:PersonDocInfoServicePortType">
+        <http:binding verb="GET"></http:binding>
+        <operation name="soapMsg_Receive">
+            <http:operation location="/CEPRequest"></http:operation>
+            <input name="soapMsg_ReceiveInput">
+                <http:urlEncoded></http:urlEncoded>
+            </input>
+            <output name="soapMsg_ReceiveOutput">
+                <mime:mimeXml part="Body"></mime:mimeXml>
+            </output>
+        </operation>
+    </binding>
+    <binding name="PersonDocInfoServiceHTTPPOSTXMLBinding" type="tns:PersonDocInfoServicePortType">
+        <http:binding verb="POST"></http:binding>
+        <operation name="soapMsg_Receive">
+            <http:operation location="/CEPRequest"></http:operation>
+            <input name="soapMsg_ReceiveInput">
+                <mime:content part="soapMsg_ReceiveInput" type="application/xml"></mime:content>
+            </input>
+            <output name="soapMsg_ReceiveOutput">
+                <mime:mimeXml part="Body"></mime:mimeXml>
+            </output>
+        </operation>
+    </binding>
+    <binding name="PersonDocInfoServiceHTTPPOSTFORMBinding" type="tns:PersonDocInfoServicePortType">
+        <http:binding verb="POST"></http:binding>
+        <operation name="soapMsg_Receive">
+            <http:operation location="/CEPRequest"></http:operation>
+            <input name="soapMsg_ReceiveInput">
+                <mime:content part="soapMsg_ReceiveInput" type="application/x-www-form-urlencoded"></mime:content>
+            </input>
+            <output name="soapMsg_ReceiveOutput">
+                <mime:mimeXml part="Body"></mime:mimeXml>
+            </output>
+        </operation>
+    </binding>
+    <binding name="PersonDocInfoServiceHTTPPOSTJSONBinding" type="tns:PersonDocInfoServicePortType">
+        <http:binding verb="POST"></http:binding>
+        <operation name="soapMsg_Receive">
+            <http:operation location="/CEPRequest"></http:operation>
+            <input name="soapMsg_ReceiveInput">
+                <mime:content part="soapMsg_ReceiveInput" type="application/json"></mime:content>
+            </input>
+            <output name="soapMsg_ReceiveOutput">
+                <mime:mimeXml part="Body"></mime:mimeXml>
+            </output>
+        </operation>
+    </binding>
+    <service name="PersonDocInfoServiceService">
+        <port binding="tns:PersonDocInfoServiceSOAP12Binding" name="PersonDocInfoServiceSOAP12BindingPort">
+            <soap12:address location="https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService"></soap12:address>
+        </port>
+        <port binding="tns:PersonDocInfoServiceSOAP11Binding" name="PersonDocInfoServiceSOAP11BindingPort">
+            <soap11:address location="https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService"></soap11:address>
+        </port>
+        <port binding="tns:PersonDocInfoServiceHTTPGETBinding" name="PersonDocInfoServiceHTTPGETBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService"></http:address>
+        </port>
+        <port binding="tns:PersonDocInfoServiceHTTPPOSTXMLBinding" name="PersonDocInfoServiceHTTPPOSTXMLBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService"></http:address>
+        </port>
+        <port binding="tns:PersonDocInfoServiceHTTPPOSTFORMBinding" name="PersonDocInfoServiceHTTPPOSTFORMBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService"></http:address>
+        </port>
+        <port binding="tns:PersonDocInfoServiceHTTPPOSTJSONBinding" name="PersonDocInfoServiceHTTPPOSTJSONBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService"></http:address>
+        </port>
+    </service>
+</definitions>

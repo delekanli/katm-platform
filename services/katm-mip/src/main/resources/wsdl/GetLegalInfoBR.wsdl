@@ -1,0 +1,164 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:mw="http://www.mobicware.com" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="urn:megaware:/mediate/ips/STC/GetLegalInfoBR/GetLegalInfoBR.wsdl" xmlns:wsa="http://www.w3.org/2005/08/addressing" targetNamespace="urn:megaware:/mediate/ips/STC/GetLegalInfoBR/GetLegalInfoBR.wsdl">
+<types>
+<s:schema targetNamespace="urn:megaware:/mediate/ips/STC/GetLegalInfoBR/GetLegalInfoBR.wsdl">
+<s:element mw:isEncrypt="no" name="Request">
+<s:complexType>
+<s:sequence>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="tin" type="s:string"/>
+</s:sequence>
+</s:complexType>
+</s:element>
+<s:element mw:isEncrypt="no" name="Response">
+<s:complexType>
+<s:sequence>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="action" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="type_reg" type="s:integer"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="tin" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="name_full" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="name_short" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="post_index" type="s:integer"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="code_region" type="s:integer"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="code_area" type="s:integer"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="city_name" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="street_name" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="house_num" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="phone_number" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="code_oked" type="s:integer"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="code_fs" type="s:integer"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="code_okpo" type="s:integer"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="code_soato" type="s:integer"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="code_opf" type="s:integer"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="reg_num" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="reg_date" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="nom_end" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="date_end" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="tin_head" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="email" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="workers_count" type="s:integer"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="director_fio" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="director_tin" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="bux_fio" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="bux_tin" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="founders" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="f_country" type="s:integer"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="f_tin" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="f_name" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="f_share_sum" type="s:integer"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="f_share_percent" type="s:integer"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="code_registrator" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="name_registrator" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="code_employee" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="name_employee" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="employee_tin" type="s:string"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="sign" type="s:byte"/>
+<s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="open_key" type="s:byte"/>
+</s:sequence>
+</s:complexType>
+</s:element>
+</s:schema>
+</types>
+<message name="receive2InputMessage">
+<part element="tns:Request" name="receive2Input"/>
+</message>
+<message name="receive2OutputMessage">
+<part element="tns:Response" name="receive2Output"/>
+</message>
+<portType name="GetLegalInfoBRPortType">
+<operation name="receive2">
+<input message="tns:receive2InputMessage" name="receive2Input"/>
+<output message="tns:receive2OutputMessage" name="receive2Output"/>
+</operation>
+</portType>
+<binding name="GetLegalInfoBRSOAP12Binding" type="tns:GetLegalInfoBRPortType">
+<soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+<operation name="receive2">
+<soap12:operation soapAction="/mediate/ips/STC/GetLegalInfoBR" style="document"/>
+<input name="receive2Input">
+<soap12:body use="literal"/>
+</input>
+<output name="receive2Output">
+<soap12:body use="literal"/>
+</output>
+</operation>
+</binding>
+<binding name="GetLegalInfoBRSOAP11Binding" type="tns:GetLegalInfoBRPortType">
+<soap11:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+<operation name="receive2">
+<soap11:operation soapAction="/mediate/ips/STC/GetLegalInfoBR" style="document"/>
+<input name="receive2Input">
+<soap11:body use="literal"/>
+</input>
+<output name="receive2Output">
+<soap11:body use="literal"/>
+</output>
+</operation>
+</binding>
+<binding name="GetLegalInfoBRHTTPGETBinding" type="tns:GetLegalInfoBRPortType">
+<http:binding verb="GET"/>
+<operation name="receive2">
+<http:operation location="/Request"/>
+<input name="receive2Input">
+<http:urlEncoded/>
+</input>
+<output name="receive2Output">
+<mime:mimeXml part="Body"/>
+</output>
+</operation>
+</binding>
+<binding name="GetLegalInfoBRHTTPPOSTXMLBinding" type="tns:GetLegalInfoBRPortType">
+<http:binding verb="POST"/>
+<operation name="receive2">
+<http:operation location="/Request"/>
+<input name="receive2Input">
+<mime:content part="receive2Input" type="application/xml"/>
+</input>
+<output name="receive2Output">
+<mime:mimeXml part="Body"/>
+</output>
+</operation>
+</binding>
+<binding name="GetLegalInfoBRHTTPPOSTFORMBinding" type="tns:GetLegalInfoBRPortType">
+<http:binding verb="POST"/>
+<operation name="receive2">
+<http:operation location="/Request"/>
+<input name="receive2Input">
+<mime:content part="receive2Input" type="application/x-www-form-urlencoded"/>
+</input>
+<output name="receive2Output">
+<mime:mimeXml part="Body"/>
+</output>
+</operation>
+</binding>
+<binding name="GetLegalInfoBRHTTPPOSTJSONBinding" type="tns:GetLegalInfoBRPortType">
+<http:binding verb="POST"/>
+<operation name="receive2">
+<http:operation location="/Request"/>
+<input name="receive2Input">
+<mime:content part="receive2Input" type="application/json"/>
+</input>
+<output name="receive2Output">
+<mime:mimeXml part="Body"/>
+</output>
+</operation>
+</binding>
+<service name="GetLegalInfoBRService">
+<port binding="tns:GetLegalInfoBRSOAP12Binding" name="GetLegalInfoBRSOAP12BindingPort">
+<soap12:address location="https://ips.gov.uz:443/mediate/ips/STC/GetLegalInfoBR"/>
+</port>
+<port binding="tns:GetLegalInfoBRSOAP11Binding" name="GetLegalInfoBRSOAP11BindingPort">
+<soap11:address location="https://ips.gov.uz:443/mediate/ips/STC/GetLegalInfoBR"/>
+</port>
+<port binding="tns:GetLegalInfoBRHTTPGETBinding" name="GetLegalInfoBRHTTPGETBindingPort">
+<http:address location="https://ips.gov.uz:443/mediate/ips/STC/GetLegalInfoBR"/>
+</port>
+<port binding="tns:GetLegalInfoBRHTTPPOSTXMLBinding" name="GetLegalInfoBRHTTPPOSTXMLBindingPort">
+<http:address location="https://ips.gov.uz:443/mediate/ips/STC/GetLegalInfoBR"/>
+</port>
+<port binding="tns:GetLegalInfoBRHTTPPOSTFORMBinding" name="GetLegalInfoBRHTTPPOSTFORMBindingPort">
+<http:address location="https://ips.gov.uz:443/mediate/ips/STC/GetLegalInfoBR"/>
+</port>
+<port binding="tns:GetLegalInfoBRHTTPPOSTJSONBinding" name="GetLegalInfoBRHTTPPOSTJSONBindingPort">
+<http:address location="https://ips.gov.uz:443/mediate/ips/STC/GetLegalInfoBR"/>
+</port>
+</service>
+</definitions>

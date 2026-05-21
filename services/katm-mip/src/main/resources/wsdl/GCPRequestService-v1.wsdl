@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wsdl:definitions targetNamespace="http://fido.com/EasuEGServices" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://fido.com/EasuEGServices" xmlns:sch="http://fido.com/EasuEGServices" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/">
+  <wsdl:types>
+    <xs:schema elementFormDefault="qualified" targetNamespace="http://fido.com/EasuEGServices" xmlns:s="http://fido.com/EasuEGServices" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+            <xs:element name="CEPRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Data" type="xs:string"/>
+                        <xs:element name="Signature" type="xs:string"/>
+                        <xs:element name="PublicCert" type="xs:string"/>
+                        <xs:element name="SignDate" type="xs:dateTime"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="CEPResponse">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="Result" type="xs:string"/>
+                        <xs:element name="Data" type="xs:string"/>
+                        <xs:element name="Comments" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="CEPResponse">
+    <wsdl:part name="CEPResponse" element="tns:CEPResponse">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="CEPRequest">
+    <wsdl:part name="CEPRequest" element="tns:CEPRequest">
+    </wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="PersonDocInfoService">
+    <wsdl:operation name="CEP">
+      <wsdl:input name="CEPRequest" message="tns:CEPRequest">
+    </wsdl:input>
+      <wsdl:output name="CEPResponse" message="tns:CEPResponse">
+    </wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="PersonDocInfoServiceSoap11" type="tns:PersonDocInfoService">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="CEP">
+      <soap:operation soapAction=""/>
+      <wsdl:input name="CEPRequest">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="CEPResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="PersonDocInfoServiceService">
+    <wsdl:port name="PersonDocInfoServiceSoap11" binding="tns:PersonDocInfoServiceSoap11">
+      <soap:address location="https://apimgw.egov.uz:8243/gcp/pinser/v1"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>

@@ -1,0 +1,60 @@
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+rule_files: []
+
+scrape_configs:
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
+
+  - job_name: 'katm-auth'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['katm-auth:8081']
+
+  - job_name: 'katm-gateway'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['katm-gateway:8080']
+
+  - job_name: 'katm-client'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['katm-client:8087']
+
+  - job_name: 'katm-claim'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['katm-claim:8085']
+
+  - job_name: 'katm-contract'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['katm-contract:8086']
+
+  - job_name: 'katm-notification'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['katm-notification:8082']
+
+  - job_name: 'katm-report'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['katm-report:8084']
+
+  - job_name: 'katm-scheduler'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['katm-scheduler:8088']
+
+  - job_name: 'katm-mip'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['katm-mip:8089']
+
+  - job_name: 'katm-queue'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['katm-queue:8083']

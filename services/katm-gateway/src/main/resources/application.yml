@@ -1,0 +1,184 @@
+server:
+  port: 8080
+
+spring:
+  application:
+    name: katm-gateway
+  main:
+    web-application-type: reactive
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.jdbc.autoconfigure.DataSourceAutoConfiguration
+      - org.springframework.boot.jdbc.autoconfigure.DataSourceTransactionManagerAutoConfiguration
+      - org.springframework.boot.jdbc.autoconfigure.health.DataSourceHealthContributorAutoConfiguration
+  security:
+    oauth2:
+      resourceserver:
+        jwt:
+          issuer-uri: ${KEYCLOAK_URL:http://localhost:8180}/realms/katm
+  cloud:
+    kubernetes:
+      discovery:
+        enabled: true
+        all-namespaces: false
+      loadbalancer:
+        mode: SERVICE
+    gateway:
+      default-filters:
+        - DedupeResponseHeader=Access-Control-Allow-Credentials Access-Control-Allow-Origin
+      routes:
+        # --- Business services ---
+        - id: katm-auth
+          uri: ${KATM_AUTH_URL:lb://katm-auth}
+          predicates:
+            - Path=/api/v1/auth/**
+          filters:
+            - StripPrefix=0
+        - id: katm-client
+          uri: ${KATM_CLIENT_URL:lb://katm-client}
+          predicates:
+            - Path=/api/v1/clients/**
+          filters:
+            - StripPrefix=0
+            - name: CircuitBreaker
+              args:
+                name: katm-client
+                fallbackUri: forward:/fallback
+        - id: katm-claim
+          uri: ${KATM_CLAIM_URL:lb://katm-claim}
+          predicates:
+            - Path=/api/v1/claims/**
+          filters:
+            - StripPrefix=0
+        - id: katm-contract
+          uri: ${KATM_CONTRACT_URL:lb://katm-contract}
+          predicates:
+            - Path=/api/v1/contracts/**
+          filters:
+            - StripPrefix=0
+        - id: katm-report
+          uri: ${KATM_REPORT_URL:lb://katm-report}
+          predicates:
+            - Path=/api/v1/reports/**
+          filters:
+            - StripPrefix=0
+        - id: katm-notification
+          uri: ${KATM_NOTIFICATION_URL:lb://katm-notification}
+          predicates:
+            - Path=/api/v1/notifications/**
+          filters:
+            - StripPrefix=0
+        - id: katm-mip
+          uri: ${KATM_MIP_URL:lb://katm-mip}
+          predicates:
+            - Path=/api/v1/mip/**
+          filters:
+            - StripPrefix=0
+        - id: katm-scheduler
+          uri: ${KATM_SCHEDULER_URL:lb://katm-scheduler}
+          predicates:
+            - Path=/api/v1/scheduler/**
+          filters:
+            - StripPrefix=0
+        # --- Swagger aggregation: /v3/api-docs/{service} → lb://service/v3/api-docs ---
+        - id: swagger-auth
+          uri: ${KATM_AUTH_URL:lb://katm-auth}
+          predicates:
+            - Path=/v3/api-docs/auth
+          filters:
+            - RewritePath=/v3/api-docs/auth, /v3/api-docs
+        - id: swagger-client
+          uri: ${KATM_CLIENT_URL:lb://katm-client}
+          predicates:
+            - Path=/v3/api-docs/client
+          filters:
+            - RewritePath=/v3/api-docs/client, /v3/api-docs
+        - id: swagger-claim
+          uri: ${KATM_CLAIM_URL:lb://katm-claim}
+          predicates:
+            - Path=/v3/api-docs/claim
+          filters:
+            - RewritePath=/v3/api-docs/claim, /v3/api-docs
+        - id: swagger-contract
+          uri: ${KATM_CONTRACT_URL:lb://katm-contract}
+          predicates:
+            - Path=/v3/api-docs/contract
+          filters:
+            - RewritePath=/v3/api-docs/contract, /v3/api-docs
+        - id: swagger-report
+          uri: ${KATM_REPORT_URL:lb://katm-report}
+          predicates:
+            - Path=/v3/api-docs/report
+          filters:
+            - RewritePath=/v3/api-docs/report, /v3/api-docs
+        - id: swagger-notification
+          uri: ${KATM_NOTIFICATION_URL:lb://katm-notification}
+          predicates:
+            - Path=/v3/api-docs/notification
+          filters:
+            - RewritePath=/v3/api-docs/notification, /v3/api-docs
+        - id: swagger-mip
+          uri: ${KATM_MIP_URL:lb://katm-mip}
+          predicates:
+            - Path=/v3/api-docs/mip
+          filters:
+            - RewritePath=/v3/api-docs/mip, /v3/api-docs
+        - id: swagger-scheduler
+          uri: ${KATM_SCHEDULER_URL:lb://katm-scheduler}
+          predicates:
+            - Path=/v3/api-docs/scheduler
+          filters:
+            - RewritePath=/v3/api-docs/scheduler, /v3/api-docs
+
+katm:
+  auth-service.url: ${AUTH_SERVICE_URL:http://localhost:8081}
+  access-check.enabled: ${ACCESS_CHECK_ENABLED:true}
+
+springdoc:
+  swagger-ui:
+    urls:
+      - name: Auth Service
+        url: /v3/api-docs/auth
+      - name: Client Service
+        url: /v3/api-docs/client
+      - name: Claim Service
+        url: /v3/api-docs/claim
+      - name: Contract Service
+        url: /v3/api-docs/contract
+      - name: Report Service
+        url: /v3/api-docs/report
+      - name: Notification Service
+        url: /v3/api-docs/notification
+      - name: MIP Service
+        url: /v3/api-docs/mip
+      - name: Scheduler Service
+        url: /v3/api-docs/scheduler
+    urls-primary-name: Auth Service
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus,gateway
+  endpoint:
+    health:
+      show-details: when_authorized
+      probes:
+        enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+    export:
+      prometheus:
+        enabled: true
+  tracing:
+    sampling:
+      probability: 1.0
+
+zipkin:
+  base-url: ${ZIPKIN_URL:http://localhost:9411}
+
+logging:
+  level:
+    uz.katm.gateway: INFO
+    reactor.netty.http.client: WARN

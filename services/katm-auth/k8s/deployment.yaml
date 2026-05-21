@@ -1,0 +1,119 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: katm-auth
+  namespace: katm
+  labels:
+    app: katm-auth
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: katm-auth
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: katm-auth
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8081"
+        prometheus.io/path: "/actuator/prometheus"
+    spec:
+      serviceAccountName: katm-gateway
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: katm-auth
+          image: registry.katm.gov.uz/katm/katm-auth:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8081
+              name: http
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "k8s"
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: katm-config
+                  key: ORACLE_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: katm-config
+                  key: ORACLE_PORT
+            - name: DB_SERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: katm-config
+                  key: ORACLE_SERVICE
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: katm-secrets
+                  key: db-user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: katm-secrets
+                  key: db-password
+            - name: KEYCLOAK_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: katm-config
+                  key: KEYCLOAK_URL
+            - name: KEYCLOAK_REALM
+              valueFrom:
+                configMapKeyRef:
+                  name: katm-config
+                  key: KEYCLOAK_REALM
+            - name: KEYCLOAK_CLIENT_ID
+              valueFrom:
+                configMapKeyRef:
+                  name: katm-config
+                  key: KEYCLOAK_CLIENT_ID
+            - name: KEYCLOAK_CLIENT_SECRET
+              valueFrom:
+                secretKeyRef:
+                  name: katm-secrets
+                  key: keycloak-client-secret
+            - name: ZIPKIN_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: katm-config
+                  key: ZIPKIN_URL
+          resources:
+            requests:
+              cpu: 250m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8081
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8081
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+      imagePullSecrets:
+        - name: registry-credentials

@@ -1,0 +1,164 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:mw="http://www.mobicware.com"
+             xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="urn:megaware:/mediate/ips/MOI/GetCitizensInfoService/GetCitizensInfoService.wsdl"
+             xmlns:wsa="http://www.w3.org/2005/08/addressing"
+             targetNamespace="urn:megaware:/mediate/ips/MOI/GetCitizensInfoService/GetCitizensInfoService.wsdl">
+    <types>
+        <s:schema targetNamespace="urn:megaware:/mediate/ips/MOI/GetCitizensInfoService/GetCitizensInfoService.wsdl">
+            <s:element mw:isEncrypt="no" mw:typeName="PinppAddress" name="PinppAddress">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pinpp" type="xs:string"/>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="guid" type="xs:string"/>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element mw:isEncrypt="no" mw:typeName="PinppAddressResponse" name="PinppAddressResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" mw:tableName="" mw:typeName="_InfoResponseModel" name="PinppAddressResult">
+                            <s:complexType>
+                                <s:sequence>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pResult" type="xs:integer"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pRequestGuid" type="xs:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" mw:tableName="" mw:typeName="anyTypeArray" name="pTemproaryAddress">
+                                        <s:complexType>
+                                            <s:sequence>
+                                                <s:element maxOccurs="unbounded" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="anyType" type="xs:string"/>
+                                            </s:sequence>
+                                        </s:complexType>
+                                    </s:element>
+                                    <s:element mw:isEncrypt="no" name="pPermanentAddress">
+                                        <s:complexType>
+                                            <s:sequence>
+                                                <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pCountry" type="xs:string"/>
+                                                <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pAddress" type="xs:string"/>
+                                                <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pDistrict" type="xs:string"/>
+                                                <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pRegdate" type="xs:string"/>
+                                                <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pFlat" type="xs:string"/>
+                                                <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pKadastr" type="xs:string"/>
+                                                <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pKorpus" type="xs:string"/>
+                                                <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pDistrictID" type="xs:string"/>
+                                                <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pCountryID" type="xs:string"/>
+                                                <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pRegionID" type="xs:string"/>
+                                                <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pRegion" type="xs:string"/>
+                                                <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pHouse" type="xs:string"/>
+                                            </s:sequence>
+                                        </s:complexType>
+                                    </s:element>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pPinpp" type="xs:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pComment" type="xs:string"/>
+                                </s:sequence>
+                            </s:complexType>
+                        </s:element>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+        </s:schema>
+    </types>
+    <message name="rEQInputMessage">
+        <part element="tns:PinppAddress" name="rEQInput"/>
+    </message>
+    <message name="rEQOutputMessage">
+        <part element="tns:PinppAddressResponse" name="rEQOutput"/>
+    </message>
+    <portType name="GetCitizensInfoServicePortType">
+        <operation name="rEQ">
+            <input message="tns:rEQInputMessage" name="rEQInput"/>
+            <output message="tns:rEQOutputMessage" name="rEQOutput"/>
+        </operation>
+    </portType>
+    <binding name="GetCitizensInfoServiceSOAP12Binding" type="tns:GetCitizensInfoServicePortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="rEQ">
+            <soap12:operation soapAction="/mediate/ips/MOI/GetCitizensInfoService" style="document"/>
+            <input name="rEQInput">
+                <soap12:body use="literal"/>
+            </input>
+            <output name="rEQOutput">
+                <soap12:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetCitizensInfoServiceSOAP11Binding" type="tns:GetCitizensInfoServicePortType">
+        <soap11:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="rEQ">
+            <soap11:operation soapAction="/mediate/ips/MOI/GetCitizensInfoService" style="document"/>
+            <input name="rEQInput">
+                <soap11:body use="literal"/>
+            </input>
+            <output name="rEQOutput">
+                <soap11:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetCitizensInfoServiceHTTPGETBinding" type="tns:GetCitizensInfoServicePortType">
+        <http:binding verb="GET"/>
+        <operation name="rEQ">
+            <http:operation location="/PinppAddress"/>
+            <input name="rEQInput">
+                <http:urlEncoded/>
+            </input>
+            <output name="rEQOutput">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetCitizensInfoServiceHTTPPOSTXMLBinding" type="tns:GetCitizensInfoServicePortType">
+        <http:binding verb="POST"/>
+        <operation name="rEQ">
+            <http:operation location="/PinppAddress"/>
+            <input name="rEQInput">
+                <mime:content part="rEQInput" type="application/xml"/>
+            </input>
+            <output name="rEQOutput">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetCitizensInfoServiceHTTPPOSTFORMBinding" type="tns:GetCitizensInfoServicePortType">
+        <http:binding verb="POST"/>
+        <operation name="rEQ">
+            <http:operation location="/PinppAddress"/>
+            <input name="rEQInput">
+                <mime:content part="rEQInput" type="application/x-www-form-urlencoded"/>
+            </input>
+            <output name="rEQOutput">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetCitizensInfoServiceHTTPPOSTJSONBinding" type="tns:GetCitizensInfoServicePortType">
+        <http:binding verb="POST"/>
+        <operation name="rEQ">
+            <http:operation location="/PinppAddress"/>
+            <input name="rEQInput">
+                <mime:content part="rEQInput" type="application/json"/>
+            </input>
+            <output name="rEQOutput">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GetCitizensInfoServiceService">
+        <port binding="tns:GetCitizensInfoServiceSOAP12Binding" name="GetCitizensInfoServiceSOAP12BindingPort">
+            <soap12:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetCitizensInfoService"/>
+        </port>
+        <port binding="tns:GetCitizensInfoServiceSOAP11Binding" name="GetCitizensInfoServiceSOAP11BindingPort">
+            <soap11:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetCitizensInfoService"/>
+        </port>
+        <port binding="tns:GetCitizensInfoServiceHTTPGETBinding" name="GetCitizensInfoServiceHTTPGETBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetCitizensInfoService"/>
+        </port>
+        <port binding="tns:GetCitizensInfoServiceHTTPPOSTXMLBinding" name="GetCitizensInfoServiceHTTPPOSTXMLBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetCitizensInfoService"/>
+        </port>
+        <port binding="tns:GetCitizensInfoServiceHTTPPOSTFORMBinding" name="GetCitizensInfoServiceHTTPPOSTFORMBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetCitizensInfoService"/>
+        </port>
+        <port binding="tns:GetCitizensInfoServiceHTTPPOSTJSONBinding" name="GetCitizensInfoServiceHTTPPOSTJSONBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetCitizensInfoService"/>
+        </port>
+    </service>
+</definitions>

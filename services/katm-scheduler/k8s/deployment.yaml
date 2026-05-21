@@ -1,0 +1,102 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: katm-scheduler
+  namespace: katm
+  labels:
+    app: katm-scheduler
+spec:
+  # Single replica to prevent duplicate job execution
+  replicas: 1
+  selector:
+    matchLabels:
+      app: katm-scheduler
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: katm-scheduler
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/port: "8091"
+        prometheus.io/path: "/actuator/prometheus"
+    spec:
+      serviceAccountName: katm-gateway
+      securityContext:
+        runAsNonRoot: true
+        runAsUser: 1000
+        fsGroup: 1000
+      containers:
+        - name: katm-scheduler
+          image: registry.katm.gov.uz/katm/katm-scheduler:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 8091
+              name: http
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: "k8s"
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: katm-config
+                  key: ORACLE_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: katm-config
+                  key: ORACLE_PORT
+            - name: DB_SERVICE
+              valueFrom:
+                configMapKeyRef:
+                  name: katm-config
+                  key: ORACLE_SERVICE
+            - name: DB_USER
+              valueFrom:
+                secretKeyRef:
+                  name: katm-secrets
+                  key: db-user
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: katm-secrets
+                  key: db-password
+            - name: KAFKA_BOOTSTRAP_SERVERS
+              valueFrom:
+                configMapKeyRef:
+                  name: katm-config
+                  key: KAFKA_SERVERS
+            - name: ZIPKIN_URL
+              valueFrom:
+                configMapKeyRef:
+                  name: katm-config
+                  key: ZIPKIN_URL
+          resources:
+            requests:
+              cpu: 100m
+              memory: 192Mi
+            limits:
+              cpu: 250m
+              memory: 384Mi
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8091
+            initialDelaySeconds: 30
+            periodSeconds: 15
+            failureThreshold: 3
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8091
+            initialDelaySeconds: 15
+            periodSeconds: 10
+            failureThreshold: 3
+          securityContext:
+            allowPrivilegeEscalation: false
+            readOnlyRootFilesystem: true
+            capabilities:
+              drop: ["ALL"]
+      imagePullSecrets:
+        - name: registry-credentials

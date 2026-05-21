@@ -1,0 +1,174 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:mw="http://www.mobicware.com"
+             xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:tns="urn:megaware:/mediate/ips/MOI/GetStreetByStreetId/GetStreetByStreetId.wsdl"
+             xmlns:wsa="http://www.w3.org/2005/08/addressing"
+             targetNamespace="urn:megaware:/mediate/ips/MOI/GetStreetByStreetId/GetStreetByStreetId.wsdl">
+    <types>
+        <s:schema targetNamespace="urn:megaware:/mediate/ips/MOI/GetStreetByStreetId/GetStreetByStreetId.wsdl">
+            <s:element mw:isEncrypt="no" mw:typeName="getStreetByStreetId" name="getStreetByStreetId">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="id" type="s:long"/>
+                        <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" mw:tableName=""
+                                   name="AuthInfo">
+                            <s:complexType>
+                                <s:sequence>
+                                    <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="userSessionId" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="WS_ID" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="LE_ID" type="s:string"/>
+                                </s:sequence>
+                            </s:complexType>
+                        </s:element>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element mw:isEncrypt="no" mw:typeName="getStreetByStreetIdResponse" name="getStreetByStreetIdResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" mw:tableName=""
+                                   mw:typeName="name" name="return">
+                            <s:complexType>
+                                <s:sequence>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name00" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name01" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name02" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name03" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name04" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name05" type="s:string"/>
+                                </s:sequence>
+                            </s:complexType>
+                        </s:element>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+        </s:schema>
+    </types>
+    <message name="receive2InputMessage">
+        <part element="tns:getStreetByStreetId" name="receive2Input"/>
+    </message>
+    <message name="receive2OutputMessage">
+        <part element="tns:getStreetByStreetIdResponse" name="receive2Output"/>
+    </message>
+    <portType name="GetStreetByStreetIdPortType">
+        <operation name="receive2">
+            <input message="tns:receive2InputMessage" name="receive2Input"/>
+            <output message="tns:receive2OutputMessage" name="receive2Output"/>
+        </operation>
+    </portType>
+    <binding name="GetStreetByStreetIdSOAP12Binding" type="tns:GetStreetByStreetIdPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="receive2">
+            <soap12:operation soapAction="/mediate/ips/MOI/GetStreetByStreetId" style="document"/>
+            <input name="receive2Input">
+                <soap12:body use="literal"/>
+            </input>
+            <output name="receive2Output">
+                <soap12:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetStreetByStreetIdSOAP11Binding" type="tns:GetStreetByStreetIdPortType">
+        <soap11:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="receive2">
+            <soap11:operation soapAction="/mediate/ips/MOI/GetStreetByStreetId" style="document"/>
+            <input name="receive2Input">
+                <soap11:body use="literal"/>
+            </input>
+            <output name="receive2Output">
+                <soap11:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetStreetByStreetIdHTTPGETBinding" type="tns:GetStreetByStreetIdPortType">
+        <http:binding verb="GET"/>
+        <operation name="receive2">
+            <http:operation location="/getStreetByStreetId"/>
+            <input name="receive2Input">
+                <http:urlEncoded/>
+            </input>
+            <output name="receive2Output">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetStreetByStreetIdHTTPPOSTXMLBinding" type="tns:GetStreetByStreetIdPortType">
+        <http:binding verb="POST"/>
+        <operation name="receive2">
+            <http:operation location="/getStreetByStreetId"/>
+            <input name="receive2Input">
+                <mime:content part="receive2Input" type="application/xml"/>
+            </input>
+            <output name="receive2Output">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetStreetByStreetIdHTTPPOSTFORMBinding" type="tns:GetStreetByStreetIdPortType">
+        <http:binding verb="POST"/>
+        <operation name="receive2">
+            <http:operation location="/getStreetByStreetId"/>
+            <input name="receive2Input">
+                <mime:content part="receive2Input" type="application/x-www-form-urlencoded"/>
+            </input>
+            <output name="receive2Output">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetStreetByStreetIdHTTPPOSTJSONBinding" type="tns:GetStreetByStreetIdPortType">
+        <http:binding verb="POST"/>
+        <operation name="receive2">
+            <http:operation location="/getStreetByStreetId"/>
+            <input name="receive2Input">
+                <mime:content part="receive2Input" type="application/json"/>
+            </input>
+            <output name="receive2Output">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GetStreetByStreetIdService">
+        <port binding="tns:GetStreetByStreetIdSOAP12Binding" name="GetStreetByStreetIdSOAP12BindingPort">
+            <soap12:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetStreetByStreetId"/>
+        </port>
+        <port binding="tns:GetStreetByStreetIdSOAP11Binding" name="GetStreetByStreetIdSOAP11BindingPort">
+            <soap11:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetStreetByStreetId"/>
+        </port>
+        <port binding="tns:GetStreetByStreetIdHTTPGETBinding" name="GetStreetByStreetIdHTTPGETBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetStreetByStreetId"/>
+        </port>
+        <port binding="tns:GetStreetByStreetIdHTTPPOSTXMLBinding" name="GetStreetByStreetIdHTTPPOSTXMLBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetStreetByStreetId"/>
+        </port>
+        <port binding="tns:GetStreetByStreetIdHTTPPOSTFORMBinding" name="GetStreetByStreetIdHTTPPOSTFORMBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetStreetByStreetId"/>
+        </port>
+        <port binding="tns:GetStreetByStreetIdHTTPPOSTJSONBinding" name="GetStreetByStreetIdHTTPPOSTJSONBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetStreetByStreetId"/>
+        </port>
+    </service>
+</definitions>

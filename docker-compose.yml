@@ -1,0 +1,348 @@
+networks:
+  katm-network:
+    driver: bridge
+
+volumes:
+  keycloak-data:
+  kafka-data:
+  zookeeper-data:
+  minio-data:
+  grafana-data:
+  prometheus-data:
+
+services:
+
+  # ─── Zookeeper ────────────────────────────────────────────────
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.6.0
+    container_name: katm-zookeeper
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+    volumes:
+      - zookeeper-data:/var/lib/zookeeper/data
+    networks:
+      - katm-network
+
+  # ─── Kafka ────────────────────────────────────────────────────
+  kafka:
+    image: confluentinc/cp-kafka:7.6.0
+    container_name: katm-kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+      - "29092:29092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_TRANSACTION_STATE_LOG_MIN_ISR: 1
+      KAFKA_TRANSACTION_STATE_LOG_REPLICATION_FACTOR: 1
+      KAFKA_AUTO_CREATE_TOPICS_ENABLE: 'true'
+    volumes:
+      - kafka-data:/var/lib/kafka/data
+    networks:
+      - katm-network
+    healthcheck:
+      test: ["CMD", "kafka-topics", "--bootstrap-server", "localhost:9092", "--list"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+  # ─── Kafka UI ─────────────────────────────────────────────────
+  kafka-ui:
+    image: provectuslabs/kafka-ui:latest
+    container_name: katm-kafka-ui
+    depends_on:
+      - kafka
+    ports:
+      - "8090:8080"
+    environment:
+      KAFKA_CLUSTERS_0_NAME: katm-local
+      KAFKA_CLUSTERS_0_BOOTSTRAPSERVERS: kafka:29092
+    networks:
+      - katm-network
+
+  # ─── Keycloak ─────────────────────────────────────────────────
+  keycloak:
+    image: quay.io/keycloak/keycloak:24.0.3
+    container_name: katm-keycloak
+    command: start-dev --import-realm
+    environment:
+      KEYCLOAK_ADMIN: ${KEYCLOAK_ADMIN:-admin}
+      KEYCLOAK_ADMIN_PASSWORD: ${KEYCLOAK_ADMIN_PASSWORD:-admin}
+      KC_DB: dev-file
+      KC_HOSTNAME_STRICT: 'false'
+      KC_HTTP_ENABLED: 'true'
+    ports:
+      - "8180:8080"
+    volumes:
+      - keycloak-data:/opt/keycloak/data
+      - ./infra/keycloak/katm-realm.json:/opt/keycloak/data/import/realm-export.json
+    networks:
+      - katm-network
+    healthcheck:
+      test: ["CMD-SHELL", "exec 3<>/dev/tcp/localhost/8080 && echo -e 'GET /health/ready HTTP/1.1\r\nHost: localhost\r\n\r\n' >&3 && cat <&3 | grep -q '200'"]
+      interval: 30s
+      timeout: 10s
+      retries: 10
+
+  # ─── MinIO (S3-compatible) ────────────────────────────────────
+  minio:
+    image: minio/minio:latest
+    container_name: katm-minio
+    command: server /data --console-address ":9001"
+    environment:
+      MINIO_ROOT_USER: ${MINIO_ROOT_USER:-minioadmin}
+      MINIO_ROOT_PASSWORD: ${MINIO_ROOT_PASSWORD:-minioadmin}
+    ports:
+      - "9000:9000"
+      - "9001:9001"
+    volumes:
+      - minio-data:/data
+    networks:
+      - katm-network
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:9000/minio/health/live"]
+      interval: 30s
+      timeout: 20s
+      retries: 3
+
+  # ─── Zipkin ───────────────────────────────────────────────────
+  zipkin:
+    image: openzipkin/zipkin:3
+    container_name: katm-zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - katm-network
+
+  # ─── Prometheus ───────────────────────────────────────────────
+  prometheus:
+    image: prom/prometheus:v2.51.2
+    container_name: katm-prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./docker/prometheus/prometheus.yml:/etc/prometheus/prometheus.yml
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+      - '--web.enable-lifecycle'
+    networks:
+      - katm-network
+
+  # ─── Grafana ──────────────────────────────────────────────────
+  grafana:
+    image: grafana/grafana:10.4.2
+    container_name: katm-grafana
+    ports:
+      - "3000:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: ${GRAFANA_USER:-admin}
+      GF_SECURITY_ADMIN_PASSWORD: ${GRAFANA_PASSWORD:-admin}
+      GF_USERS_ALLOW_SIGN_UP: 'false'
+    volumes:
+      - grafana-data:/var/lib/grafana
+      - ./docker/grafana/provisioning:/etc/grafana/provisioning
+    depends_on:
+      - prometheus
+    networks:
+      - katm-network
+
+  # ─── Microservices ────────────────────────────────────────────
+  katm-auth:
+    build:
+      context: .
+      dockerfile: services/katm-auth/Dockerfile
+    container_name: katm-auth
+    ports:
+      - "8081:8081"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KAFKA_SERVERS: kafka:29092
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-1521}
+      DB_SERVICE: ${DB_SERVICE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - keycloak
+      - kafka
+    networks:
+      - katm-network
+
+  katm-gateway:
+    build:
+      context: .
+      dockerfile: services/katm-gateway/Dockerfile
+    container_name: katm-gateway
+    ports:
+      - "8080:8080"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      AUTH_SERVICE_URL: http://katm-auth:8081
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - keycloak
+      - katm-auth
+    networks:
+      - katm-network
+
+  katm-client:
+    build:
+      context: .
+      dockerfile: services/katm-client/Dockerfile
+    container_name: katm-client
+    ports:
+      - "8087:8087"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KAFKA_SERVERS: kafka:29092
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-1521}
+      DB_SERVICE: ${DB_SERVICE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - keycloak
+      - kafka
+    networks:
+      - katm-network
+
+  katm-claim:
+    build:
+      context: .
+      dockerfile: services/katm-claim/Dockerfile
+    container_name: katm-claim
+    ports:
+      - "8085:8085"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KAFKA_SERVERS: kafka:29092
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-1521}
+      DB_SERVICE: ${DB_SERVICE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      S3_ENDPOINT: http://minio:9000
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - keycloak
+      - kafka
+      - minio
+    networks:
+      - katm-network
+
+  katm-contract:
+    build:
+      context: .
+      dockerfile: services/katm-contract/Dockerfile
+    container_name: katm-contract
+    ports:
+      - "8086:8086"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KAFKA_SERVERS: kafka:29092
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-1521}
+      DB_SERVICE: ${DB_SERVICE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      S3_ENDPOINT: http://minio:9000
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - keycloak
+      - kafka
+    networks:
+      - katm-network
+
+  katm-notification:
+    build:
+      context: .
+      dockerfile: services/katm-notification/Dockerfile
+    container_name: katm-notification
+    ports:
+      - "8082:8082"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KAFKA_SERVERS: kafka:29092
+      SMTP_HOST: ${SMTP_HOST:-smtp.gmail.com}
+      SMTP_USER: ${SMTP_USER}
+      SMTP_PASS: ${SMTP_PASS}
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - kafka
+    networks:
+      - katm-network
+
+  katm-report:
+    build:
+      context: .
+      dockerfile: services/katm-report/Dockerfile
+    container_name: katm-report
+    ports:
+      - "8084:8084"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KAFKA_SERVERS: kafka:29092
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-1521}
+      DB_SERVICE: ${DB_SERVICE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      S3_ENDPOINT: http://minio:9000
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - kafka
+      - minio
+    networks:
+      - katm-network
+
+  katm-scheduler:
+    build:
+      context: .
+      dockerfile: services/katm-scheduler/Dockerfile
+    container_name: katm-scheduler
+    ports:
+      - "8088:8088"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KAFKA_SERVERS: kafka:29092
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-1521}
+      DB_SERVICE: ${DB_SERVICE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - kafka
+    networks:
+      - katm-network
+
+  katm-mip:
+    build:
+      context: .
+      dockerfile: services/katm-mip/Dockerfile
+    container_name: katm-mip
+    ports:
+      - "8089:8089"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      KAFKA_SERVERS: kafka:29092
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-1521}
+      DB_SERVICE: ${DB_SERVICE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - kafka
+    networks:
+      - katm-network

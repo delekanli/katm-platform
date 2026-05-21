@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: katm-contract
+  namespace: katm
+  labels:
+    app: katm-contract
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: katm-contract
+  template:
+    metadata:
+      labels:
+        app: katm-contract
+    spec:
+      containers:
+        - name: katm-contract
+          image: katm/katm-contract:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8086
+          envFrom:
+            - configMapRef:
+                name: katm-config
+            - secretRef:
+                name: katm-secrets
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8086
+            initialDelaySeconds: 40
+            periodSeconds: 10
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8086
+            initialDelaySeconds: 60
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: katm-contract
+  namespace: katm
+spec:
+  selector:
+    app: katm-contract
+  ports:
+    - port: 8086
+      targetPort: 8086

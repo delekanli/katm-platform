@@ -1,0 +1,1129 @@
+{
+  "info": {
+    "name": "KATM Platform API",
+    "_postman_id": "katm-platform-v1",
+    "description": "Полная коллекция API-запросов платформы KATM.\n\nПеред использованием выполните запрос **Login** — токен автоматически сохранится в переменную `access_token`.\n\nПеременные коллекции:\n- `base_url` — базовый URL gateway (по умолчанию http://localhost:8080)\n- `access_token` — Bearer-токен (заполняется автоматически после Login)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    { "key": "base_url",     "value": "http://localhost:8080", "type": "string" },
+    { "key": "access_token", "value": "",                      "type": "string" }
+  ],
+  "auth": {
+    "type": "bearer",
+    "bearer": [{ "key": "token", "value": "{{access_token}}", "type": "string" }]
+  },
+  "item": [
+    {
+      "name": "01. Auth",
+      "description": "Аутентификация и управление токенами (katm-auth :8081)",
+      "item": [
+        {
+          "name": "Login",
+          "event": [
+            {
+              "listen": "test",
+              "script": {
+                "exec": [
+                  "var json = pm.response.json();",
+                  "if (json.accessToken) {",
+                  "    pm.collectionVariables.set('access_token', json.accessToken);",
+                  "}"
+                ],
+                "type": "text/javascript"
+              }
+            }
+          ],
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"login\": \"bank_user\",\n  \"password\": \"changeme\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/login",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "login"]
+            },
+            "description": "Вход по логину и паролю. Токен автоматически сохраняется в переменную `access_token`."
+          }
+        },
+        {
+          "name": "Refresh Token",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "X-Refresh-Token", "value": "<refresh_token>" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/refresh",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "refresh"]
+            }
+          }
+        },
+        {
+          "name": "Logout",
+          "request": {
+            "auth": { "type": "noauth" },
+            "method": "POST",
+            "header": [{ "key": "X-Refresh-Token", "value": "<refresh_token>" }],
+            "url": {
+              "raw": "{{base_url}}/api/v1/auth/logout",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "auth", "logout"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "02. Clients",
+      "description": "Управление клиентскими данными (katm-client :8087) — роли: BANK, ADMIN, CLIENT",
+      "item": [
+        {
+          "name": "Сохранить паспортные данные (МИП)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"tin\": \"123456789\",\n  \"firstName\": \"Алишер\",\n  \"lastName\": \"Каримов\",\n  \"middleName\": \"Бахромович\",\n  \"docSeries\": \"AA\",\n  \"docNumber\": \"1234567\",\n  \"docIssueDate\": \"2015-06-10\",\n  \"docExpireDate\": \"2025-06-10\",\n  \"resident\": 1,\n  \"sex\": 1,\n  \"isAlive\": 1,\n  \"birthCountry\": \"UZ\",\n  \"birthPlace\": \"Toshkent\",\n  \"birthDate\": \"1990-03-22\",\n  \"pinfl\": \"12345678901234\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/clients/passport",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "clients", "passport"]
+            }
+          }
+        },
+        {
+          "name": "Сменить пароль клиента",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/clients/CLI-001/password?newPassword=NewPass123!",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "clients", "CLI-001", "password"],
+              "query": [{ "key": "newPassword", "value": "NewPass123!" }]
+            }
+          }
+        },
+        {
+          "name": "Проверить запрет на кредит (ban-status)",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/clients/ban-status?subjectId=SUBJ-001&identifier=12345678901234&additionalInfo=",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "clients", "ban-status"],
+              "query": [
+                { "key": "subjectId",      "value": "SUBJ-001" },
+                { "key": "identifier",     "value": "12345678901234" },
+                { "key": "additionalInfo", "value": "", "disabled": true }
+              ]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "03. Credits & Reports",
+      "description": "Кредитные отчёты и FICO-скоринг (katm-report :8084) — роли: BANK, ADMIN",
+      "item": [
+        {
+          "name": "Запросить кредитный отчёт",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"isLegal\": 0,\n  \"claimId\": \"CLAIM-2024-001\",\n  \"reportId\": 1,\n  \"ip\": \"192.168.1.100\",\n  \"mipResponse\": \"\",\n  \"isShow\": 1,\n  \"lang\": \"ru\",\n  \"juridicalStatus\": \"\",\n  \"loanSubject\": \"Заёмщик\",\n  \"personalCode\": \"12345678901234\",\n  \"inn\": \"\",\n  \"ownerId\": \"OWN-001\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/credits/report",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "credits", "report"]
+            }
+          }
+        },
+        {
+          "name": "Статус асинхронного отчёта",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/credits/report/status?claimId=CLAIM-2024-001&token=TOKEN-XYZ",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "credits", "report", "status"],
+              "query": [
+                { "key": "claimId", "value": "CLAIM-2024-001" },
+                { "key": "token",   "value": "TOKEN-XYZ" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Infoscore-отчёт по ПИНФЛ",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/credits/report/pin/12345678901234",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "credits", "report", "pin", "12345678901234"]
+            }
+          }
+        },
+        {
+          "name": "Infoscore-отчёт по ИНН юрлица",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/credits/report/tin/123456789",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "credits", "report", "tin", "123456789"]
+            }
+          }
+        },
+        {
+          "name": "FICO-скор по clientId",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/credits/fico/CLI-001",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "credits", "fico", "CLI-001"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "04. Bank Claims",
+      "description": "Управление заявками банка (katm-claim :8085) — роли: BANK, ADMIN",
+      "item": [
+        {
+          "name": "Отклонить заявку",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimId\": \"CLAIM-2024-001\",\n  \"date\": \"2024-03-15\",\n  \"declineNumber\": \"DCL-001\",\n  \"declineReason\": \"Недостаточное обеспечение\",\n  \"declineReasonNote\": \"Залог не соответствует требованиям банка\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/claim/decline",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "claim", "decline"]
+            }
+          }
+        },
+        {
+          "name": "Получить информацию по заявке",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimId\": \"CLAIM-2024-001\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/claim/info",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "claim", "info"]
+            }
+          }
+        },
+        {
+          "name": "Запрос по физлицу (МИП)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ip\": \"192.168.1.100\",\n  \"method\": \"GetCitizenInfoServiceNew\",\n  \"contentType\": \"application/json\",\n  \"mipPin\": \"12345678901234\",\n  \"mipSurname\": \"КАРИМОВ\",\n  \"mipName\": \"АЛИШЕР\",\n  \"mipPatronymic\": \"БАХРОМОВИЧ\",\n  \"mipBirthdate\": \"1990-03-22\",\n  \"mipSex\": \"1\",\n  \"queryRequestDateTime\": \"2024-03-15T10:00:00\",\n  \"queryRequestContent\": \"\",\n  \"mipState\": \"SUCCESS\",\n  \"mipRequestTime\": \"2024-03-15T10:00:00\",\n  \"mipResponseTime\": \"2024-03-15T10:00:01\",\n  \"mipRequestContent\": \"\",\n  \"mipResponseContent\": \"\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/claim/individual",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "claim", "individual"]
+            }
+          }
+        },
+        {
+          "name": "Запрос по юрлицу (МИП)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ip\": \"192.168.1.100\",\n  \"method\": \"GetEntityInfo\",\n  \"contentType\": \"application/json\",\n  \"mipFullName\": \"ООО РОМАШКА\",\n  \"mipInn\": \"123456789\",\n  \"mipOkpo\": \"98765432\",\n  \"queryRequestDateTime\": \"2024-03-15T10:00:00\",\n  \"queryRequestContent\": \"\",\n  \"mipState\": \"SUCCESS\",\n  \"mipRequestTime\": \"2024-03-15T10:00:00\",\n  \"mipResponseTime\": \"2024-03-15T10:00:01\",\n  \"mipRequestContent\": \"\",\n  \"mipResponseContent\": \"\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/claim/entity",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "claim", "entity"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "05. Insurance Claims",
+      "description": "Страховые случаи (katm-claim :8085) — роли: INSURANCE, ADMIN",
+      "item": [
+        {
+          "name": "Инициировать страховой случай",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimId\": \"INS-CLAIM-001\",\n  \"claimDate\": \"2024-03-15\",\n  \"agreementId\": \"AGMT-001\",\n  \"agreementDate\": \"2023-01-01\",\n  \"docSeries\": \"AA\",\n  \"docNumber\": \"1234567\",\n  \"region\": \"Toshkent\",\n  \"localRegion\": \"Yunusobod\",\n  \"address\": \"ул. Навои 10\",\n  \"pinfl\": \"12345678901234\",\n  \"phone\": \"998901234567\",\n  \"creditAmount\": 50000000,\n  \"currency\": \"UZS\",\n  \"creditEndDate\": \"2026-01-01\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/insurance/claims/initiate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "insurance", "claims", "initiate"]
+            }
+          }
+        },
+        {
+          "name": "Добавить страховой случай",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"initialId\": 12345,\n  \"claimId\": \"INS-CLAIM-001\",\n  \"lastName\": \"Каримов\",\n  \"firstName\": \"Алишер\",\n  \"middleName\": \"Бахромович\",\n  \"sex\": 1,\n  \"birthDate\": \"1990-03-22\",\n  \"docIssueDate\": \"2015-06-10\",\n  \"docExpireDate\": \"2025-06-10\",\n  \"isUpdate\": 0,\n  \"mipState\": 1,\n  \"mipResult\": \"SUCCESS\",\n  \"tin\": \"123456789\",\n  \"docType\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/insurance/claims/add",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "insurance", "claims", "add"]
+            }
+          }
+        },
+        {
+          "name": "Отклонить страховой случай",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/insurance/claims/reject/INS-CLAIM-001?reason=Не соответствует условиям договора",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "insurance", "claims", "reject", "INS-CLAIM-001"],
+              "query": [{ "key": "reason", "value": "Не соответствует условиям договора" }]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "06. Retailer Claims",
+      "description": "Регистрация заявок от ритейлеров (katm-claim :8085) — роли: RETAILER, ADMIN",
+      "item": [
+        {
+          "name": "Регистрация заявки физлица (по ПИНФЛ, МИП)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pinfl\": \"12345678901234\",\n  \"docSeries\": \"AA\",\n  \"docNumber\": \"1234567\",\n  \"docType\": \"10\",\n  \"claimId\": \"RET-CLAIM-001\",\n  \"claimDate\": \"2024-03-15\",\n  \"agreementId\": \"AGMT-RET-001\",\n  \"agreementDate\": \"2024-03-15\",\n  \"region\": \"Toshkent\",\n  \"localRegion\": \"Yunusobod\",\n  \"address\": \"ул. Навои 10\",\n  \"inn\": \"\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/retailer/claim/registration",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "retailer", "claim", "registration"]
+            }
+          }
+        },
+        {
+          "name": "Регистрация заявки физлица (ручной ввод)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inn\": \"\",\n  \"firstName\": \"Алишер\",\n  \"lastName\": \"Каримов\",\n  \"middleName\": \"Бахромович\",\n  \"birthDate\": \"1990-03-22\",\n  \"issueDocDate\": \"2015-06-10\",\n  \"expiredDocDate\": \"2025-06-10\",\n  \"male\": 1,\n  \"resident\": 1,\n  \"mrz\": \"\",\n  \"docType\": \"10\",\n  \"claimId\": \"RET-CLAIM-EXT-001\",\n  \"claimDate\": \"2024-03-15\",\n  \"agreementId\": \"AGMT-RET-001\",\n  \"agreementDate\": \"2024-03-15\",\n  \"region\": \"Toshkent\",\n  \"localRegion\": \"Yunusobod\",\n  \"address\": \"ул. Навои 10\",\n  \"docSeries\": \"AA\",\n  \"docNumber\": \"1234567\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/retailer/claim/registration/ext",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "retailer", "claim", "registration", "ext"]
+            }
+          }
+        },
+        {
+          "name": "Регистрация доверенной заявки физлица",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pinfl\": \"12345678901234\",\n  \"docSeries\": \"AA\",\n  \"docNumber\": \"1234567\",\n  \"docType\": \"10\",\n  \"claimId\": \"RET-CLAIM-TRUST-001\",\n  \"claimDate\": \"2024-03-15\",\n  \"agreementId\": \"AGMT-RET-001\",\n  \"agreementDate\": \"2024-03-15\",\n  \"region\": \"Toshkent\",\n  \"localRegion\": \"Yunusobod\",\n  \"address\": \"ул. Навои 10\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/retailer/claim/registration/trusted",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "retailer", "claim", "registration", "trusted"]
+            }
+          }
+        },
+        {
+          "name": "Регистрация заявки юрлица (МИП)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inn\": \"123456789\",\n  \"resident\": 1,\n  \"government\": 0,\n  \"clientType\": \"LEGAL\",\n  \"headCode\": \"HEAD-001\",\n  \"claimId\": \"RET-LEGAL-001\",\n  \"claimDate\": \"2024-03-15\",\n  \"agreementId\": \"AGMT-LEGAL-001\",\n  \"agreementDate\": \"2024-03-15\",\n  \"region\": \"Toshkent\",\n  \"localRegion\": \"Mirzo Ulugbek\",\n  \"address\": \"ул. Амира Темура 100\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/retailer/claim/legal/registration",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "retailer", "claim", "legal", "registration"]
+            }
+          }
+        },
+        {
+          "name": "Регистрация заявки юрлица (ручной ввод)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inn\": \"123456789\",\n  \"resident\": 1,\n  \"government\": 0,\n  \"clientType\": \"LEGAL\",\n  \"headCode\": \"HEAD-001\",\n  \"claimId\": \"RET-LEGAL-EXT-001\",\n  \"claimDate\": \"2024-03-15\",\n  \"agreementId\": \"AGMT-LEGAL-001\",\n  \"agreementDate\": \"2024-03-15\",\n  \"region\": \"Toshkent\",\n  \"localRegion\": \"Mirzo Ulugbek\",\n  \"address\": \"ул. Амира Темура 100\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/retailer/claim/legal/registration/ext",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "retailer", "claim", "legal", "registration", "ext"]
+            }
+          }
+        },
+        {
+          "name": "Регистрация заявки организации (МИП)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inn\": \"987654321\",\n  \"resident\": 1,\n  \"government\": 1,\n  \"clientType\": \"ORG\",\n  \"headCode\": \"HEAD-002\",\n  \"claimId\": \"RET-ORG-001\",\n  \"claimDate\": \"2024-03-15\",\n  \"agreementId\": \"AGMT-ORG-001\",\n  \"agreementDate\": \"2024-03-15\",\n  \"region\": \"Toshkent\",\n  \"localRegion\": \"Shayxontohur\",\n  \"address\": \"Мустакиллик майдони 1\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/retailer/claim/org/registration",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "retailer", "claim", "org", "registration"]
+            }
+          }
+        },
+        {
+          "name": "Регистрация заявки организации (ручной ввод)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inn\": \"987654321\",\n  \"resident\": 1,\n  \"government\": 1,\n  \"clientType\": \"ORG\",\n  \"headCode\": \"HEAD-002\",\n  \"claimId\": \"RET-ORG-EXT-001\",\n  \"claimDate\": \"2024-03-15\",\n  \"agreementId\": \"AGMT-ORG-001\",\n  \"agreementDate\": \"2024-03-15\",\n  \"region\": \"Toshkent\",\n  \"localRegion\": \"Shayxontohur\",\n  \"address\": \"Мустакиллик майдони 1\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/retailer/claim/org/registration/ext",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "retailer", "claim", "org", "registration", "ext"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "07. Bank Contracts",
+      "description": "Управление договорами банка (katm-contract :8086) — роли: BANK, ADMIN",
+      "item": [
+        {
+          "name": "Отклонить заявку",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimId\": \"CLAIM-2024-001\",\n  \"date\": \"2024-03-15\",\n  \"declineNumber\": \"DCL-001\",\n  \"declineReason\": \"Недостаточное обеспечение\",\n  \"declineReasonNote\": \"Залог не соответствует требованиям\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/claim/decline",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "claim", "decline"]
+            }
+          }
+        },
+        {
+          "name": "Получить информацию по заявке",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimId\": \"CLAIM-2024-001\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/claim/info",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "claim", "info"]
+            }
+          }
+        },
+        {
+          "name": "Запрос по физлицу (МИП)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ip\": \"192.168.1.100\",\n  \"method\": \"GetCitizenInfoServiceNew\",\n  \"contentType\": \"application/json\",\n  \"mipPin\": \"12345678901234\",\n  \"mipSurname\": \"КАРИМОВ\",\n  \"mipName\": \"АЛИШЕР\",\n  \"mipPatronymic\": \"БАХРОМОВИЧ\",\n  \"mipBirthdate\": \"1990-03-22\",\n  \"mipSex\": \"1\",\n  \"queryRequestDateTime\": \"2024-03-15T10:00:00\",\n  \"queryRequestContent\": \"\",\n  \"mipState\": \"SUCCESS\",\n  \"mipRequestTime\": \"2024-03-15T10:00:00\",\n  \"mipResponseTime\": \"2024-03-15T10:00:01\",\n  \"mipRequestContent\": \"\",\n  \"mipResponseContent\": \"\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/claim/individual",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "claim", "individual"]
+            }
+          }
+        },
+        {
+          "name": "Запрос по юрлицу (МИП)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ip\": \"192.168.1.100\",\n  \"method\": \"GetEntityInfo\",\n  \"contentType\": \"application/json\",\n  \"mipFullName\": \"ООО РОМАШКА\",\n  \"mipInn\": \"123456789\",\n  \"mipOkpo\": \"98765432\",\n  \"queryRequestDateTime\": \"2024-03-15T10:00:00\",\n  \"queryRequestContent\": \"\",\n  \"mipState\": \"SUCCESS\",\n  \"mipRequestTime\": \"2024-03-15T10:00:00\",\n  \"mipResponseTime\": \"2024-03-15T10:00:01\",\n  \"mipRequestContent\": \"\",\n  \"mipResponseContent\": \"\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/claim/entity",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "claim", "entity"]
+            }
+          }
+        },
+        {
+          "name": "Регистрация кредитного договора",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimId\": \"CLAIM-2024-001\",\n  \"contractId\": \"CONTRACT-2024-001\",\n  \"inn\": \"123456789\",\n  \"nibbd\": \"00000\",\n  \"date\": \"2024-03-15\",\n  \"creditType\": \"01\",\n  \"creditObject\": \"Потребительский кредит\",\n  \"creditDateBegin\": \"2024-03-15\",\n  \"creditDateEnd\": \"2027-03-15\",\n  \"summa\": 50000000,\n  \"currency\": \"UZS\",\n  \"procent\": 24.0,\n  \"juridicNumber\": \"JUR-001\",\n  \"supply\": \"Залог\",\n  \"quality\": \"Стандартный\",\n  \"urgency\": \"Срочный\",\n  \"hbranch\": \"01001\",\n  \"creditActivity\": \"Потребление\",\n  \"reason\": \"Личные нужды\",\n  \"founder\": \"\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/contract/loan",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "contract", "loan"]
+            }
+          }
+        },
+        {
+          "name": "Регистрация лизингового договора",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimId\": \"CLAIM-2024-001\",\n  \"inn\": \"123456789\",\n  \"nibbd\": \"00000\",\n  \"leasingId\": \"LEASE-2024-001\",\n  \"date\": \"2024-03-15\",\n  \"dateLeasingBegin\": \"2024-03-15\",\n  \"dateLeasingEnd\": \"2027-03-15\",\n  \"notariusRegNumber\": \"NR-001\",\n  \"notariusRegDate\": \"2024-03-10\",\n  \"notariusCertNumber\": \"NC-001\",\n  \"notariusCertDate\": \"2024-03-10\",\n  \"governmentRegNum\": \"GR-001\",\n  \"governmentRegDate\": \"2024-03-12\",\n  \"summa\": 100000000,\n  \"currency\": \"UZS\",\n  \"procent\": 18.0,\n  \"countObject\": 1\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/contract/lease",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "contract", "lease"]
+            }
+          }
+        },
+        {
+          "name": "Регистрация факторингового договора",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimId\": \"CLAIM-2024-001\",\n  \"inn\": \"123456789\",\n  \"nibbd\": \"00000\",\n  \"factoringId\": \"FACTOR-2024-001\",\n  \"date\": \"2024-03-15\",\n  \"dateBegin\": \"2024-03-15\",\n  \"dateEnd\": \"2025-03-15\",\n  \"bankElement\": \"Без регресса\",\n  \"factoringNumber\": \"FN-001\",\n  \"currency\": \"UZS\",\n  \"summaLiability\": 200000000,\n  \"summaDiscount\": 5000000,\n  \"innDebtor\": \"987654321\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/contract/factoring",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "contract", "factoring"]
+            }
+          }
+        },
+        {
+          "name": "Добавить погашение по кредиту",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"CONTRACT-2024-001\",\n  \"contractType\": \"LOAN\",\n  \"date\": \"2024-04-01\",\n  \"loanStatus\": \"Действующий\",\n  \"account\": \"20206000000000000001\",\n  \"coa\": \"20206\",\n  \"isUpdate\": 0,\n  \"repaymentArray\": [\n    {\n      \"date\": \"2024-04-01\",\n      \"account\": \"20206000000000000001\",\n      \"debit\": 0,\n      \"credit\": 1500000,\n      \"startBalance\": 50000000,\n      \"endBalance\": 48500000\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/contract/repayment",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "contract", "repayment"]
+            }
+          }
+        },
+        {
+          "name": "Добавить детали погашения",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"CONTRACT-2024-001\",\n  \"contractType\": \"LOAN\",\n  \"date\": \"2024-04-01\",\n  \"isUpdate\": 0,\n  \"repaymentDetArray\": [\n    {\n      \"payType\": \"Основной долг\",\n      \"docNum\": \"PAY-001\",\n      \"docType\": \"Мемориальный ордер\",\n      \"docDate\": \"2024-04-01\",\n      \"currency\": \"UZS\",\n      \"nameA\": \"Банк\",\n      \"branchA\": \"01001\",\n      \"accountA\": \"20206000000000000001\",\n      \"nameB\": \"Клиент\",\n      \"branchB\": \"00000\",\n      \"accountB\": \"40817000000000000001\",\n      \"summa\": 1000000,\n      \"purpose\": \"Погашение основного долга\",\n      \"coaA\": \"20206\",\n      \"coaB\": \"40817\",\n      \"paymentId\": \"PMNT-001\"\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/contract/repayment/details",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "contract", "repayment", "details"]
+            }
+          }
+        },
+        {
+          "name": "Добавить детали погашения (субъект)",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"CONTRACT-2024-001\",\n  \"contractType\": \"LOAN\",\n  \"date\": \"2024-04-01\",\n  \"isUpdate\": 0,\n  \"lomRepayDetailArray\": [\n    {\n      \"payType\": \"Основной долг\",\n      \"docNum\": \"PAY-001\",\n      \"docType\": \"Мемориальный ордер\",\n      \"docDate\": \"2024-04-01\",\n      \"currency\": \"UZS\",\n      \"nameA\": \"Банк\",\n      \"branchA\": \"01001\",\n      \"accountA\": \"20206000000000000001\",\n      \"nameB\": \"Клиент\",\n      \"branchB\": \"00000\",\n      \"accountB\": \"40817000000000000001\",\n      \"summa\": 500000,\n      \"purpose\": \"Погашение процентов\",\n      \"coaA\": \"20206\",\n      \"coaB\": \"40817\",\n      \"paymentId\": \"PMNT-002\"\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/contract/repayment/subject",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "contract", "repayment", "subject"]
+            }
+          }
+        },
+        {
+          "name": "Добавить график погашения кредита",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"CONTRACT-2024-001\",\n  \"inn\": \"123456789\",\n  \"nibbd\": \"00000\",\n  \"date\": \"2024-03-15\",\n  \"isUpdate\": 0,\n  \"scheduleArray\": [\n    { \"date\": \"2024-04-15\", \"currency\": \"UZS\", \"amount\": 1388889, \"percent\": 1000000 },\n    { \"date\": \"2024-05-15\", \"currency\": \"UZS\", \"amount\": 1388889, \"percent\": 972222 },\n    { \"date\": \"2024-06-15\", \"currency\": \"UZS\", \"amount\": 1388889, \"percent\": 944444 }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/contract/schedule",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "contract", "schedule"]
+            }
+          }
+        },
+        {
+          "name": "Добавить статус счетов",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"CONTRACT-2024-001\",\n  \"contractType\": \"LOAN\",\n  \"date\": \"2024-03-15\",\n  \"isUpdate\": 0,\n  \"accStatusDetailArray\": [\n    {\n      \"coa\": \"20206\",\n      \"account\": \"20206000000000000001\",\n      \"dateOpen\": \"2024-03-15\",\n      \"dateClose\": null,\n      \"date\": \"2024-03-15\"\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/contract/account-status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "contract", "account-status"]
+            }
+          }
+        },
+        {
+          "name": "Регистрация связанных лиц",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimId\": \"CLAIM-2024-001\",\n  \"ownerId\": \"OWN-001\",\n  \"loanSubject\": \"Поручитель\",\n  \"subjectStatus\": \"Действующий\",\n  \"date\": \"2024-03-15\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/contract/related-entities",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "contract", "related-entities"]
+            }
+          }
+        },
+        {
+          "name": "Регистрация залогодателя",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"ownerId\": \"OWN-001\",\n  \"inn\": \"123456789\",\n  \"clientId\": \"CLI-001\",\n  \"resident\": \"1\",\n  \"subjectType\": \"Физическое лицо\",\n  \"identityCardType\": \"Паспорт\",\n  \"identityCardSerial\": \"AA\",\n  \"identityCardNumber\": \"1234567\",\n  \"identityCardDate\": \"2015-06-10\",\n  \"sex\": \"1\",\n  \"fio\": \"Каримов Алишер Бахромович\",\n  \"personalCode\": \"12345678901234\",\n  \"nibbd\": \"00000\",\n  \"clientType\": \"Физическое лицо\",\n  \"fullName\": \"\",\n  \"agreementNumber\": \"AGMT-001\",\n  \"agreementDate\": \"2024-03-15\",\n  \"legalAddress\": \"Toshkent\",\n  \"dateBirthday\": \"1990-03-22\",\n  \"date\": \"2024-03-15\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/contract/pledge-owner",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "contract", "pledge-owner"]
+            }
+          }
+        },
+        {
+          "name": "Регистрация обеспечения по кредиту",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"guaranteeId\": \"GUAR-001\",\n  \"claimId\": \"CLAIM-2024-001\",\n  \"ownerId\": \"OWN-001\",\n  \"agreementNumber\": \"AGMT-001\",\n  \"agreementDate\": \"2024-03-15\",\n  \"guaranteeType\": \"Недвижимость\",\n  \"contractNumber\": \"CONTRACT-2024-001\",\n  \"contractDate\": \"2024-03-15\",\n  \"summa\": 75000000,\n  \"currency\": \"UZS\",\n  \"name\": \"Квартира\",\n  \"description\": \"2-комнатная квартира, 65 кв.м\",\n  \"status\": \"Действующий\",\n  \"loanSubject\": \"Залог\",\n  \"date\": \"2024-03-15\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/contract/loan-security",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "contract", "loan-security"]
+            }
+          }
+        },
+        {
+          "name": "Добавить график погашения лизинга",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"leasingId\": \"LEASE-2024-001\",\n  \"inn\": \"123456789\",\n  \"nibbd\": \"00000\",\n  \"date\": \"2024-03-15\",\n  \"isUpdate\": 0,\n  \"scheduleArray\": [\n    { \"date\": \"2024-04-15\", \"currency\": \"UZS\", \"amount\": 2777778, \"percent\": 1500000 },\n    { \"date\": \"2024-05-15\", \"currency\": \"UZS\", \"amount\": 2777778, \"percent\": 1450000 }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/contract/lease-schedule",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "contract", "lease-schedule"]
+            }
+          }
+        },
+        {
+          "name": "Добавить погашение по лизингу",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"inn\": \"123456789\",\n  \"nibbd\": \"00000\",\n  \"clientId\": \"CLI-001\",\n  \"leasingId\": \"LEASE-2024-001\",\n  \"date\": \"2024-04-01\",\n  \"isUpdate\": 0,\n  \"repaymentArray\": [\n    {\n      \"date\": \"2024-04-01\",\n      \"currency\": \"UZS\",\n      \"leasingType\": \"Финансовый\",\n      \"amortization\": 1,\n      \"amount\": 2777778,\n      \"name\": \"Оборудование\",\n      \"status\": \"Действующий\",\n      \"details\": \"Ежемесячный платёж\",\n      \"objectId\": \"OBJ-001\"\n    }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/bank/contract/lease-repayment",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "bank", "contract", "lease-repayment"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "08. Retailer Contracts",
+      "description": "Управление договорами ритейлеров (katm-contract :8086) — роли: RETAILER, ADMIN",
+      "item": [
+        {
+          "name": "Регистрация договора",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimId\": \"RET-CLAIM-001\",\n  \"contractId\": \"RET-CONTRACT-001\",\n  \"object\": \"Электроника\",\n  \"startDate\": \"2024-03-15\",\n  \"endDate\": \"2025-03-15\",\n  \"creditAmount\": 5000000,\n  \"currency\": \"UZS\",\n  \"isUpdate\": 0,\n  \"contractStatus\": \"Действующий\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/retailer/contract/registration",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "retailer", "contract", "registration"]
+            }
+          }
+        },
+        {
+          "name": "Добавить график погашения",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimId\": \"RET-CLAIM-001\",\n  \"contractId\": \"RET-CONTRACT-001\",\n  \"isUpdate\": 0,\n  \"planArray\": [\n    { \"payDate\": \"2024-04-15\", \"mainAmount\": 416667, \"percentAmount\": 83333 },\n    { \"payDate\": \"2024-05-15\", \"mainAmount\": 416667, \"percentAmount\": 75000 },\n    { \"payDate\": \"2024-06-15\", \"mainAmount\": 416667, \"percentAmount\": 66667 }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/retailer/contract/schedule/add",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "retailer", "contract", "schedule", "add"]
+            }
+          }
+        },
+        {
+          "name": "Добавить погашение",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"claimId\": \"RET-CLAIM-001\",\n  \"contractId\": \"RET-CONTRACT-001\",\n  \"isUpdate\": 0,\n  \"repaymentArray\": [\n    { \"payDate\": \"2024-04-15\", \"mainAmount\": 416667, \"percentAmount\": 83333 }\n  ]\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/retailer/contract/repayment/add",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "retailer", "contract", "repayment", "add"]
+            }
+          }
+        },
+        {
+          "name": "Получить список погашений",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"RET-CONTRACT-001\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/retailer/contract/repayment/list",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "retailer", "contract", "repayment", "list"]
+            }
+          }
+        },
+        {
+          "name": "Получить график погашений",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"RET-CONTRACT-001\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/retailer/contract/repayment/schedule",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "retailer", "contract", "repayment", "schedule"]
+            }
+          }
+        },
+        {
+          "name": "Получить информацию по договору",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"contractId\": \"RET-CONTRACT-001\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/retailer/contract/info",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "retailer", "contract", "info"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "09. Notifications",
+      "description": "OTP, подписки, SMS и email (katm-notification :8088)",
+      "item": [
+        {
+          "name": "Отправить OTP",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/otp?msisdn=998901234567",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "otp"],
+              "query": [{ "key": "msisdn", "value": "998901234567" }]
+            }
+          }
+        },
+        {
+          "name": "Активировать подписку",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/subscriptions/CLI-001/activate?msisdn=998901234567&lang=1",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "subscriptions", "CLI-001", "activate"],
+              "query": [
+                { "key": "msisdn", "value": "998901234567" },
+                { "key": "lang",   "value": "1" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Приостановить подписку",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/subscriptions/CLI-001/suspend",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "subscriptions", "CLI-001", "suspend"]
+            }
+          }
+        },
+        {
+          "name": "Статус подписки",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/subscriptions/CLI-001/status",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "subscriptions", "CLI-001", "status"]
+            }
+          }
+        },
+        {
+          "name": "Переактивировать замороженную подписку",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/subscriptions/CLI-001/reactivate",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "subscriptions", "CLI-001", "reactivate"]
+            }
+          }
+        },
+        {
+          "name": "Снять заморозку подписки",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/subscriptions/CLI-001/cancel-freeze",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "subscriptions", "CLI-001", "cancel-freeze"]
+            }
+          }
+        },
+        {
+          "name": "Отправить SMS",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"recipient\": \"998901234567\",\n  \"text\": \"Ваш платёж успешно обработан.\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/sms/send",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "sms", "send"]
+            }
+          }
+        },
+        {
+          "name": "Массовая отправка SMS",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/sms/send-bulk?recipients=998901234567&recipients=998907654321&text=Уважаемый клиент, напоминаем об оплате.",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "sms", "send-bulk"],
+              "query": [
+                { "key": "recipients", "value": "998901234567" },
+                { "key": "recipients", "value": "998907654321" },
+                { "key": "text",       "value": "Уважаемый клиент, напоминаем об оплате." }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Отправить Email",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"to\": \"client@example.com\",\n  \"subject\": \"Уведомление о платеже\",\n  \"body\": \"Ваш платёж на сумму 1 500 000 сум успешно обработан.\",\n  \"html\": false\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/notifications/email/send",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "notifications", "email", "send"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "10. MIP — Citizens",
+      "description": "Данные граждан через МИП/SOAP (katm-mip :8089) — isAuthenticated()",
+      "item": [
+        {
+          "name": "Данные гражданина по ПИНФЛ",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/mip/citizens/12345678901234",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "mip", "citizens", "12345678901234"]
+            }
+          }
+        },
+        {
+          "name": "Документы гражданина по ПИНФЛ",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/mip/citizens/12345678901234/documents",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "mip", "citizens", "12345678901234", "documents"]
+            }
+          }
+        },
+        {
+          "name": "Пакетный запрос по списку ПИНФЛ",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "[\n  \"12345678901234\",\n  \"98765432109876\",\n  \"11223344556677\"\n]",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/mip/citizens/batch",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "mip", "citizens", "batch"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "11. MIP — Tax",
+      "description": "Налоговая информация через МИП/SOAP (katm-mip :8089) — isAuthenticated()",
+      "item": [
+        {
+          "name": "Налоговая информация по ПИНФЛ",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/mip/tax/pin/12345678901234",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "mip", "tax", "pin", "12345678901234"]
+            }
+          }
+        },
+        {
+          "name": "Налоговая информация по ИНН",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/mip/tax/tin/123456789",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "mip", "tax", "tin", "123456789"]
+            }
+          }
+        },
+        {
+          "name": "ИНН по серии и номеру паспорта",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/mip/tax/tin-by-passport?series=AA&number=1234567",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "mip", "tax", "tin-by-passport"],
+              "query": [
+                { "key": "series", "value": "AA" },
+                { "key": "number", "value": "1234567" }
+              ]
+            }
+          }
+        },
+        {
+          "name": "Задолженности по налогам",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "{{base_url}}/api/v1/mip/tax/debt/123456789",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "mip", "tax", "debt", "123456789"]
+            }
+          }
+        }
+      ]
+    },
+    {
+      "name": "12. MIP — Integration",
+      "description": "Синхронные запросы к МИП (katm-mip :8089) — роли: ADMIN, MANAGER",
+      "item": [
+        {
+          "name": "Отправить синхронный запрос",
+          "request": {
+            "method": "POST",
+            "header": [{ "key": "Content-Type", "value": "application/json" }],
+            "body": {
+              "mode": "raw",
+              "raw": "{\n  \"pin\": \"12345678901234\",\n  \"requestType\": \"CITIZEN_INFO\"\n}",
+              "options": { "raw": { "language": "json" } }
+            },
+            "url": {
+              "raw": "{{base_url}}/api/v1/mip/request?requestType=CITIZEN_INFO",
+              "host": ["{{base_url}}"],
+              "path": ["api", "v1", "mip", "request"],
+              "query": [{ "key": "requestType", "value": "CITIZEN_INFO" }]
+            }
+          }
+        }
+      ]
+    }
+  ]
+}

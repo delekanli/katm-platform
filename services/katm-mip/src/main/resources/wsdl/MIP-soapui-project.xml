@@ -1,0 +1,356 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project id="b048d4e4-232f-4a01-942d-ce7f6f348ef2" activeEnvironment="Default" name="MIP" resourceRoot="" soapui-version="5.5.0" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" id="b092f8bb-2837-445d-a60a-1061a1be4df1" wsaVersion="NONE" name="PersonDocInfoServiceSOAP12Binding" type="wsdl" bindingName="{urn:megaware:/mediate/ips/PC/PersonDocInfoService/PersonDocInfoService.wsdl}PersonDocInfoServiceSOAP12Binding" soapVersion="1_2" anonymous="optional" definition="file:/D:/projects/Infokredit/katm/katm-mip/src/main/resources/wsdl/PersonDocInfoService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache/><con:endpoints><con:endpoint>https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService</con:endpoint></con:endpoints><con:operation id="0c5349fd-2037-4f44-be0c-13b50fd8a687" isOneWay="false" action="/mediate/ips/PC/PersonDocInfoService" name="soapMsg_Receive" bindingOperationName="soapMsg_Receive" type="Request-Response" outputName="soapMsg_ReceiveOutput" inputName="soapMsg_ReceiveInput" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="5c74c8f2-d76a-41aa-8ff0-1c3644b82114" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:per="urn:megaware:/mediate/ips/PC/PersonDocInfoService/PersonDocInfoService.wsdl">\r
+   <soap:Header/>\r
+   <soap:Body>\r
+      <per:CEPRequest>\r
+         <!--Optional:-->\r
+         <AuthInfo>\r
+            <!--Optional:-->\r
+            <userSessionId>?</userSessionId>\r
+            <WS_ID>?</WS_ID>\r
+            <!--Optional:-->\r
+            <LE_ID>?</LE_ID>\r
+         </AuthInfo>\r
+         <Data>?</Data>\r
+         <!--Optional:-->\r
+         <Signature>?</Signature>\r
+         <!--Optional:-->\r
+         <PublicCert>?</PublicCert>\r
+         <!--Optional:-->\r
+         <SignDate>?</SignDate>\r
+      </per:CEPRequest>\r
+   </soap:Body>\r
+</soap:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:megaware:/mediate/ips/PC/PersonDocInfoService/PersonDocInfoService.wsdl/PersonDocInfoServicePortType/soapMsg_ReceiveInput"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="8ad1bedd-925a-4d1b-ae70-536b6821657c" wsaVersion="NONE" name="PersonDocInfoServiceSOAP11Binding" type="wsdl" bindingName="{urn:megaware:/mediate/ips/PC/PersonDocInfoService/PersonDocInfoService.wsdl}PersonDocInfoServiceSOAP11Binding" soapVersion="1_1" anonymous="optional" definition="file:/D:/projects/Infokredit/katm/katm-mip/src/main/resources/wsdl/PersonDocInfoService.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/D:/projects/Infokredit/katm/katm-mip/src/main/resources/wsdl/PersonDocInfoService.wsdl"><con:part><con:url>file:/D:/projects/Infokredit/katm/katm-mip/src/main/resources/wsdl/PersonDocInfoService.wsdl</con:url><con:content><![CDATA[<definitions targetNamespace="urn:megaware:/mediate/ips/PC/PersonDocInfoService/PersonDocInfoService.wsdl" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:mw="http://www.mobicware.com" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="urn:megaware:/mediate/ips/PC/PersonDocInfoService/PersonDocInfoService.wsdl" xmlns:wsa="http://www.w3.org/2005/08/addressing">
+  <types>
+    <s:schema targetNamespace="urn:megaware:/mediate/ips/PC/PersonDocInfoService/PersonDocInfoService.wsdl">
+      <s:element mw:isEncrypt="no" name="CEPRequest">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" mw:tableName="" name="AuthInfo">
+              <s:complexType>
+                <s:sequence>
+                  <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="userSessionId" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="WS_ID" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="LE_ID" type="s:string"/>
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="Data" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="Signature" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="PublicCert" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="SignDate" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element mw:isEncrypt="no" name="CEPResponse">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="Result" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="Data" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="Comments" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </types>
+  <message name="soapMsg_ReceiveInputMessage">
+    <part element="tns:CEPRequest" name="soapMsg_ReceiveInput"/>
+  </message>
+  <message name="soapMsg_ReceiveOutputMessage">
+    <part element="tns:CEPResponse" name="soapMsg_ReceiveOutput"/>
+  </message>
+  <portType name="PersonDocInfoServicePortType">
+    <operation name="soapMsg_Receive">
+      <input message="tns:soapMsg_ReceiveInputMessage" name="soapMsg_ReceiveInput"/>
+      <output message="tns:soapMsg_ReceiveOutputMessage" name="soapMsg_ReceiveOutput"/>
+    </operation>
+  </portType>
+  <binding name="PersonDocInfoServiceSOAP12Binding" type="tns:PersonDocInfoServicePortType">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="soapMsg_Receive">
+      <soap12:operation soapAction="/mediate/ips/PC/PersonDocInfoService" style="document"/>
+      <input name="soapMsg_ReceiveInput">
+        <soap12:body use="literal"/>
+      </input>
+      <output name="soapMsg_ReceiveOutput">
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="PersonDocInfoServiceSOAP11Binding" type="tns:PersonDocInfoServicePortType">
+    <soap11:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="soapMsg_Receive">
+      <soap11:operation soapAction="/mediate/ips/PC/PersonDocInfoService" style="document"/>
+      <input name="soapMsg_ReceiveInput">
+        <soap11:body use="literal"/>
+      </input>
+      <output name="soapMsg_ReceiveOutput">
+        <soap11:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="PersonDocInfoServiceHTTPGETBinding" type="tns:PersonDocInfoServicePortType">
+    <http:binding verb="GET"/>
+    <operation name="soapMsg_Receive">
+      <http:operation location="/CEPRequest"/>
+      <input name="soapMsg_ReceiveInput">
+        <http:urlEncoded/>
+      </input>
+      <output name="soapMsg_ReceiveOutput">
+        <mime:mimeXml part="Body"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="PersonDocInfoServiceHTTPPOSTXMLBinding" type="tns:PersonDocInfoServicePortType">
+    <http:binding verb="POST"/>
+    <operation name="soapMsg_Receive">
+      <http:operation location="/CEPRequest"/>
+      <input name="soapMsg_ReceiveInput">
+        <mime:content part="soapMsg_ReceiveInput" type="application/xml"/>
+      </input>
+      <output name="soapMsg_ReceiveOutput">
+        <mime:mimeXml part="Body"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="PersonDocInfoServiceHTTPPOSTFORMBinding" type="tns:PersonDocInfoServicePortType">
+    <http:binding verb="POST"/>
+    <operation name="soapMsg_Receive">
+      <http:operation location="/CEPRequest"/>
+      <input name="soapMsg_ReceiveInput">
+        <mime:content part="soapMsg_ReceiveInput" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output name="soapMsg_ReceiveOutput">
+        <mime:mimeXml part="Body"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="PersonDocInfoServiceHTTPPOSTJSONBinding" type="tns:PersonDocInfoServicePortType">
+    <http:binding verb="POST"/>
+    <operation name="soapMsg_Receive">
+      <http:operation location="/CEPRequest"/>
+      <input name="soapMsg_ReceiveInput">
+        <mime:content part="soapMsg_ReceiveInput" type="application/json"/>
+      </input>
+      <output name="soapMsg_ReceiveOutput">
+        <mime:mimeXml part="Body"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="PersonDocInfoServiceService">
+    <port binding="tns:PersonDocInfoServiceSOAP12Binding" name="PersonDocInfoServiceSOAP12BindingPort">
+      <soap12:address location="https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService"/>
+    </port>
+    <port binding="tns:PersonDocInfoServiceSOAP11Binding" name="PersonDocInfoServiceSOAP11BindingPort">
+      <soap11:address location="https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService"/>
+    </port>
+    <port binding="tns:PersonDocInfoServiceHTTPGETBinding" name="PersonDocInfoServiceHTTPGETBindingPort">
+      <http:address location="https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService"/>
+    </port>
+    <port binding="tns:PersonDocInfoServiceHTTPPOSTXMLBinding" name="PersonDocInfoServiceHTTPPOSTXMLBindingPort">
+      <http:address location="https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService"/>
+    </port>
+    <port binding="tns:PersonDocInfoServiceHTTPPOSTFORMBinding" name="PersonDocInfoServiceHTTPPOSTFORMBindingPort">
+      <http:address location="https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService"/>
+    </port>
+    <port binding="tns:PersonDocInfoServiceHTTPPOSTJSONBinding" name="PersonDocInfoServiceHTTPPOSTJSONBindingPort">
+      <http:address location="https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService"/>
+    </port>
+  </service>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService</con:endpoint></con:endpoints><con:operation id="5172d04d-79bd-4b3c-a01c-187d89d2dca1" isOneWay="false" action="/mediate/ips/PC/PersonDocInfoService" name="soapMsg_Receive" bindingOperationName="soapMsg_Receive" type="Request-Response" outputName="soapMsg_ReceiveOutput" inputName="soapMsg_ReceiveInput" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="098516cc-c3b2-453a-beef-addefd3569c7" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://ips.gov.uz:443/mediate/ips/PC/PersonDocInfoService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:per="urn:megaware:/mediate/ips/PC/PersonDocInfoService/PersonDocInfoService.wsdl">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <per:CEPRequest>\r
+         <!--Optional:-->\r
+         <AuthInfo>\r
+            <!--Optional:-->\r
+            <userSessionId>?</userSessionId>\r
+            <WS_ID>?</WS_ID>\r
+            <!--Optional:-->\r
+            <LE_ID>?</LE_ID>\r
+         </AuthInfo>\r
+         <Data>?</Data>\r
+         <!--Optional:-->\r
+         <Signature>?</Signature>\r
+         <!--Optional:-->\r
+         <PublicCert>?</PublicCert>\r
+         <!--Optional:-->\r
+         <SignDate>?</SignDate>\r
+      </per:CEPRequest>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="/mediate/ips/PC/PersonDocInfoService"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="ef8ef608-5da4-4258-a05f-6df6f7786202" wsaVersion="NONE" name="GetAddressSOAP11Binding" type="wsdl" bindingName="{urn:megaware:/mediate/ips/MOI/GetAddress/GetAddress.wsdl}GetAddressSOAP11Binding" soapVersion="1_1" anonymous="optional" definition="file:/D:/projects/Infokredit/katm/katm-mip/src/main/resources/wsdl/GetAddress.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache/><con:endpoints><con:endpoint>https://ips.gov.uz:443/mediate/ips/MOI/GetAddress</con:endpoint></con:endpoints><con:operation id="c29df8f9-c7c3-411e-aedb-504121a5191c" isOneWay="false" action="/mediate/ips/MOI/GetAddress" name="receive1" bindingOperationName="receive1" type="Request-Response" outputName="receive1Output" inputName="receive1Input" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="f5f86a78-714d-40d9-b026-e0805b9e46d5" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://ips.gov.uz:443/mediate/ips/MOI/GetAddress</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:get="urn:megaware:/mediate/ips/MOI/GetAddress/GetAddress.wsdl">\r
+   <soapenv:Header/>\r
+   <soapenv:Body>\r
+      <get:Request>\r
+         <Pin>?</Pin>\r
+         <Guid>?</Guid>\r
+      </get:Request>\r
+   </soapenv:Body>\r
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="/mediate/ips/MOI/GetAddress"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:WsdlInterface" id="f0e432bf-613f-4fb5-ab6c-5ced081778b8" wsaVersion="NONE" name="GetAddressSOAP12Binding" type="wsdl" bindingName="{urn:megaware:/mediate/ips/MOI/GetAddress/GetAddress.wsdl}GetAddressSOAP12Binding" soapVersion="1_2" anonymous="optional" definition="file:/D:/projects/Infokredit/katm/katm-mip/src/main/resources/wsdl/GetAddress.wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="file:/D:/projects/Infokredit/katm/katm-mip/src/main/resources/wsdl/GetAddress.wsdl"><con:part><con:url>file:/D:/projects/Infokredit/katm/katm-mip/src/main/resources/wsdl/GetAddress.wsdl</con:url><con:content><![CDATA[<definitions targetNamespace="urn:megaware:/mediate/ips/MOI/GetAddress/GetAddress.wsdl" xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:mw="http://www.mobicware.com" xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:tns="urn:megaware:/mediate/ips/MOI/GetAddress/GetAddress.wsdl" xmlns:wsa="http://www.w3.org/2005/08/addressing">
+  <types>
+    <s:schema targetNamespace="urn:megaware:/mediate/ips/MOI/GetAddress/GetAddress.wsdl">
+      <s:element mw:isEncrypt="no" name="Request">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="Pin" type="s:string"/>
+            <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="Guid" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+      <s:element mw:isEncrypt="no" name="ResponseModel">
+        <s:complexType>
+          <s:sequence>
+            <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pPinpp" type="s:long"/>
+            <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" mw:tableName="" name="pPermanentAddress">
+              <s:complexType>
+                <s:sequence>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pCountry" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pRegion" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pDistrict" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pPlace" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pStreet" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pAddress" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pHouse" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pBlock" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pFlat" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pRegdate" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pRegtill" type="s:string"/>
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" mw:tableName="" name="pTemproaryAddress">
+              <s:complexType>
+                <s:sequence>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pCountry" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pRegion" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pDistrict" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pPlace" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pStreet" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pAddress" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pHouse" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pBlock" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pFlat" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pRegdate" type="s:string"/>
+                  <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:nillable="true" mw:preamble="" name="pRegtill" type="s:string"/>
+                </s:sequence>
+              </s:complexType>
+            </s:element>
+            <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:description="" mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" name="pRequestGuid" type="s:string"/>
+          </s:sequence>
+        </s:complexType>
+      </s:element>
+    </s:schema>
+  </types>
+  <message name="receive1InputMessage">
+    <part element="tns:Request" name="receive1Input"/>
+  </message>
+  <message name="receive1OutputMessage">
+    <part element="tns:ResponseModel" name="receive1Output"/>
+  </message>
+  <portType name="GetAddressPortType">
+    <operation name="receive1">
+      <input message="tns:receive1InputMessage" name="receive1Input"/>
+      <output message="tns:receive1OutputMessage" name="receive1Output"/>
+    </operation>
+  </portType>
+  <binding name="GetAddressSOAP12Binding" type="tns:GetAddressPortType">
+    <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="receive1">
+      <soap12:operation soapAction="/mediate/ips/MOI/GetAddress" style="document"/>
+      <input name="receive1Input">
+        <soap12:body use="literal"/>
+      </input>
+      <output name="receive1Output">
+        <soap12:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="GetAddressSOAP11Binding" type="tns:GetAddressPortType">
+    <soap11:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+    <operation name="receive1">
+      <soap11:operation soapAction="/mediate/ips/MOI/GetAddress" style="document"/>
+      <input name="receive1Input">
+        <soap11:body use="literal"/>
+      </input>
+      <output name="receive1Output">
+        <soap11:body use="literal"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="GetAddressHTTPGETBinding" type="tns:GetAddressPortType">
+    <http:binding verb="GET"/>
+    <operation name="receive1">
+      <http:operation location="/Request"/>
+      <input name="receive1Input">
+        <http:urlEncoded/>
+      </input>
+      <output name="receive1Output">
+        <mime:mimeXml part="Body"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="GetAddressHTTPPOSTXMLBinding" type="tns:GetAddressPortType">
+    <http:binding verb="POST"/>
+    <operation name="receive1">
+      <http:operation location="/Request"/>
+      <input name="receive1Input">
+        <mime:content part="receive1Input" type="application/xml"/>
+      </input>
+      <output name="receive1Output">
+        <mime:mimeXml part="Body"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="GetAddressHTTPPOSTFORMBinding" type="tns:GetAddressPortType">
+    <http:binding verb="POST"/>
+    <operation name="receive1">
+      <http:operation location="/Request"/>
+      <input name="receive1Input">
+        <mime:content part="receive1Input" type="application/x-www-form-urlencoded"/>
+      </input>
+      <output name="receive1Output">
+        <mime:mimeXml part="Body"/>
+      </output>
+    </operation>
+  </binding>
+  <binding name="GetAddressHTTPPOSTJSONBinding" type="tns:GetAddressPortType">
+    <http:binding verb="POST"/>
+    <operation name="receive1">
+      <http:operation location="/Request"/>
+      <input name="receive1Input">
+        <mime:content part="receive1Input" type="application/json"/>
+      </input>
+      <output name="receive1Output">
+        <mime:mimeXml part="Body"/>
+      </output>
+    </operation>
+  </binding>
+  <service name="GetAddressService">
+    <port binding="tns:GetAddressSOAP12Binding" name="GetAddressSOAP12BindingPort">
+      <soap12:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetAddress"/>
+    </port>
+    <port binding="tns:GetAddressSOAP11Binding" name="GetAddressSOAP11BindingPort">
+      <soap11:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetAddress"/>
+    </port>
+    <port binding="tns:GetAddressHTTPGETBinding" name="GetAddressHTTPGETBindingPort">
+      <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetAddress"/>
+    </port>
+    <port binding="tns:GetAddressHTTPPOSTXMLBinding" name="GetAddressHTTPPOSTXMLBindingPort">
+      <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetAddress"/>
+    </port>
+    <port binding="tns:GetAddressHTTPPOSTFORMBinding" name="GetAddressHTTPPOSTFORMBindingPort">
+      <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetAddress"/>
+    </port>
+    <port binding="tns:GetAddressHTTPPOSTJSONBinding" name="GetAddressHTTPPOSTJSONBindingPort">
+      <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetAddress"/>
+    </port>
+  </service>
+</definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>https://ips.gov.uz:443/mediate/ips/MOI/GetAddress</con:endpoint></con:endpoints><con:operation id="ade4b7c1-0b02-4144-86bf-49111fa37d49" isOneWay="false" action="/mediate/ips/MOI/GetAddress" name="receive1" bindingOperationName="receive1" type="Request-Response" outputName="receive1Output" inputName="receive1Input" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call id="b6544ce3-a002-456b-80c0-ea25ff5397a1" name="Request 1"><con:settings/><con:encoding>UTF-8</con:encoding><con:endpoint>https://ips.gov.uz:443/mediate/ips/MOI/GetAddress</con:endpoint><con:request><![CDATA[<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope" xmlns:get="urn:megaware:/mediate/ips/MOI/GetAddress/GetAddress.wsdl">\r
+   <soap:Header/>\r
+   <soap:Body>\r
+      <get:Request>\r
+         <Pin>?</Pin>\r
+         <Guid>?</Guid>\r
+      </get:Request>\r
+   </soap:Body>\r
+</soap:Envelope>]]></con:request><con:credentials><con:authType>No Authorization</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="urn:megaware:/mediate/ips/MOI/GetAddress/GetAddress.wsdl/GetAddressPortType/receive1Input"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:properties/><con:wssContainer/><con:oAuth2ProfileContainer/><con:oAuth1ProfileContainer/><con:sensitiveInformation/></con:soapui-project>

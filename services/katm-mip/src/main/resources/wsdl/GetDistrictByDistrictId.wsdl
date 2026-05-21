@@ -1,0 +1,178 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:mw="http://www.mobicware.com"
+             xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:tns="urn:megaware:/mediate/ips/MOI/GetDistrictByDistrictId/GetDistrictByDistrictId.wsdl"
+             xmlns:wsa="http://www.w3.org/2005/08/addressing"
+             targetNamespace="urn:megaware:/mediate/ips/MOI/GetDistrictByDistrictId/GetDistrictByDistrictId.wsdl">
+    <types>
+        <s:schema targetNamespace="urn:megaware:/mediate/ips/MOI/GetDistrictByDistrictId/GetDistrictByDistrictId.wsdl">
+            <s:element mw:isEncrypt="no" mw:typeName="getDistrictByDistrictId" name="getDistrictByDistrictId">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="id" type="s:long"/>
+                        <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" mw:tableName=""
+                                   name="AuthInfo">
+                            <s:complexType>
+                                <s:sequence>
+                                    <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="userSessionId" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="WS_ID" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="LE_ID" type="s:string"/>
+                                </s:sequence>
+                            </s:complexType>
+                        </s:element>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element mw:isEncrypt="no" mw:typeName="getDistrictByDistrictIdResponse"
+                       name="getDistrictByDistrictIdResponse">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" mw:tableName=""
+                                   mw:typeName="name" name="return">
+                            <s:complexType>
+                                <s:sequence>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name00" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name01" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name02" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name03" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name04" type="s:string"/>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="sp_name05" type="s:string"/>
+                                </s:sequence>
+                            </s:complexType>
+                        </s:element>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+        </s:schema>
+    </types>
+    <message name="receive2InputMessage">
+        <part element="tns:getDistrictByDistrictId" name="receive2Input"/>
+    </message>
+    <message name="receive2OutputMessage">
+        <part element="tns:getDistrictByDistrictIdResponse" name="receive2Output"/>
+    </message>
+    <portType name="GetDistrictByDistrictIdPortType">
+        <operation name="receive2">
+            <input message="tns:receive2InputMessage" name="receive2Input"/>
+            <output message="tns:receive2OutputMessage" name="receive2Output"/>
+        </operation>
+    </portType>
+    <binding name="GetDistrictByDistrictIdSOAP12Binding" type="tns:GetDistrictByDistrictIdPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="receive2">
+            <soap12:operation soapAction="/mediate/ips/MOI/GetDistrictByDistrictId" style="document"/>
+            <input name="receive2Input">
+                <soap12:body use="literal"/>
+            </input>
+            <output name="receive2Output">
+                <soap12:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetDistrictByDistrictIdSOAP11Binding" type="tns:GetDistrictByDistrictIdPortType">
+        <soap11:binding transport="http://schemas.xmlsoap.org/soap/http"/>
+        <operation name="receive2">
+            <soap11:operation soapAction="/mediate/ips/MOI/GetDistrictByDistrictId" style="document"/>
+            <input name="receive2Input">
+                <soap11:body use="literal"/>
+            </input>
+            <output name="receive2Output">
+                <soap11:body use="literal"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetDistrictByDistrictIdHTTPGETBinding" type="tns:GetDistrictByDistrictIdPortType">
+        <http:binding verb="GET"/>
+        <operation name="receive2">
+            <http:operation location="/getDistrictByDistrictId"/>
+            <input name="receive2Input">
+                <http:urlEncoded/>
+            </input>
+            <output name="receive2Output">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetDistrictByDistrictIdHTTPPOSTXMLBinding" type="tns:GetDistrictByDistrictIdPortType">
+        <http:binding verb="POST"/>
+        <operation name="receive2">
+            <http:operation location="/getDistrictByDistrictId"/>
+            <input name="receive2Input">
+                <mime:content part="receive2Input" type="application/xml"/>
+            </input>
+            <output name="receive2Output">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetDistrictByDistrictIdHTTPPOSTFORMBinding" type="tns:GetDistrictByDistrictIdPortType">
+        <http:binding verb="POST"/>
+        <operation name="receive2">
+            <http:operation location="/getDistrictByDistrictId"/>
+            <input name="receive2Input">
+                <mime:content part="receive2Input" type="application/x-www-form-urlencoded"/>
+            </input>
+            <output name="receive2Output">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetDistrictByDistrictIdHTTPPOSTJSONBinding" type="tns:GetDistrictByDistrictIdPortType">
+        <http:binding verb="POST"/>
+        <operation name="receive2">
+            <http:operation location="/getDistrictByDistrictId"/>
+            <input name="receive2Input">
+                <mime:content part="receive2Input" type="application/json"/>
+            </input>
+            <output name="receive2Output">
+                <mime:mimeXml part="Body"/>
+            </output>
+        </operation>
+    </binding>
+    <service name="GetDistrictByDistrictIdService">
+        <port binding="tns:GetDistrictByDistrictIdSOAP12Binding" name="GetDistrictByDistrictIdSOAP12BindingPort">
+            <soap12:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetDistrictByDistrictId"/>
+        </port>
+        <port binding="tns:GetDistrictByDistrictIdSOAP11Binding" name="GetDistrictByDistrictIdSOAP11BindingPort">
+            <soap11:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetDistrictByDistrictId"/>
+        </port>
+        <port binding="tns:GetDistrictByDistrictIdHTTPGETBinding" name="GetDistrictByDistrictIdHTTPGETBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetDistrictByDistrictId"/>
+        </port>
+        <port binding="tns:GetDistrictByDistrictIdHTTPPOSTXMLBinding"
+              name="GetDistrictByDistrictIdHTTPPOSTXMLBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetDistrictByDistrictId"/>
+        </port>
+        <port binding="tns:GetDistrictByDistrictIdHTTPPOSTFORMBinding"
+              name="GetDistrictByDistrictIdHTTPPOSTFORMBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetDistrictByDistrictId"/>
+        </port>
+        <port binding="tns:GetDistrictByDistrictIdHTTPPOSTJSONBinding"
+              name="GetDistrictByDistrictIdHTTPPOSTJSONBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/MOI/GetDistrictByDistrictId"/>
+        </port>
+    </service>
+</definitions>

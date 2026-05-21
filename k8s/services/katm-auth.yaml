@@ -1,0 +1,60 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: katm-auth
+  namespace: katm
+  labels:
+    app: katm-auth
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: katm-auth
+  template:
+    metadata:
+      labels:
+        app: katm-auth
+    spec:
+      containers:
+        - name: katm-auth
+          image: katm/katm-auth:latest
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8081
+          envFrom:
+            - configMapRef:
+                name: katm-config
+            - secretRef:
+                name: katm-secrets
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: 8081
+            initialDelaySeconds: 40
+            periodSeconds: 10
+            failureThreshold: 5
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: 8081
+            initialDelaySeconds: 60
+            periodSeconds: 20
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: katm-auth
+  namespace: katm
+spec:
+  selector:
+    app: katm-auth
+  ports:
+    - port: 8081
+      targetPort: 8081

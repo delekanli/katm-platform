@@ -1,0 +1,43 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: katm-ingress
+  namespace: katm
+  annotations:
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+    # Rate limiting (дополнительный слой к Spring Cloud Gateway)
+    nginx.ingress.kubernetes.io/limit-rps: "200"
+    nginx.ingress.kubernetes.io/limit-connections: "50"
+    # Проброс реального IP клиента
+    nginx.ingress.kubernetes.io/enable-real-ip: "true"
+    nginx.ingress.kubernetes.io/forwarded-for-header: "X-Real-IP"
+    # OpenTelemetry трейсинг
+    nginx.ingress.kubernetes.io/enable-opentelemetry: "true"
+    nginx.ingress.kubernetes.io/opentelemetry-trust-incoming-span: "true"
+    # CORS обрабатывает Spring Gateway
+    nginx.ingress.kubernetes.io/enable-cors: "false"
+    # Таймауты
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "10"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "60"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "60"
+    # Сжатие
+    nginx.ingress.kubernetes.io/enable-gzip: "true"
+    nginx.ingress.kubernetes.io/gzip-types: "application/json text/plain"
+spec:
+  ingressClassName: nginx
+  tls:
+    - hosts:
+        - api.katm.gov.uz
+      secretName: katm-tls-secret
+  rules:
+    - host: api.katm.gov.uz
+      http:
+        paths:
+          - path: /api/
+            pathType: Prefix
+            backend:
+              service:
+                name: katm-gateway
+                port:
+                  number: 8080

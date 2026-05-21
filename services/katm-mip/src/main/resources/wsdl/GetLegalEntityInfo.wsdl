@@ -1,0 +1,329 @@
+<definitions xmlns="http://schemas.xmlsoap.org/wsdl/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/"
+             xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:mw="http://www.mobicware.com"
+             xmlns:s="http://www.w3.org/2001/XMLSchema" xmlns:soap11="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/"
+             xmlns:tns="urn:megaware:/mediate/ips/ILDS/GetLegalEntityInfo/GetLegalEntityInfo.wsdl"
+             xmlns:wsa="http://www.w3.org/2005/08/addressing"
+             targetNamespace="urn:megaware:/mediate/ips/ILDS/GetLegalEntityInfo/GetLegalEntityInfo.wsdl">
+    <types>
+        <s:schema targetNamespace="urn:megaware:/mediate/ips/ILDS/GetLegalEntityInfo/GetLegalEntityInfo.wsdl">
+            <s:element mw:isEncrypt="no" name="GetLegalEntityInfo">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" mw:tableName=""
+                                   name="AuthInfo">
+                            <s:complexType>
+                                <s:sequence>
+                                    <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="userSessionId"
+                                               type="s:string"></s:element>
+                                    <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="WS_ID" type="s:string"></s:element>
+                                    <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="LE_ID" type="s:string"></s:element>
+                                </s:sequence>
+                            </s:complexType>
+                        </s:element>
+                        <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble="" mw:tableName=""
+                                   name="msg">
+                            <s:complexType>
+                                <s:sequence>
+                                    <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="TIN" type="s:string"></s:element>
+                                    <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter=""
+                                               mw:encoding="Plain" mw:function="" mw:isCondition="no" mw:isEncrypt="no"
+                                               mw:length="0" mw:preamble="" name="_LHASH_KEY_"
+                                               type="s:string"></s:element>
+                                </s:sequence>
+                            </s:complexType>
+                        </s:element>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+            <s:element mw:isEncrypt="no" name="LEGAL_ENTITY_INFORMATION">
+                <s:complexType>
+                    <s:sequence>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="LE_ID" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="TIN" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="OKPO" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="KFS_CD" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="KFS_DESC_UZ" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="KFS_DESC_RU" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="1" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="KFS_DESC_EN" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="KOPF_CD" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="KOPF_DESC_UZ" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="KOPF_DESC_RU" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="KOPF_DESC_EN" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="SOATO_CD" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="SOATO_DESC_UZ" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="SOATO_DESC_RU" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="SOATO_DESC_EN" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="OKONH_CD" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="OKONH_DESC_UZ" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="OKONH_DESC_RU" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="OKONH_DESC_EN" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="OKED_CD" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="OKED_DESC_UZ" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="OKED_DESC_RU" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="OKED_DESC_EN" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="SOOGU_CD" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="SOOGU_DESC_UZ" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="SOOGU_DESC_RU" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="SOOGU_DESC_EN" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="LE_NM_UZ" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="ACRON_UZ" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="REG_DATE" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="REG_NO" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="LIQ_DATE" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="LIQ_NO" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="ZIP" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="ADDR" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="HEAD_NM" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="HEAD_TIN" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="PHONE" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="EMAIL" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="AUTH_CAPITAL" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="AUTH_CAPITAL_US" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="LE_TYP" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="SMALL_BIZ" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="EMP_AVR" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="TAX_CD" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="LE_STATUS" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="FOUNDER_NM1" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="FOUNDER_COUNTRY1" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="FOUNDER_NM2" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="FOUNDER_COUNTRY2" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="FOUNDER_NM3" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="FOUNDER_COUNTRY3" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="FOUNDER_NM4" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="FOUNDER_COUNTRY4" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="FOUNDER_NM5" type="s:string"></s:element>
+                        <s:element maxOccurs="1" minOccurs="0" mw:column="" mw:delimiter="" mw:encoding="Plain"
+                                   mw:function="" mw:isCondition="no" mw:isEncrypt="no" mw:length="0" mw:preamble=""
+                                   name="FOUNDER_COUNTRY5" type="s:string"></s:element>
+                    </s:sequence>
+                </s:complexType>
+            </s:element>
+        </s:schema>
+    </types>
+    <message name="receiveInputMessage">
+        <part element="tns:GetLegalEntityInfo" name="receiveInput"></part>
+    </message>
+    <message name="receiveOutputMessage">
+        <part element="tns:LEGAL_ENTITY_INFORMATION" name="receiveOutput"></part>
+    </message>
+    <portType name="GetLegalEntityInfoPortType">
+        <operation name="receive">
+            <input message="tns:receiveInputMessage" name="receiveInput"></input>
+            <output message="tns:receiveOutputMessage" name="receiveOutput"></output>
+        </operation>
+    </portType>
+    <binding name="GetLegalEntityInfoSOAP12Binding" type="tns:GetLegalEntityInfoPortType">
+        <soap12:binding transport="http://schemas.xmlsoap.org/soap/http"></soap12:binding>
+        <operation name="receive">
+            <soap12:operation soapAction="/mediate/ips/ILDS/GetLegalEntityInfo" style="document"></soap12:operation>
+            <input name="receiveInput">
+                <soap12:body use="literal"></soap12:body>
+            </input>
+            <output name="receiveOutput">
+                <soap12:body use="literal"></soap12:body>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetLegalEntityInfoSOAP11Binding" type="tns:GetLegalEntityInfoPortType">
+        <soap11:binding transport="http://schemas.xmlsoap.org/soap/http"></soap11:binding>
+        <operation name="receive">
+            <soap11:operation soapAction="/mediate/ips/ILDS/GetLegalEntityInfo" style="document"></soap11:operation>
+            <input name="receiveInput">
+                <soap11:body use="literal"></soap11:body>
+            </input>
+            <output name="receiveOutput">
+                <soap11:body use="literal"></soap11:body>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetLegalEntityInfoHTTPGETBinding" type="tns:GetLegalEntityInfoPortType">
+        <http:binding verb="GET"></http:binding>
+        <operation name="receive">
+            <http:operation location="/GetLegalEntityInfo"></http:operation>
+            <input name="receiveInput">
+                <http:urlEncoded></http:urlEncoded>
+            </input>
+            <output name="receiveOutput">
+                <mime:mimeXml part="Body"></mime:mimeXml>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetLegalEntityInfoHTTPPOSTXMLBinding" type="tns:GetLegalEntityInfoPortType">
+        <http:binding verb="POST"></http:binding>
+        <operation name="receive">
+            <http:operation location="/GetLegalEntityInfo"></http:operation>
+            <input name="receiveInput">
+                <mime:content part="receiveInput" type="application/xml"></mime:content>
+            </input>
+            <output name="receiveOutput">
+                <mime:mimeXml part="Body"></mime:mimeXml>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetLegalEntityInfoHTTPPOSTFORMBinding" type="tns:GetLegalEntityInfoPortType">
+        <http:binding verb="POST"></http:binding>
+        <operation name="receive">
+            <http:operation location="/GetLegalEntityInfo"></http:operation>
+            <input name="receiveInput">
+                <mime:content part="receiveInput" type="application/x-www-form-urlencoded"></mime:content>
+            </input>
+            <output name="receiveOutput">
+                <mime:mimeXml part="Body"></mime:mimeXml>
+            </output>
+        </operation>
+    </binding>
+    <binding name="GetLegalEntityInfoHTTPPOSTJSONBinding" type="tns:GetLegalEntityInfoPortType">
+        <http:binding verb="POST"></http:binding>
+        <operation name="receive">
+            <http:operation location="/GetLegalEntityInfo"></http:operation>
+            <input name="receiveInput">
+                <mime:content part="receiveInput" type="application/json"></mime:content>
+            </input>
+            <output name="receiveOutput">
+                <mime:mimeXml part="Body"></mime:mimeXml>
+            </output>
+        </operation>
+    </binding>
+    <service name="GetLegalEntityInfoService">
+        <port binding="tns:GetLegalEntityInfoSOAP12Binding" name="GetLegalEntityInfoSOAP12BindingPort">
+            <soap12:address location="https://ips.gov.uz:443/mediate/ips/ILDS/GetLegalEntityInfo"></soap12:address>
+        </port>
+        <port binding="tns:GetLegalEntityInfoSOAP11Binding" name="GetLegalEntityInfoSOAP11BindingPort">
+            <soap11:address location="https://ips.gov.uz:443/mediate/ips/ILDS/GetLegalEntityInfo"></soap11:address>
+        </port>
+        <port binding="tns:GetLegalEntityInfoHTTPGETBinding" name="GetLegalEntityInfoHTTPGETBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/ILDS/GetLegalEntityInfo"></http:address>
+        </port>
+        <port binding="tns:GetLegalEntityInfoHTTPPOSTXMLBinding" name="GetLegalEntityInfoHTTPPOSTXMLBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/ILDS/GetLegalEntityInfo"></http:address>
+        </port>
+        <port binding="tns:GetLegalEntityInfoHTTPPOSTFORMBinding" name="GetLegalEntityInfoHTTPPOSTFORMBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/ILDS/GetLegalEntityInfo"></http:address>
+        </port>
+        <port binding="tns:GetLegalEntityInfoHTTPPOSTJSONBinding" name="GetLegalEntityInfoHTTPPOSTJSONBindingPort">
+            <http:address location="https://ips.gov.uz:443/mediate/ips/ILDS/GetLegalEntityInfo"></http:address>
+        </port>
+    </service>
+</definitions>

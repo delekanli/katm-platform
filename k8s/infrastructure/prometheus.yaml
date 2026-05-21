@@ -1,0 +1,137 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: prometheus-config
+  namespace: katm
+data:
+  prometheus.yml: |
+    global:
+      scrape_interval: 15s
+      evaluation_interval: 15s
+
+    scrape_configs:
+      - job_name: 'katm-auth'
+        metrics_path: /actuator/prometheus
+        static_configs:
+          - targets: ['katm-auth:8081']
+
+      - job_name: 'katm-gateway'
+        metrics_path: /actuator/prometheus
+        static_configs:
+          - targets: ['katm-gateway:8080']
+
+      - job_name: 'katm-client'
+        metrics_path: /actuator/prometheus
+        static_configs:
+          - targets: ['katm-client:8087']
+
+      - job_name: 'katm-claim'
+        metrics_path: /actuator/prometheus
+        static_configs:
+          - targets: ['katm-claim:8085']
+
+      - job_name: 'katm-contract'
+        metrics_path: /actuator/prometheus
+        static_configs:
+          - targets: ['katm-contract:8086']
+
+      - job_name: 'katm-notification'
+        metrics_path: /actuator/prometheus
+        static_configs:
+          - targets: ['katm-notification:8088']
+
+      - job_name: 'katm-report'
+        metrics_path: /actuator/prometheus
+        static_configs:
+          - targets: ['katm-report:8084']
+
+      - job_name: 'katm-scheduler'
+        metrics_path: /actuator/prometheus
+        static_configs:
+          - targets: ['katm-scheduler:8091']
+
+      - job_name: 'katm-mip'
+        metrics_path: /actuator/prometheus
+        static_configs:
+          - targets: ['katm-mip:8089']
+
+      - job_name: 'katm-queue'
+        metrics_path: /actuator/prometheus
+        static_configs:
+          - targets: ['katm-queue:8083']
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: prometheus-pvc
+  namespace: katm
+spec:
+  accessModes:
+    - ReadWriteOnce
+  resources:
+    requests:
+      storage: 5Gi
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: prometheus
+  namespace: katm
+  labels:
+    app: prometheus
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: prometheus
+  template:
+    metadata:
+      labels:
+        app: prometheus
+    spec:
+      containers:
+        - name: prometheus
+          image: prom/prometheus:v2.51.2
+          args:
+            - "--config.file=/etc/prometheus/prometheus.yml"
+            - "--storage.tsdb.path=/prometheus"
+            - "--web.enable-lifecycle"
+          ports:
+            - containerPort: 9090
+          volumeMounts:
+            - name: config
+              mountPath: /etc/prometheus
+            - name: data
+              mountPath: /prometheus
+          resources:
+            requests:
+              cpu: 100m
+              memory: 256Mi
+            limits:
+              cpu: 500m
+              memory: 512Mi
+          readinessProbe:
+            httpGet:
+              path: /-/ready
+              port: 9090
+            initialDelaySeconds: 15
+            periodSeconds: 10
+      volumes:
+        - name: config
+          configMap:
+            name: prometheus-config
+        - name: data
+          persistentVolumeClaim:
+            claimName: prometheus-pvc
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: prometheus
+  namespace: katm
+spec:
+  selector:
+    app: prometheus
+  ports:
+    - port: 9090
+      targetPort: 9090

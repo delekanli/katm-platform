@@ -1,0 +1,116 @@
+<?xml version='1.0' encoding='UTF-8'?><!-- Published by JAX-WS RI (http://jax-ws.java.net). RI's version is JAX-WS RI 2.2.10 svn-revision#919b322c92f13ad085a933e8dd6dd35d4947364b. --><xs:schema xmlns:tns="http://deptorservice.mibcenter.mib.uz/" xmlns:xs="http://www.w3.org/2001/XMLSchema" version="1.0" targetNamespace="http://deptorservice.mibcenter.mib.uz/">
+
+<xs:complexType name="DebtorIndividualArgument">
+<xs:complexContent>
+<xs:extension base="tns:GenericArgument">
+<xs:sequence>
+<xs:element name="passport_sn" type="xs:string"/>
+<xs:element name="passport_number" type="xs:string"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="GenericArgument">
+<xs:sequence>
+<xs:element name="username" type="xs:string"/>
+<xs:element name="password" type="xs:string"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="debtorIndividualResult">
+<xs:complexContent>
+<xs:extension base="tns:genericResult">
+<xs:sequence>
+<xs:element name="all_debet_sum" type="xs:double" minOccurs="0"/>
+<xs:element name="debets" type="tns:debtorBean" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="passport_number" type="xs:string" minOccurs="0"/>
+<xs:element name="passport_sn" type="xs:string" minOccurs="0"/>
+<xs:element name="review_date" type="xs:dateTime" minOccurs="0"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="genericResult">
+<xs:sequence>
+<xs:element name="result_code" type="xs:int" minOccurs="0"/>
+<xs:element name="result_message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="debtorBean">
+<xs:complexContent>
+<xs:extension base="tns:baseDebtorBean">
+<xs:sequence>
+<xs:element name="area_name" type="xs:string" minOccurs="0"/>
+<xs:element name="debet_summa" type="xs:double" minOccurs="0"/>
+<xs:element name="features" type="tns:featureBean" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="id" type="xs:int" minOccurs="0"/>
+<xs:element name="org_id" type="xs:int" minOccurs="0"/>
+<xs:element name="org_type" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="baseDebtorBean">
+<xs:sequence>
+<xs:element name="result_code" type="xs:int" minOccurs="0"/>
+<xs:element name="result_message" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="featureBean">
+<xs:sequence>
+<xs:element name="field_key" type="xs:string" minOccurs="0"/>
+<xs:element name="field_value" type="xs:string" minOccurs="0"/>
+</xs:sequence>
+</xs:complexType>
+
+<xs:complexType name="DebtorJuridicalArgument">
+<xs:complexContent>
+<xs:extension base="tns:GenericArgument">
+<xs:sequence>
+<xs:element name="inn" type="xs:string"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="debtorJuridicalResult">
+<xs:complexContent>
+<xs:extension base="tns:genericResult">
+<xs:sequence>
+<xs:element name="all_debet_sum" type="xs:double" minOccurs="0"/>
+<xs:element name="debets" type="tns:debtorBean" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="inn" type="xs:string" minOccurs="0"/>
+<xs:element name="review_date" type="xs:dateTime" minOccurs="0"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="DebtorIndividualByPinflArgument">
+<xs:complexContent>
+<xs:extension base="tns:GenericArgument">
+<xs:sequence>
+<xs:element name="pinfl" type="xs:string"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+
+<xs:complexType name="debtorIndividualByPinflResult">
+<xs:complexContent>
+<xs:extension base="tns:genericResult">
+<xs:sequence>
+<xs:element name="all_debet_sum" type="xs:double" minOccurs="0"/>
+<xs:element name="debets" type="tns:debtorBean" nillable="true" minOccurs="0" maxOccurs="unbounded"/>
+<xs:element name="pinfl" type="xs:string" minOccurs="0"/>
+<xs:element name="review_date" type="xs:dateTime" minOccurs="0"/>
+</xs:sequence>
+</xs:extension>
+</xs:complexContent>
+</xs:complexType>
+</xs:schema>
