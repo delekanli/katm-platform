@@ -2,11 +2,17 @@ package uz.katm.client.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import uz.katm.client.domain.record.AddCreditBanRequest;
 import uz.katm.client.domain.record.BanStatusResponse;
+import uz.katm.client.domain.record.CreditBanHistoryItem;
+import uz.katm.client.domain.record.CreditBanInfo;
+import uz.katm.client.domain.record.DeactivateCreditBanRequest;
 import uz.katm.client.domain.record.PassportDataRequest;
 import uz.katm.client.domain.record.ProcedureResult;
 import uz.katm.client.exception.ClientServiceException;
 import uz.katm.client.repository.ClientRepository;
+
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -33,6 +39,26 @@ public class ClientService {
                 head, code, subjectId, identifier, clientIp, additionalInfo);
         assertSuccess(response.code(), response.message());
         return response;
+    }
+
+    public ProcedureResult addCreditBan(String head, String code, String clientIp, AddCreditBanRequest request) {
+        ProcedureResult result = clientRepository.addCreditBan(head, code, clientIp, request);
+        assertSuccess(result.code(), result.message());
+        return result;
+    }
+
+    public ProcedureResult deactivateCreditBan(String head, String code, String clientIp, DeactivateCreditBanRequest request) {
+        ProcedureResult result = clientRepository.deactivateCreditBan(head, code, clientIp, request);
+        assertSuccess(result.code(), result.message());
+        return result;
+    }
+
+    public List<CreditBanHistoryItem> getCreditBanHistory(String identifier, String subjectId) {
+        return clientRepository.getCreditBanHistory(identifier, subjectId);
+    }
+
+    public CreditBanInfo getCreditBanInfoByHash(String hash) {
+        return clientRepository.getCreditBanInfoByHash(hash);
     }
 
     private void assertSuccess(String code, String message) {
