@@ -195,6 +195,7 @@ services:
       KATM_NOTIFICATION_URL: http://katm-notification:8088
       KATM_MIP_URL: http://katm-mip:8089
       KATM_SCHEDULER_URL: http://katm-scheduler:8091
+      KATM_REFERENCE_URL: http://katm-reference:8090
       SPRING_CLOUD_KUBERNETES_ENABLED: 'false'
       SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED: 'false'
       SPRING_CLOUD_KUBERNETES_LOADBALANCER_ENABLED: 'false'
@@ -203,6 +204,26 @@ services:
     depends_on:
       - keycloak
       - katm-auth
+    networks:
+      - katm-network
+
+  katm-reference:
+    build:
+      context: .
+      dockerfile: services/katm-reference/Dockerfile
+    container_name: katm-reference
+    ports:
+      - "8090:8090"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-1521}
+      DB_SERVICE: ${DB_SERVICE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - keycloak
     networks:
       - katm-network
 
