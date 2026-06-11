@@ -40,4 +40,12 @@ public class CitizenController {
     public ResponseEntity<?> getCitizensBatch(@NotEmpty @RequestBody List<String> pins) {
         return ResponseEntity.ok(citizenMipService.getCitizensBatch(pins));
     }
+
+    @Operation(summary = "Адрес ПИНФЛ через старый сервис (GetCitizensInfoService, legacy)")
+    @GetMapping("/{pin}/address")
+    public ResponseEntity<?> getPeAddress(
+            @NotBlank @PathVariable String pin,
+            @RequestParam(required = false, defaultValue = "") String guid) {
+        return ResponseEntity.ok(citizenMipService.getPeAddress(pin, guid));
+    }
 }
