@@ -1,20 +1,31 @@
 package uz.katm.notification.repository;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
+import uz.katm.notification.domain.record.NotificationHistoryItem;
+import uz.katm.notification.domain.record.NotificationType;
 import uz.katm.notification.domain.record.OtpResponse;
 
 import javax.sql.DataSource;
 import java.math.BigDecimal;
+import java.sql.Date;
+import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Repository
 public class NotificationRepository {
 
+    private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedJdbcTemplate;
     private final SimpleJdbcCall sendOtpCall;
     private final SimpleJdbcCall subscriptionActivateCall;
     private final SimpleJdbcCall subscriptionSuspendCall;
@@ -22,7 +33,10 @@ public class NotificationRepository {
     private final SimpleJdbcCall activateFreezedCall;
     private final SimpleJdbcCall cancelFreezedCall;
 
-    public NotificationRepository(DataSource dataSource) {
+    public NotificationRepository(DataSource dataSource, JdbcTemplate jdbcTemplate,
+                                  NamedParameterJdbcTemplate namedJdbcTemplate) {
+        this.jdbcTemplate = jdbcTemplate;
+        this.namedJdbcTemplate = namedJdbcTemplate;
         this.sendOtpCall = new SimpleJdbcCall(dataSource)
                 .withSchemaName("DATAS")
                 .withCatalogName("SMS_NOTIFICATION")
@@ -117,6 +131,29 @@ public class NotificationRepository {
     public int cancelFreezed(String clientId) {
         var params = new MapSqlParameterSource().addValue("P_CLIENT_ID", clientId);
         return callIntFunction(cancelFreezedCall, params);
+    }
+
+    public List<NotificationHistoryItem> subscriptionHistory(String clientId, LocalDate dateFrom, LocalDate dateTo) {
+        return namedJdbcTemplate.query(
+                "SELECT * FROM table(DATAS.SMS_NOTIFICATION.subscribtion_history(:clientId, :dateFrom, :dateTo))",
+                new MapSqlParameterSource()
+                        .addValue("clientId", clientId)
+                        .addValue("dateFrom", dateFrom != null ? Date.valueOf(dateFrom) : null)
+                        .addValue("dateTo", dateTo != null ? Date.valueOf(dateTo) : null),
+                (rs, rowNum) -> new NotificationHistoryItem(
+                        toLdt(rs.getTimestamp("D_DATE")),
+                        rs.getString("MSISDN"),
+                        rs.getString("SMS_TEXT")));
+    }
+
+    public List<NotificationType> notificationTypes() {
+        return jdbcTemplate.query(
+                "select distinct sms_type, comment_t from datas.SMS_TEMPLATE order by sms_type",
+                (rs, rowNum) -> new NotificationType(rs.getInt("SMS_TYPE"), rs.getString("COMMENT_T")));
+    }
+
+    private static LocalDateTime toLdt(Timestamp ts) {
+        return ts != null ? ts.toLocalDateTime() : null;
     }
 
     private int callIntFunction(SimpleJdbcCall call, MapSqlParameterSource params) {

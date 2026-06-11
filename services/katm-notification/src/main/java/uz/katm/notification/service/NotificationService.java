@@ -6,10 +6,13 @@ import org.springframework.stereotype.Service;
 import uz.katm.notification.client.SmsClient;
 import uz.katm.notification.domain.dto.SendEmailRequest;
 import uz.katm.notification.domain.dto.SendSmsRequest;
+import uz.katm.notification.domain.record.NotificationHistoryItem;
+import uz.katm.notification.domain.record.NotificationType;
 import uz.katm.notification.domain.record.OtpResponse;
 import uz.katm.notification.domain.record.SubscriptionStatus;
 import uz.katm.notification.repository.NotificationRepository;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Slf4j
@@ -48,6 +51,15 @@ public class NotificationService {
     public SubscriptionStatus cancelFreezed(String clientId) {
         log.debug("Cancelling freezed subscription for clientId={}", clientId);
         return SubscriptionStatus.fromCode(notificationRepository.cancelFreezed(clientId));
+    }
+
+    public List<NotificationHistoryItem> subscriptionHistory(String clientId, LocalDate dateFrom, LocalDate dateTo) {
+        log.debug("Subscription history for clientId={}", clientId);
+        return notificationRepository.subscriptionHistory(clientId, dateFrom, dateTo);
+    }
+
+    public List<NotificationType> notificationTypes() {
+        return notificationRepository.notificationTypes();
     }
 
     public void onCreditUpdate(String payload) {

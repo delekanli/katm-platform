@@ -8,6 +8,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
 import lombok.RequiredArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.validation.annotation.Validated;
@@ -15,10 +16,13 @@ import org.springframework.web.bind.annotation.*;
 import uz.katm.common.dto.ApiResponse;
 import uz.katm.notification.domain.dto.SendEmailRequest;
 import uz.katm.notification.domain.dto.SendSmsRequest;
+import uz.katm.notification.domain.record.NotificationHistoryItem;
+import uz.katm.notification.domain.record.NotificationType;
 import uz.katm.notification.domain.record.OtpResponse;
 import uz.katm.notification.domain.record.SubscriptionStatus;
 import uz.katm.notification.service.NotificationService;
 
+import java.time.LocalDate;
 import java.util.List;
 
 @Tag(name = "Notifications", description = "OTP, управление подписками, SMS и email рассылка")
@@ -76,6 +80,23 @@ public class NotificationController {
     @PreAuthorize("hasAnyRole('CLIENT', 'ADMIN')")
     public ResponseEntity<ApiResponse<SubscriptionStatus>> cancelFreezed(@NotBlank @PathVariable String clientId) {
         return ResponseEntity.ok(ApiResponse.ok(notificationService.cancelFreezed(clientId)));
+    }
+
+    @Operation(summary = "История уведомлений клиента за период")
+    @GetMapping("/subscriptions/{clientId}/history")
+    @PreAuthorize("hasAnyRole('CLIENT', 'ADMIN')")
+    public ResponseEntity<ApiResponse<List<NotificationHistoryItem>>> subscriptionHistory(
+            @NotBlank @PathVariable String clientId,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateFrom,
+            @RequestParam(required = false) @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dateTo) {
+        return ResponseEntity.ok(ApiResponse.ok(notificationService.subscriptionHistory(clientId, dateFrom, dateTo)));
+    }
+
+    @Operation(summary = "Справочник типов уведомлений")
+    @GetMapping("/types")
+    @PreAuthorize("isAuthenticated()")
+    public ResponseEntity<ApiResponse<List<NotificationType>>> notificationTypes() {
+        return ResponseEntity.ok(ApiResponse.ok(notificationService.notificationTypes()));
     }
 
     @Operation(summary = "Отправить SMS")
