@@ -80,6 +80,12 @@ spring:
                 - Path=/api/v1/scheduler/**
               filters:
                 - StripPrefix=0
+            - id: katm-analytics
+              uri: ${KATM_ANALYTICS_URL:http://localhost:8095}
+              predicates:
+                - Path=/api/v1/analytics/**
+              filters:
+                - StripPrefix=0
             # --- Swagger aggregation ---
             - id: swagger-auth
               uri: ${KATM_AUTH_URL:http://localhost:8081}
@@ -129,6 +135,12 @@ spring:
                 - Path=/v3/api-docs/scheduler
               filters:
                 - RewritePath=/v3/api-docs/scheduler, /v3/api-docs
+            - id: swagger-analytics
+              uri: ${KATM_ANALYTICS_URL:http://localhost:8095}
+              predicates:
+                - Path=/v3/api-docs/analytics
+              filters:
+                - RewritePath=/v3/api-docs/analytics, /v3/api-docs
 
 katm:
   auth-service.url: ${AUTH_SERVICE_URL:http://localhost:8081}
@@ -153,6 +165,8 @@ springdoc:
         url: /v3/api-docs/mip
       - name: Scheduler Service
         url: /v3/api-docs/scheduler
+      - name: Analytics Service
+        url: /v3/api-docs/analytics
     urls-primary-name: Auth Service
 
 management:

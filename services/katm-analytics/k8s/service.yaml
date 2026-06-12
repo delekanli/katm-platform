@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: katm-analytics
+  namespace: katm
+  labels:
+    app: katm-analytics
+spec:
+  type: ClusterIP
+  selector:
+    app: katm-analytics
+  ports:
+    - port: 8095
+      targetPort: 8095
+      protocol: TCP
+      name: http
