@@ -6,6 +6,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
 import uz.katm.client.domain.dto.ClientLegalDataDto;
 import uz.katm.client.domain.dto.ClientPersonalDataDto;
+import uz.katm.common.security.ServiceTokenProvider;
 
 @Slf4j
 @Component
@@ -13,9 +14,11 @@ public class MipClient {
 
     private final RestClient restClient;
 
-    public MipClient(@Value("${katm.mip-service.url}") String baseUrl) {
+    public MipClient(@Value("${katm.mip-service.url}") String baseUrl,
+                     ServiceTokenProvider serviceTokenProvider) {
         this.restClient = RestClient.builder()
                 .baseUrl(baseUrl)
+                .requestInterceptor(serviceTokenProvider.authInterceptor())
                 .build();
     }
 
