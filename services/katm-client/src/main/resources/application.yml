@@ -82,6 +82,10 @@ resilience4j:
 katm:
   mip-service:
     url: ${MIP_SERVICE_URL:http://localhost:8089}
+  service-auth:
+    token-uri: ${KEYCLOAK_URL:http://localhost:8180}/realms/katm/protocol/openid-connect/token
+    client-id: ${SERVICE_CLIENT_ID:katm-service}
+    client-secret: ${SERVICE_CLIENT_SECRET:changeme}
 
 springdoc:
   api-docs:

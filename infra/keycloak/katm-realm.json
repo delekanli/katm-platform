@@ -199,6 +199,18 @@
         "MKO",
         "ORG"
       ]
+    },
+    {
+      "username": "service-account-katm-service",
+      "enabled": true,
+      "serviceAccountClientId": "katm-service",
+      "attributes": {
+        "head": "002",
+        "code": "00450"
+      },
+      "realmRoles": [
+        "ADMIN"
+      ]
     }
   ],
   "clientScopes": [
