@@ -160,8 +160,6 @@ services:
       context: .
       dockerfile: services/katm-auth/Dockerfile
     container_name: katm-auth
-    ports:
-      - "8081:8081"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       KAFKA_SERVERS: kafka:29092
@@ -217,8 +215,6 @@ services:
       context: .
       dockerfile: services/katm-reference/Dockerfile
     container_name: katm-reference
-    ports:
-      - "8090:8090"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       DB_HOST: ${DB_HOST}
@@ -237,8 +233,6 @@ services:
       context: .
       dockerfile: services/katm-registry/Dockerfile
     container_name: katm-registry
-    ports:
-      - "8092:8092"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       DB_HOST: ${DB_HOST}
@@ -257,8 +251,6 @@ services:
       context: .
       dockerfile: services/katm-ucin/Dockerfile
     container_name: katm-ucin
-    ports:
-      - "8094:8094"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       DB_HOST: ${DB_HOST}
@@ -277,8 +269,6 @@ services:
       context: .
       dockerfile: services/katm-egov/Dockerfile
     container_name: katm-egov
-    ports:
-      - "8093:8093"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       DB_HOST: ${DB_HOST}
@@ -298,8 +288,6 @@ services:
       context: .
       dockerfile: services/katm-analytics/Dockerfile
     container_name: katm-analytics
-    ports:
-      - "8095:8095"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       DB_HOST: ${DB_HOST}
@@ -318,8 +306,6 @@ services:
       context: .
       dockerfile: services/katm-system/Dockerfile
     container_name: katm-system
-    ports:
-      - "8096:8096"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       DB_HOST: ${DB_HOST}
@@ -338,8 +324,6 @@ services:
       context: .
       dockerfile: services/katm-client/Dockerfile
     container_name: katm-client
-    ports:
-      - "8087:8087"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       KAFKA_SERVERS: kafka:29092
@@ -362,8 +346,6 @@ services:
       context: .
       dockerfile: services/katm-claim/Dockerfile
     container_name: katm-claim
-    ports:
-      - "8085:8085"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       KAFKA_SERVERS: kafka:29092
@@ -388,8 +370,6 @@ services:
       context: .
       dockerfile: services/katm-contract/Dockerfile
     container_name: katm-contract
-    ports:
-      - "8086:8086"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       KAFKA_SERVERS: kafka:29092
@@ -411,8 +391,6 @@ services:
       context: .
       dockerfile: services/katm-notification/Dockerfile
     container_name: katm-notification
-    ports:
-      - "8088:8088"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       KAFKA_BOOTSTRAP_SERVERS: kafka:29092
@@ -436,8 +414,6 @@ services:
       context: .
       dockerfile: services/katm-report/Dockerfile
     container_name: katm-report
-    ports:
-      - "8084:8084"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       KAFKA_SERVERS: kafka:29092
@@ -459,8 +435,6 @@ services:
       context: .
       dockerfile: services/katm-scheduler/Dockerfile
     container_name: katm-scheduler
-    ports:
-      - "8091:8091"
     environment:
       KAFKA_BOOTSTRAP_SERVERS: kafka:29092
       DB_HOST: ${DB_HOST}
@@ -479,8 +453,6 @@ services:
       context: .
       dockerfile: services/katm-mip/Dockerfile
     container_name: katm-mip
-    ports:
-      - "8089:8089"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       KAFKA_SERVERS: kafka:29092

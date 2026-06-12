@@ -1,0 +1,45 @@
+# Сетевая изоляция: снаружи доступен только gateway; внутренние сервисы
+# принимают трафик лишь от других подов namespace katm (gateway + межсервисные вызовы).
+---
+# 1. По умолчанию запрещаем весь входящий трафик в namespace.
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: default-deny-ingress
+  namespace: katm
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+---
+# 2. Разрешаем входящий трафик между подами внутри namespace katm
+#    (gateway -> backend, межсервисные вызовы client->mip / egov->ucin, prometheus -> backend).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-intra-namespace
+  namespace: katm
+spec:
+  podSelector: {}
+  policyTypes:
+    - Ingress
+  ingress:
+    - from:
+        - podSelector: {}
+---
+# 3. Единственная внешняя точка входа — gateway (от ingress-контроллера / извне).
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: allow-external-to-gateway
+  namespace: katm
+spec:
+  podSelector:
+    matchLabels:
+      app: katm-gateway
+  policyTypes:
+    - Ingress
+  ingress:
+    - ports:
+        - protocol: TCP
+          port: 8080
