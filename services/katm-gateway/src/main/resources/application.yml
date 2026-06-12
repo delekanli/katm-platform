@@ -84,6 +84,10 @@ spring:
               uri: ${KATM_REFERENCE_URL:http://localhost:8090}
               predicates:
                 - Path=/api/v1/reference/**
+            - id: katm-registry
+              uri: ${KATM_REGISTRY_URL:http://localhost:8092}
+              predicates:
+                - Path=/api/v1/registry/**
               filters:
                 - StripPrefix=0
             # --- Swagger aggregation ---
@@ -141,6 +145,12 @@ spring:
                 - Path=/v3/api-docs/reference
               filters:
                 - RewritePath=/v3/api-docs/reference, /v3/api-docs
+            - id: swagger-registry
+              uri: ${KATM_REGISTRY_URL:http://localhost:8092}
+              predicates:
+                - Path=/v3/api-docs/registry
+              filters:
+                - RewritePath=/v3/api-docs/registry, /v3/api-docs
 
 katm:
   auth-service.url: ${AUTH_SERVICE_URL:http://localhost:8081}
@@ -167,6 +177,8 @@ springdoc:
         url: /v3/api-docs/scheduler
       - name: Reference Service
         url: /v3/api-docs/reference
+      - name: Registry Service
+        url: /v3/api-docs/registry
     urls-primary-name: Auth Service
 
 management:

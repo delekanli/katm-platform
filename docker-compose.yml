@@ -196,6 +196,7 @@ services:
       KATM_MIP_URL: http://katm-mip:8089
       KATM_SCHEDULER_URL: http://katm-scheduler:8091
       KATM_REFERENCE_URL: http://katm-reference:8090
+      KATM_REGISTRY_URL: http://katm-registry:8092
       SPRING_CLOUD_KUBERNETES_ENABLED: 'false'
       SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED: 'false'
       SPRING_CLOUD_KUBERNETES_LOADBALANCER_ENABLED: 'false'
@@ -214,6 +215,13 @@ services:
     container_name: katm-reference
     ports:
       - "8090:8090"
+  katm-registry:
+    build:
+      context: .
+      dockerfile: services/katm-registry/Dockerfile
+    container_name: katm-registry
+    ports:
+      - "8092:8092"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       DB_HOST: ${DB_HOST}
