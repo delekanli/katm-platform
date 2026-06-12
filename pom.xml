@@ -17,6 +17,7 @@
         <module>services/katm-gateway</module>
         <module>services/katm-notification</module>
         <module>services/katm-report</module>
+        <module>services/katm-system</module>
         <module>services/katm-claim</module>
         <module>services/katm-contract</module>
         <module>services/katm-client</module>
