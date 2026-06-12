@@ -84,22 +84,32 @@ spring:
               uri: ${KATM_REFERENCE_URL:http://localhost:8090}
               predicates:
                 - Path=/api/v1/reference/**
+              filters:
+                - StripPrefix=0
             - id: katm-registry
               uri: ${KATM_REGISTRY_URL:http://localhost:8092}
               predicates:
                 - Path=/api/v1/registry/**
+              filters:
+                - StripPrefix=0
             - id: katm-ucin
               uri: ${KATM_UCIN_URL:http://localhost:8094}
               predicates:
                 - Path=/api/v1/ucin/**
+              filters:
+                - StripPrefix=0
             - id: katm-egov
               uri: ${KATM_EGOV_URL:http://localhost:8093}
               predicates:
                 - Path=/api/v1/egov/**
+              filters:
+                - StripPrefix=0
             - id: katm-analytics
               uri: ${KATM_ANALYTICS_URL:http://localhost:8095}
               predicates:
                 - Path=/api/v1/analytics/**
+              filters:
+                - StripPrefix=0
             - id: katm-system
               uri: ${KATM_SYSTEM_URL:http://localhost:8096}
               predicates:

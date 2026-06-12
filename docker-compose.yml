@@ -219,6 +219,19 @@ services:
     container_name: katm-reference
     ports:
       - "8090:8090"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-1521}
+      DB_SERVICE: ${DB_SERVICE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - keycloak
+    networks:
+      - katm-network
+
   katm-registry:
     build:
       context: .
@@ -226,6 +239,19 @@ services:
     container_name: katm-registry
     ports:
       - "8092:8092"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-1521}
+      DB_SERVICE: ${DB_SERVICE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - keycloak
+    networks:
+      - katm-network
+
   katm-ucin:
     build:
       context: .
@@ -233,6 +259,19 @@ services:
     container_name: katm-ucin
     ports:
       - "8094:8094"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-1521}
+      DB_SERVICE: ${DB_SERVICE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - keycloak
+    networks:
+      - katm-network
+
   katm-egov:
     build:
       context: .
@@ -240,6 +279,20 @@ services:
     container_name: katm-egov
     ports:
       - "8093:8093"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-1521}
+      DB_SERVICE: ${DB_SERVICE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      UCIN_SERVICE_URL: http://katm-ucin:8094
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - keycloak
+    networks:
+      - katm-network
+
   katm-analytics:
     build:
       context: .
@@ -247,6 +300,19 @@ services:
     container_name: katm-analytics
     ports:
       - "8095:8095"
+    environment:
+      KEYCLOAK_URL: http://keycloak:8080
+      DB_HOST: ${DB_HOST}
+      DB_PORT: ${DB_PORT:-1521}
+      DB_SERVICE: ${DB_SERVICE}
+      DB_USER: ${DB_USER}
+      DB_PASSWORD: ${DB_PASSWORD}
+      ZIPKIN_URL: http://zipkin:9411
+    depends_on:
+      - keycloak
+    networks:
+      - katm-network
+
   katm-system:
     build:
       context: .
@@ -261,7 +327,6 @@ services:
       DB_SERVICE: ${DB_SERVICE}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
-      UCIN_SERVICE_URL: http://katm-ucin:8094
       ZIPKIN_URL: http://zipkin:9411
     depends_on:
       - keycloak
