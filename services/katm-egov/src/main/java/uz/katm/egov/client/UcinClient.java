@@ -6,14 +6,15 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Component;
 import org.springframework.web.client.RestClient;
+import uz.katm.common.security.ServiceTokenProvider;
 import uz.katm.egov.domain.record.ClientInitResult;
 
 import java.util.Map;
 
 /**
  * Клиент к сервису katm-ucin для инициализации клиента (registerClaim делегирует UCIN,
- * как в монолите). По образцу katm-client MipClient — REST-вызов без auth-заголовка
- * (сложившаяся inter-service конвенция платформы; см. оговорку про межсервисную авторизацию).
+ * как в монолите). Прикрепляет сервисный M2M-токен (client_credentials) через
+ * {@link ServiceTokenProvider} — межсервисная авторизация платформы.
  */
 @Slf4j
 @Component
@@ -21,8 +22,12 @@ public class UcinClient {
 
     private final RestClient restClient;
 
-    public UcinClient(@Value("${katm.ucin-service.url:http://localhost:8094}") String baseUrl) {
-        this.restClient = RestClient.builder().baseUrl(baseUrl).build();
+    public UcinClient(@Value("${katm.ucin-service.url:http://localhost:8094}") String baseUrl,
+                      ServiceTokenProvider serviceTokenProvider) {
+        this.restClient = RestClient.builder()
+                .baseUrl(baseUrl)
+                .requestInterceptor(serviceTokenProvider.authInterceptor())
+                .build();
     }
 
     public ClientInitResult initClient(Map<String, Object> body) {
