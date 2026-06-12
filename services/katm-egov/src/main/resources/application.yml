@@ -17,6 +17,10 @@ spring:
         jwt:
           issuer-uri: ${KEYCLOAK_URL:http://localhost:8180}/realms/katm
 
+katm:
+  ucin-service:
+    url: ${UCIN_SERVICE_URL:http://localhost:8094}
+
 management:
   endpoints:
     web:

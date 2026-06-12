@@ -13,6 +13,8 @@ import uz.katm.common.dto.ApiResponse;
 import uz.katm.egov.domain.dto.ClaimStatusUpdateRequest;
 import uz.katm.egov.domain.dto.IndividualReportRequest;
 import uz.katm.egov.domain.dto.LegalReportRequest;
+import uz.katm.egov.domain.dto.RegisterClaimRequest;
+import uz.katm.egov.domain.record.ClientInitResult;
 import uz.katm.egov.domain.record.CreditReportResult;
 import uz.katm.egov.domain.record.OperationResult;
 import uz.katm.egov.service.EgovService;
@@ -49,5 +51,12 @@ public class EgovController {
             @Valid @RequestBody ClaimStatusUpdateRequest req) {
         return ResponseEntity.ok(ApiResponse.ok(
                 service.updateClaimStatus(claimId, req.claimStatus(), req.currentNode())));
+    }
+
+    @Operation(summary = "Регистрация заявки E-GOV (инициализация клиента через UCIN)")
+    @PostMapping("/claims/register")
+    public ResponseEntity<ApiResponse<ClientInitResult>> registerClaim(
+            @Valid @RequestBody RegisterClaimRequest req) {
+        return ResponseEntity.ok(ApiResponse.ok(service.registerClaim(req)));
     }
 }

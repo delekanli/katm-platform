@@ -221,6 +221,7 @@ services:
       DB_SERVICE: ${DB_SERVICE}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      UCIN_SERVICE_URL: http://katm-ucin:8094
       ZIPKIN_URL: http://zipkin:9411
     depends_on:
       - keycloak
