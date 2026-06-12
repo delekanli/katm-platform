@@ -1,0 +1,16 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: katm-egov
+  namespace: katm
+  labels:
+    app: katm-egov
+spec:
+  type: ClusterIP
+  selector:
+    app: katm-egov
+  ports:
+    - port: 8093
+      targetPort: 8093
+      protocol: TCP
+      name: http

@@ -198,6 +198,7 @@ services:
       KATM_REFERENCE_URL: http://katm-reference:8090
       KATM_REGISTRY_URL: http://katm-registry:8092
       KATM_UCIN_URL: http://katm-ucin:8094
+      KATM_EGOV_URL: http://katm-egov:8093
       SPRING_CLOUD_KUBERNETES_ENABLED: 'false'
       SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED: 'false'
       SPRING_CLOUD_KUBERNETES_LOADBALANCER_ENABLED: 'false'
@@ -230,6 +231,13 @@ services:
     container_name: katm-ucin
     ports:
       - "8094:8094"
+  katm-egov:
+    build:
+      context: .
+      dockerfile: services/katm-egov/Dockerfile
+    container_name: katm-egov
+    ports:
+      - "8093:8093"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       DB_HOST: ${DB_HOST}
@@ -237,6 +245,7 @@ services:
       DB_SERVICE: ${DB_SERVICE}
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
+      UCIN_SERVICE_URL: http://katm-ucin:8094
       ZIPKIN_URL: http://zipkin:9411
     depends_on:
       - keycloak
