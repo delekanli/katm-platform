@@ -96,6 +96,10 @@ spring:
               uri: ${KATM_EGOV_URL:http://localhost:8093}
               predicates:
                 - Path=/api/v1/egov/**
+            - id: katm-analytics
+              uri: ${KATM_ANALYTICS_URL:http://localhost:8095}
+              predicates:
+                - Path=/api/v1/analytics/**
               filters:
                 - StripPrefix=0
             # --- Swagger aggregation ---
@@ -171,6 +175,12 @@ spring:
                 - Path=/v3/api-docs/egov
               filters:
                 - RewritePath=/v3/api-docs/egov, /v3/api-docs
+            - id: swagger-analytics
+              uri: ${KATM_ANALYTICS_URL:http://localhost:8095}
+              predicates:
+                - Path=/v3/api-docs/analytics
+              filters:
+                - RewritePath=/v3/api-docs/analytics, /v3/api-docs
 
 katm:
   auth-service.url: ${AUTH_SERVICE_URL:http://localhost:8081}
@@ -203,6 +213,8 @@ springdoc:
         url: /v3/api-docs/ucin
       - name: E-GOV Service
         url: /v3/api-docs/egov
+      - name: Analytics Service
+        url: /v3/api-docs/analytics
     urls-primary-name: Auth Service
 
 management:

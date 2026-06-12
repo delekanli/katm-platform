@@ -21,6 +21,7 @@
         <module>services/katm-registry</module>
         <module>services/katm-ucin</module>
         <module>services/katm-egov</module>
+        <module>services/katm-analytics</module>
         <module>services/katm-claim</module>
         <module>services/katm-contract</module>
         <module>services/katm-client</module>
