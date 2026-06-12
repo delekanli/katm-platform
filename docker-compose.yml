@@ -200,6 +200,7 @@ services:
       KATM_UCIN_URL: http://katm-ucin:8094
       KATM_EGOV_URL: http://katm-egov:8093
       KATM_ANALYTICS_URL: http://katm-analytics:8095
+      KATM_SYSTEM_URL: http://katm-system:8096
       SPRING_CLOUD_KUBERNETES_ENABLED: 'false'
       SPRING_CLOUD_KUBERNETES_DISCOVERY_ENABLED: 'false'
       SPRING_CLOUD_KUBERNETES_LOADBALANCER_ENABLED: 'false'
@@ -246,6 +247,13 @@ services:
     container_name: katm-analytics
     ports:
       - "8095:8095"
+  katm-system:
+    build:
+      context: .
+      dockerfile: services/katm-system/Dockerfile
+    container_name: katm-system
+    ports:
+      - "8096:8096"
     environment:
       KEYCLOAK_URL: http://keycloak:8080
       DB_HOST: ${DB_HOST}
