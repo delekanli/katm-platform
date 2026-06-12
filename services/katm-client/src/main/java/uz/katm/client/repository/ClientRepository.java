@@ -3,26 +3,38 @@ package uz.katm.client.repository;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
+import uz.katm.client.domain.record.AddCreditBanRequest;
 import uz.katm.client.domain.record.BanStatusResponse;
+import uz.katm.client.domain.record.CreditBanHistoryItem;
+import uz.katm.client.domain.record.CreditBanInfo;
+import uz.katm.client.domain.record.DeactivateCreditBanRequest;
 import uz.katm.client.domain.record.PassportDataRequest;
 import uz.katm.client.domain.record.ProcedureResult;
 
 import javax.sql.DataSource;
 import java.sql.Date;
+import java.sql.Timestamp;
 import java.sql.Types;
+import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Map;
 
 @Repository
 public class ClientRepository {
 
 
+    private final NamedParameterJdbcTemplate namedJdbcTemplate;
     private final SimpleJdbcCall savePassportCall;
     private final SimpleJdbcCall updatePasswordCall;
     private final SimpleJdbcCall checkBanStatusCall;
+    private final SimpleJdbcCall addCreditBanCall;
+    private final SimpleJdbcCall deactivateCreditBanCall;
 
-    public ClientRepository(DataSource dataSource) {
+    public ClientRepository(DataSource dataSource, NamedParameterJdbcTemplate namedJdbcTemplate) {
+        this.namedJdbcTemplate = namedJdbcTemplate;
         this.savePassportCall = new SimpleJdbcCall(dataSource)
                 .withSchemaName("DATAS")
                 .withCatalogName("PKG_CLIENTS")
@@ -76,6 +88,41 @@ public class ClientRepository {
                         new SqlOutParameter("P_RESULT", Types.VARCHAR),
                         new SqlOutParameter("P_RET_MSG", Types.VARCHAR)
                 );
+
+        this.addCreditBanCall = new SimpleJdbcCall(dataSource)
+                .withSchemaName("DATAS")
+                .withCatalogName("CREDIT_BANS")
+                .withProcedureName("ADD_CREDIT_BAN")
+                .withoutProcedureColumnMetaDataAccess()
+                .declareParameters(
+                        new SqlParameter("P_HEAD", Types.VARCHAR),
+                        new SqlParameter("P_CODE", Types.VARCHAR),
+                        new SqlParameter("P_SUBJECT_ID", Types.VARCHAR),
+                        new SqlParameter("P_IDENTIFIER", Types.VARCHAR),
+                        new SqlParameter("P_IDEN_DATE", Types.DATE),
+                        new SqlParameter("P_FULL_NAME", Types.VARCHAR),
+                        new SqlParameter("P_REASON", Types.VARCHAR),
+                        new SqlParameter("P_END_DATE", Types.DATE),
+                        new SqlParameter("P_CLIENT_IP", Types.VARCHAR),
+                        new SqlOutParameter("P_RESULT", Types.VARCHAR),
+                        new SqlOutParameter("P_RET_MSG", Types.VARCHAR)
+                );
+
+        this.deactivateCreditBanCall = new SimpleJdbcCall(dataSource)
+                .withSchemaName("DATAS")
+                .withCatalogName("CREDIT_BANS")
+                .withProcedureName("DEACTIVATE_CREDIT_BAN")
+                .withoutProcedureColumnMetaDataAccess()
+                .declareParameters(
+                        new SqlParameter("P_HEAD", Types.VARCHAR),
+                        new SqlParameter("P_CODE", Types.VARCHAR),
+                        new SqlParameter("P_SUBJECT_ID", Types.VARCHAR),
+                        new SqlParameter("P_IDENTIFIER", Types.VARCHAR),
+                        new SqlParameter("P_REASON", Types.VARCHAR),
+                        new SqlParameter("P_CLIENT_IP", Types.VARCHAR),
+                        new SqlOutParameter("P_RESULT", Types.VARCHAR),
+                        new SqlOutParameter("P_RET_MSG", Types.VARCHAR)
+                );
     }
 
     public ProcedureResult savePassportData(PassportDataRequest req) {
@@ -121,6 +168,73 @@ public class ClientRepository {
                 (String) out.get("P_RET_MSG"),
                 (Integer) out.get("P_IS_BANNED")
         );
+    }
+
+    public ProcedureResult addCreditBan(String head, String code, String clientIp, AddCreditBanRequest req) {
+        var params = new MapSqlParameterSource()
+                .addValue("P_HEAD", head)
+                .addValue("P_CODE", code)
+                .addValue("P_SUBJECT_ID", req.subjectId())
+                .addValue("P_IDENTIFIER", req.identifier())
+                .addValue("P_IDEN_DATE", req.idenDate() != null ? Date.valueOf(req.idenDate()) : null)
+                .addValue("P_FULL_NAME", req.fullName())
+                .addValue("P_REASON", req.reason())
+                .addValue("P_END_DATE", req.endDate() != null ? Date.valueOf(req.endDate()) : null)
+                .addValue("P_CLIENT_IP", clientIp);
+        return toResult(addCreditBanCall.execute(params));
+    }
+
+    public ProcedureResult deactivateCreditBan(String head, String code, String clientIp, DeactivateCreditBanRequest req) {
+        var params = new MapSqlParameterSource()
+                .addValue("P_HEAD", head)
+                .addValue("P_CODE", code)
+                .addValue("P_SUBJECT_ID", req.subjectId())
+                .addValue("P_IDENTIFIER", req.identifier())
+                .addValue("P_REASON", req.reason())
+                .addValue("P_CLIENT_IP", clientIp);
+        return toResult(deactivateCreditBanCall.execute(params));
+    }
+
+    public List<CreditBanHistoryItem> getCreditBanHistory(String identifier, String subjectId) {
+        return namedJdbcTemplate.query(
+                "select cb.head, cb.code, cbl.hash_val, cbl.action_at, " +
+                        "case when cbl.action_type = 'INSERT' then 1 else 0 end as is_active " +
+                        "from datas.credit_ban cb " +
+                        "left join datas.credit_ban_log cbl on cbl.ban_id = cb.ban_id " +
+                        "where cb.identifier = :identifier and cb.subject_id = :subjectId " +
+                        "order by cbl.action_at desc",
+                new MapSqlParameterSource()
+                        .addValue("identifier", identifier)
+                        .addValue("subjectId", subjectId),
+                (rs, rowNum) -> new CreditBanHistoryItem(
+                        rs.getString("HEAD"),
+                        rs.getString("CODE"),
+                        rs.getString("HASH_VAL"),
+                        toLdt(rs.getTimestamp("ACTION_AT")),
+                        rs.getInt("IS_ACTIVE")));
+    }
+
+    public CreditBanInfo getCreditBanInfoByHash(String hash) {
+        try {
+            return namedJdbcTemplate.queryForObject(
+                    "select cb.identifier, cb.full_name, cbl.action_at as action_date, " +
+                            "case when cbl.action_type = 'INSERT' then 1 else 0 end as status " +
+                            "from datas.credit_ban cb " +
+                            "left join datas.credit_ban_log cbl on cbl.ban_id = cb.ban_id " +
+                            "where cbl.hash_val = :hash",
+                    new MapSqlParameterSource("hash", hash),
+                    (rs, rowNum) -> new CreditBanInfo(
+                            rs.getString("IDENTIFIER"),
+                            rs.getString("FULL_NAME"),
+                            toLdt(rs.getTimestamp("ACTION_DATE")),
+                            rs.getInt("STATUS")));
+        } catch (org.springframework.dao.EmptyResultDataAccessException e) {
+            return null;
+        }
+    }
+
+    private static LocalDateTime toLdt(Timestamp ts) {
+        return ts != null ? ts.toLocalDateTime() : null;
     }
 
     private ProcedureResult toResult(Map<String, Object> out) {
