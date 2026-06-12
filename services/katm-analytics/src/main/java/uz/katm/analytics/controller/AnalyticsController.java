@@ -107,4 +107,54 @@ public class AnalyticsController {
             @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
         return ResponseEntity.ok(ApiResponse.ok(service.webDemandsStat(start, end)));
     }
+
+    @Operation(summary = "Детали скоринга по заявке")
+    @GetMapping("/score-details")
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> scoreDetails(
+            @NotBlank @RequestParam String demandId) {
+        return ResponseEntity.ok(ApiResponse.ok(service.scoreReportDetails(demandId)));
+    }
+
+    @Operation(summary = "Сводная статистика по всем отчётам за период (head/code='-1' для всех)")
+    @GetMapping("/all-reports-stat")
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> allReportsStat(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end,
+            @RequestParam(defaultValue = "-1") String head,
+            @RequestParam(defaultValue = "-1") String code) {
+        return ResponseEntity.ok(ApiResponse.ok(service.allReportsStat(start, end, head, code)));
+    }
+
+    @Operation(summary = "Изменения договора (discover_ci015)")
+    @GetMapping("/discover-ci015")
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> discoverCi015(
+            @NotBlank @RequestParam String head,
+            @NotBlank @RequestParam String code,
+            @NotBlank @RequestParam String contractId) {
+        return ResponseEntity.ok(ApiResponse.ok(service.discoverCi015(head, code, contractId)));
+    }
+
+    @Operation(summary = "Статистика ЦБ РУз по производителям за период")
+    @GetMapping("/cb-uz-stat")
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> cbUzStat(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
+        return ResponseEntity.ok(ApiResponse.ok(service.cbUzStat(start, end)));
+    }
+
+    @Operation(summary = "Минимальный набор за период")
+    @GetMapping("/min-nabor")
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> minNabor(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
+        return ResponseEntity.ok(ApiResponse.ok(service.minNabor(start, end)));
+    }
+
+    @Operation(summary = "Заявки без отчётов за период")
+    @GetMapping("/claims-wo-reports")
+    public ResponseEntity<ApiResponse<List<Map<String, Object>>>> claimsWoReports(
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate start,
+            @RequestParam @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate end) {
+        return ResponseEntity.ok(ApiResponse.ok(service.claimsWoReports(start, end)));
+    }
 }

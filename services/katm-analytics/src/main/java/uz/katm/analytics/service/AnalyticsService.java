@@ -56,4 +56,28 @@ public class AnalyticsService {
     public List<Map<String, Object>> webDemandsStat(LocalDate start, LocalDate end) {
         return repository.webDemandsStat(start, end);
     }
+
+    public List<Map<String, Object>> scoreReportDetails(String demandId) {
+        return repository.scoreReportDetails(demandId);
+    }
+
+    public List<Map<String, Object>> allReportsStat(LocalDate start, LocalDate end, String head, String code) {
+        return repository.allReportsStat(start, end, head, code);
+    }
+
+    public List<Map<String, Object>> discoverCi015(String head, String code, String contractId) {
+        return repository.discoverCi015(head, code, contractId);
+    }
+
+    public List<Map<String, Object>> cbUzStat(LocalDate start, LocalDate end) {
+        return repository.cbUzStat(start, end);
+    }
+
+    public List<Map<String, Object>> minNabor(LocalDate start, LocalDate end) {
+        return repository.minNabor(start, end);
+    }
+
+    public List<Map<String, Object>> claimsWoReports(LocalDate start, LocalDate end) {
+        return repository.claimsWoReports(start, end);
+    }
 }
