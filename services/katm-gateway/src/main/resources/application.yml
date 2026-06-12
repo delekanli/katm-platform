@@ -88,6 +88,10 @@ spring:
               uri: ${KATM_REGISTRY_URL:http://localhost:8092}
               predicates:
                 - Path=/api/v1/registry/**
+            - id: katm-ucin
+              uri: ${KATM_UCIN_URL:http://localhost:8094}
+              predicates:
+                - Path=/api/v1/ucin/**
               filters:
                 - StripPrefix=0
             # --- Swagger aggregation ---
@@ -151,6 +155,12 @@ spring:
                 - Path=/v3/api-docs/registry
               filters:
                 - RewritePath=/v3/api-docs/registry, /v3/api-docs
+            - id: swagger-ucin
+              uri: ${KATM_UCIN_URL:http://localhost:8094}
+              predicates:
+                - Path=/v3/api-docs/ucin
+              filters:
+                - RewritePath=/v3/api-docs/ucin, /v3/api-docs
 
 katm:
   auth-service.url: ${AUTH_SERVICE_URL:http://localhost:8081}
@@ -179,6 +189,8 @@ springdoc:
         url: /v3/api-docs/reference
       - name: Registry Service
         url: /v3/api-docs/registry
+      - name: UCIN Service
+        url: /v3/api-docs/ucin
     urls-primary-name: Auth Service
 
 management:

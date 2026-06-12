@@ -19,6 +19,7 @@
         <module>services/katm-report</module>
         <module>services/katm-reference</module>
         <module>services/katm-registry</module>
+        <module>services/katm-ucin</module>
         <module>services/katm-claim</module>
         <module>services/katm-contract</module>
         <module>services/katm-client</module>
