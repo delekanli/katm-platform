@@ -114,6 +114,16 @@ public class RetailerClaimService {
         return repository.addOrgClaim(init.initialId(), head, code, req, null, "MANUAL", "EXT");
     }
 
+    public OperationResult rejectClaim(String head, String code, RejectClaimRequest req) {
+        log.info("rejectClaim: code={}, claimId={}", code, req.claimId());
+        return repository.rejectClaim(code, req);
+    }
+
+    public OperationResult rejectLegalClaim(String head, String code, RejectClaimRequest req) {
+        log.info("rejectLegalClaim: head={}, code={}, claimId={}", head, code, req.claimId());
+        return repository.rejectLegalClaim(head, code, req);
+    }
+
     private void checkResult(String code, String message) {
         if (!"0".equals(code)) {
             throw new ClaimServiceException(code, message);

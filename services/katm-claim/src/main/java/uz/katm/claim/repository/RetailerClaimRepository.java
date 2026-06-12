@@ -9,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import uz.katm.claim.domain.retailer.ClaimLegalRegistrationRequest;
 import uz.katm.claim.domain.retailer.ClaimRegistrationRequest;
 import uz.katm.claim.domain.retailer.OperationResult;
+import uz.katm.claim.domain.retailer.RejectClaimRequest;
 
 import javax.sql.DataSource;
 import java.sql.Date;
@@ -26,8 +27,43 @@ public class RetailerClaimRepository {
     private final SimpleJdbcCall initiateLegalClaimCall;
     private final SimpleJdbcCall addLegalClaimCall;
     private final SimpleJdbcCall addOrgClaimCall;
+    private final SimpleJdbcCall rejectClaimCall;
+    private final SimpleJdbcCall rejectLegalClaimCall;
 
     public RetailerClaimRepository(DataSource dataSource) {
+        this.rejectClaimCall = new SimpleJdbcCall(dataSource)
+                .withSchemaName("DATAS")
+                .withCatalogName("PKG_RETAILERS")
+                .withProcedureName("REJECT_CLAIM")
+                .withoutProcedureColumnMetaDataAccess()
+                .declareParameters(
+                        new SqlParameter("P_CODE", Types.VARCHAR),
+                        new SqlParameter("P_CLAIM_ID", Types.VARCHAR),
+                        new SqlParameter("P_REJ_DATE", Types.DATE),
+                        new SqlParameter("P_REASON_ID", Types.VARCHAR),
+                        new SqlParameter("P_REASON", Types.VARCHAR),
+                        new SqlParameter("P_IS_UPDATE", Types.INTEGER),
+                        new SqlOutParameter("P_RESULT", Types.VARCHAR),
+                        new SqlOutParameter("P_RET_MSG", Types.VARCHAR)
+                );
+
+        this.rejectLegalClaimCall = new SimpleJdbcCall(dataSource)
+                .withSchemaName("DATAS")
+                .withCatalogName("PKG_RETAILERS")
+                .withProcedureName("REJECT_LEGAL_CLAIM")
+                .withoutProcedureColumnMetaDataAccess()
+                .declareParameters(
+                        new SqlParameter("P_HEAD", Types.VARCHAR),
+                        new SqlParameter("P_CODE", Types.VARCHAR),
+                        new SqlParameter("P_CLAIM_ID", Types.VARCHAR),
+                        new SqlParameter("P_REJ_DATE", Types.DATE),
+                        new SqlParameter("P_REASON_ID", Types.VARCHAR),
+                        new SqlParameter("P_REASON", Types.VARCHAR),
+                        new SqlParameter("P_IS_UPDATE", Types.INTEGER),
+                        new SqlOutParameter("P_RESULT", Types.VARCHAR),
+                        new SqlOutParameter("P_RET_MSG", Types.VARCHAR)
+                );
+
         this.initiateClaimCall = new SimpleJdbcCall(dataSource)
                 .withSchemaName("DATAS")
                 .withCatalogName("PKG_RETAILERS")
@@ -260,6 +296,31 @@ public class RetailerClaimRepository {
                                        ClaimLegalRegistrationRequest req,
                                        String fullName, String mipState, String mipResult) {
         return executeResult(addOrgClaimCall, buildLegalParams(initialId, head, code, req, fullName, mipState, mipResult));
+    }
+
+    /** Отклонение заявки физлица (PKG_RETAILERS.REJECT_CLAIM). */
+    public OperationResult rejectClaim(String code, RejectClaimRequest req) {
+        var params = new MapSqlParameterSource()
+                .addValue("P_CODE", code)
+                .addValue("P_CLAIM_ID", req.claimId())
+                .addValue("P_REJ_DATE", toSqlDate(req.rejDate()))
+                .addValue("P_REASON_ID", req.reasonId())
+                .addValue("P_REASON", req.reason())
+                .addValue("P_IS_UPDATE", req.isUpdate());
+        return executeResult(rejectClaimCall, params);
+    }
+
+    /** Отклонение заявки юрлица/организации (PKG_RETAILERS.REJECT_LEGAL_CLAIM). */
+    public OperationResult rejectLegalClaim(String head, String code, RejectClaimRequest req) {
+        var params = new MapSqlParameterSource()
+                .addValue("P_HEAD", head)
+                .addValue("P_CODE", code)
+                .addValue("P_CLAIM_ID", req.claimId())
+                .addValue("P_REJ_DATE", toSqlDate(req.rejDate()))
+                .addValue("P_REASON_ID", req.reasonId())
+                .addValue("P_REASON", req.reason())
+                .addValue("P_IS_UPDATE", req.isUpdate());
+        return executeResult(rejectLegalClaimCall, params);
     }
 
     private MapSqlParameterSource buildLegalParams(Integer initialId, String head, String code,

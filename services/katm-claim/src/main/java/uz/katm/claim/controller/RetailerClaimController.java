@@ -87,4 +87,22 @@ public class RetailerClaimController {
         return ResponseEntity.ok(ApiResponse.ok(
                 retailerClaimService.registerOrgClaimExt(JwtUtils.head(jwt), JwtUtils.code(jwt), req)));
     }
+
+    @Operation(summary = "Отклонение заявки физ.лица")
+    @PostMapping("/reject")
+    public ResponseEntity<ApiResponse<OperationResult>> rejectClaim(
+            @AuthenticationPrincipal Jwt jwt,
+            @Valid @RequestBody RejectClaimRequest req) {
+        return ResponseEntity.ok(ApiResponse.ok(
+                retailerClaimService.rejectClaim(JwtUtils.head(jwt), JwtUtils.code(jwt), req)));
+    }
+
+    @Operation(summary = "Отклонение заявки юр.лица / организации")
+    @PostMapping("/legal/reject")
+    public ResponseEntity<ApiResponse<OperationResult>> rejectLegalClaim(
+            @AuthenticationPrincipal Jwt jwt,
+            @Valid @RequestBody RejectClaimRequest req) {
+        return ResponseEntity.ok(ApiResponse.ok(
+                retailerClaimService.rejectLegalClaim(JwtUtils.head(jwt), JwtUtils.code(jwt), req)));
+    }
 }
