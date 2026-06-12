@@ -36,6 +36,12 @@ s3:
   bucket-name: katm-files
   region: us-east-1
 
+katm:
+  fcbk:
+    url: ${FCBK_FICO_URL:}
+    username: ${FCBK_FICO_USERNAME:}
+    password: ${FCBK_FICO_PASSWORD:}
+
 management:
   endpoints:
     web:
