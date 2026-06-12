@@ -42,10 +42,67 @@ katm:
     connect-timeout: 10000
     read-timeout: 30000
     citizen-endpoint: ${MIP_CITIZEN_ENDPOINT:}
+    citizens-batch-endpoint: ${MIP_CITIZENS_BATCH_ENDPOINT:}
     doc-endpoint: ${MIP_DOC_ENDPOINT:}
     tax-endpoint: ${MIP_TAX_ENDPOINT:}
+    tax-by-tin-endpoint: ${MIP_TAX_BY_TIN_ENDPOINT:}
     tin-endpoint: ${MIP_TIN_ENDPOINT:}
+    tin-old-endpoint: ${MIP_TIN_OLD_ENDPOINT:}
+    full-tin-endpoint: ${MIP_FULL_TIN_ENDPOINT:}
+    tax-objects-endpoint: ${MIP_TAX_OBJECTS_ENDPOINT:}
+    pay-insur-endpoint: ${MIP_PAY_INSUR_ENDPOINT:}
     debt-endpoint: ${MIP_DEBT_ENDPOINT:}
+    # Адресные справочники (фаза 2)
+    region-endpoint: ${MIP_REGION_ENDPOINT:}
+    district-endpoint: ${MIP_DISTRICT_ENDPOINT:}
+    place-endpoint: ${MIP_PLACE_ENDPOINT:}
+    street-endpoint: ${MIP_STREET_ENDPOINT:}
+    # Юрлица (фаза 3)
+    legal-endpoint: ${MIP_LEGAL_ENDPOINT:}
+    legal-br-endpoint: ${MIP_LEGAL_BR_ENDPOINT:}
+    # Пенсии / ИНПС (фаза 4)
+    inps-endpoint: ${MIP_INPS_ENDPOINT:}
+    pension-assign-endpoint: ${MIP_PENSION_ASSIGN_ENDPOINT:}
+    pension-size-endpoint: ${MIP_PENSION_SIZE_ENDPOINT:}
+    pension-req-endpoint: ${MIP_PENSION_REQ_ENDPOINT:}
+    # Долги МИБ / водоконтроль (фаза 5) — креды через конфиг
+    debtor-endpoint: ${MIP_DEBTOR_ENDPOINT:}
+    debtor:
+      username: ${MIP_DEBTOR_USERNAME:}
+      password: ${MIP_DEBTOR_PASSWORD:}
+    water-endpoint: ${MIP_WATER_ENDPOINT:}
+    water:
+      username: ${MIP_WATER_USERNAME:}
+      password: ${MIP_WATER_PASSWORD:}
+    # ГЦП / MIP2 REST (фаза 6) — использует OAuth-токен ПЦД (фаза 7)
+    gcp:
+      person-doc-url: ${MIP_GCP_PERSON_DOC_URL:}
+    # PCD / МИБ (фаза 7): сквозной REST-доступ через OAuth2 (grant_type=password)
+    pcd:
+      oauth-url: ${MIP_PCD_OAUTH_URL:}
+      oauth-username: ${MIP_PCD_OAUTH_USERNAME:}
+      oauth-password: ${MIP_PCD_OAUTH_PASSWORD:}
+      client-username: ${MIP_PCD_CLIENT_USERNAME:}
+      client-password: ${MIP_PCD_CLIENT_PASSWORD:}
+  http:
+    ssl-verify: ${KATM_HTTP_SSL_VERIFY:true}
+
+# Resilience4j: ретраи и circuit breaker для нестабильных госсервисов
+resilience4j:
+  retry:
+    instances:
+      pcd:
+        max-attempts: 3
+        wait-duration: 2s
+        retry-exceptions:
+          - uz.katm.mip.exception.MipTransientException
+  circuitbreaker:
+    instances:
+      pcd:
+        sliding-window-size: 20
+        failure-rate-threshold: 50
+        wait-duration-in-open-state: 30s
+        permitted-number-of-calls-in-half-open-state: 5
 
 management:
   endpoints:

@@ -45,4 +45,38 @@ public class TaxController {
     public ResponseEntity<?> getDeptTax(@NotBlank @PathVariable String tin) {
         return ResponseEntity.ok(taxMipService.getDeptTaxInfo(tin));
     }
+
+    @Operation(summary = "Долги по налогам, признак url=49 (GetDeptTaxInfo)")
+    @GetMapping("/debt-49/{tin}")
+    public ResponseEntity<?> getDebtTax49(@NotBlank @PathVariable String tin) {
+        return ResponseEntity.ok(taxMipService.getDebtTaxInfo(tin));
+    }
+
+    @Operation(summary = "ИНН по паспорту, старый сервис (GetTinbyPasNum)")
+    @GetMapping("/tin-by-passport-old")
+    public ResponseEntity<?> getTinByPassportOld(
+            @NotBlank @RequestParam String series,
+            @NotBlank @RequestParam String number) {
+        return ResponseEntity.ok(taxMipService.getTinByPassNum(series, number));
+    }
+
+    @Operation(summary = "Полный ИНН по паспорту (GetFullTinByPassport)")
+    @GetMapping("/full-tin-by-passport")
+    public ResponseEntity<?> getFullTinByPassport(
+            @NotBlank @RequestParam String series,
+            @NotBlank @RequestParam String number) {
+        return ResponseEntity.ok(taxMipService.getFullTinByPassNum(series, number));
+    }
+
+    @Operation(summary = "Налоговые объекты по ИНН (GetTaxInfoIndividual)")
+    @GetMapping("/objects/{tin}")
+    public ResponseEntity<?> getTaxObjects(@NotBlank @PathVariable String tin) {
+        return ResponseEntity.ok(taxMipService.getTaxObjects(tin));
+    }
+
+    @Operation(summary = "Уплата страховых налогов по ИНН (GetPayInsurTaxInfo)")
+    @GetMapping("/pay-insur/{tin}")
+    public ResponseEntity<?> getPayInsurTax(@NotBlank @PathVariable String tin) {
+        return ResponseEntity.ok(taxMipService.getPayInsurTaxInfo(tin));
+    }
 }

@@ -1,10 +1,13 @@
 package uz.katm.mip.service;
 
-import jakarta.xml.ws.BindingProvider;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
+import uz.katm.mip.ws.MipPortConfigurer;
+import uz.katm.mip.ws.batch.GetCitizensInfoServicePortType;
+import uz.katm.mip.ws.batch.GetCitizensInfoServiceService;
 import uz.katm.mip.ws.citizen.GetCitizenInfoServiceNewPortType;
 import uz.katm.mip.ws.citizen.GetCitizenInfoServiceNewService;
 import uz.katm.mip.ws.citizen.PinppAddress;
@@ -21,19 +24,19 @@ import java.util.stream.Collectors;
 
 @Slf4j
 @Service
+@RequiredArgsConstructor
 public class CitizenMipService {
 
-    @Value("${katm.mip.connect-timeout:10000}")
-    private int connectTimeout;
-
-    @Value("${katm.mip.read-timeout:30000}")
-    private int readTimeout;
+    private final MipPortConfigurer portConfigurer;
 
     @Value("${katm.mip.citizen-endpoint:}")
     private String citizenEndpoint;
 
     @Value("${katm.mip.doc-endpoint:}")
     private String docEndpoint;
+
+    @Value("${katm.mip.citizens-batch-endpoint:}")
+    private String citizensBatchEndpoint;
 
     @Cacheable(value = "mip-citizen", key = "#pin")
     public PinppAddressResponse getCitizenInfo(String pin) {
@@ -44,7 +47,7 @@ public class CitizenMipService {
 
         GetCitizenInfoServiceNewPortType port =
                 new GetCitizenInfoServiceNewService().getPort(GetCitizenInfoServiceNewPortType.class);
-        configurePort(port, citizenEndpoint);
+        portConfigurer.configure(port, citizenEndpoint);
 
         return port.receive2(request);
     }
@@ -58,7 +61,7 @@ public class CitizenMipService {
 
         PersonDocInfoServicePortType port =
                 new PersonDocInfoServiceService().getPort(PersonDocInfoServicePortType.class);
-        configurePort(port, docEndpoint);
+        portConfigurer.configure(port, docEndpoint);
 
         return port.soapMsgReceive(request);
     }
@@ -69,18 +72,22 @@ public class CitizenMipService {
                 .collect(Collectors.toMap(pin -> pin, this::getCitizenInfo));
     }
 
-    private void configurePort(Object port, String endpointUrl) {
-        BindingProvider provider = (BindingProvider) port;
-        Map<String, Object> ctx = provider.getRequestContext();
+    /** Адрес ПИНФЛ через старый сервис GetCitizensInfoService (фаза 6, legacy). */
+    @Cacheable(value = "mip-citizen-legacy", key = "#pin + '-' + #guid")
+    public uz.katm.mip.ws.batch.PinppAddressResponse getPeAddress(String pin, String guid) {
+        log.info("SOAP GetCitizensInfoService: pin={}, guid={}", pin, guid);
 
-        if (endpointUrl != null && !endpointUrl.isBlank()) {
-            ctx.put(BindingProvider.ENDPOINT_ADDRESS_PROPERTY, endpointUrl);
-        }
-        ctx.put("com.sun.xml.ws.connect.timeout", connectTimeout);
-        ctx.put("com.sun.xml.ws.request.timeout", readTimeout);
-        ctx.put("com.sun.xml.internal.ws.connect.timeout", connectTimeout);
-        ctx.put("com.sun.xml.internal.ws.request.timeout", readTimeout);
+        uz.katm.mip.ws.batch.PinppAddress request = new uz.katm.mip.ws.batch.PinppAddress();
+        request.setPinpp(pin);
+        request.setGuid(guid);
+
+        GetCitizensInfoServicePortType port =
+                new GetCitizensInfoServiceService().getPort(GetCitizensInfoServicePortType.class);
+        portConfigurer.configure(port, citizensBatchEndpoint);
+
+        return port.rEQ(request);
     }
+
 
     private String buildDocRequestData(String pin) {
         String safe = pin.replace("&", "&amp;").replace("<", "&lt;").replace(">", "&gt;");
