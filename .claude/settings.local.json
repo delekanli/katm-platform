@@ -6,7 +6,8 @@
       "Bash(ls -la \"d:\\\\Project\\\\katm-platform\\\\services\\\\auth-service\\\\\" 2>/dev/null | head -20)",
       "Read(//d/Project/katm-platform/services/auth-service\" 2>/dev/**)",
       "PowerShell(Get-ChildItem -Path \"d:\\\\Project\\\\katm-platform\\\\services\\\\auth-service\" -Depth 2 | Where-Object { $_.PSIsContainer -eq $false } | ForEach-Object { $_.FullName })",
-      "PowerShell(Get-ChildItem -Path \"d:\\\\Project\\\\katm-platform\\\\services\\\\auth-service\\\\src\" -Recurse -File | ForEach-Object { $_.FullName })"
+      "PowerShell(Get-ChildItem -Path \"d:\\\\Project\\\\katm-platform\\\\services\\\\auth-service\\\\src\" -Recurse -File | ForEach-Object { $_.FullName })",
+      "mcp__amplicode__rebuild_project"
     ]
   }
 }

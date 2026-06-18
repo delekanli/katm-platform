@@ -1,19 +1,25 @@
 package uz.katm.egov.repository;
 
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.SqlOutParameter;
 import org.springframework.jdbc.core.SqlParameter;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.core.simple.SimpleJdbcCall;
 import org.springframework.stereotype.Repository;
 import uz.katm.egov.domain.dto.IndividualReportRequest;
 import uz.katm.egov.domain.dto.LegalReportRequest;
 import uz.katm.egov.domain.record.CreditReportResult;
+import uz.katm.egov.domain.record.EgovResendItem;
 import uz.katm.egov.domain.record.OperationResult;
 
 import javax.sql.DataSource;
+import java.sql.Clob;
 import java.sql.Date;
+import java.sql.SQLException;
 import java.sql.Types;
 import java.time.LocalDate;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -26,8 +32,12 @@ public class EgovReportRepository {
     private final SimpleJdbcCall individualReportCall;
     private final SimpleJdbcCall legalReportCall;
     private final SimpleJdbcCall updateStatusCall;
+    private final JdbcTemplate jdbcTemplate;
+    private final NamedParameterJdbcTemplate namedJdbcTemplate;
 
     public EgovReportRepository(DataSource dataSource) {
+        this.jdbcTemplate = new JdbcTemplate(dataSource);
+        this.namedJdbcTemplate = new NamedParameterJdbcTemplate(dataSource);
         this.individualReportCall = new SimpleJdbcCall(dataSource)
                 .withSchemaName("DATAS")
                 .withCatalogName("PKG_WEB_INDIVIDUAL")
@@ -146,6 +156,38 @@ public class EgovReportRepository {
                 .addValue("P_CLAIM_STATUS", status)
                 .addValue("P_CURRENT_NODE", node));
         return new OperationResult((String) out.get("P_RESULT"), (String) out.get("P_RET_MSG"));
+    }
+
+    /**
+     * Отчёты, не отправленные в E-GOV (web_claims.status=0 за последние сутки, IP шлюза E-GOV, до 100 шт).
+     * Перенос gov.uz.katm.repo.system.SystemToolRepositoryImpl.getReportsForEgovResend.
+     */
+    public List<EgovResendItem> getReportsForEgovResend() {
+        return jdbcTemplate.query(
+                "select wc.claim_id, dcr.credit_report " +
+                        "from datas.demands_cr dcr " +
+                        "join datas.web_claims wc on wc.id_demand = dcr.id_demand " +
+                        "where wc.status = 0 and trunc(wc.date_add) >= trunc(sysdate-1) " +
+                        "and wc.ip = '194.93.25.237' and rownum <= 100 order by date_add asc",
+                (rs, rowNum) -> new EgovResendItem(rs.getString("CLAIM_ID"), clobToString(rs.getClob("CREDIT_REPORT"))));
+    }
+
+    /** Помечает web-заявку отправленной в E-GOV (status=1). */
+    public int updateWebClaimStatusEgov(String claimId) {
+        return namedJdbcTemplate.update(
+                "UPDATE datas.web_claims SET status = 1 WHERE claim_id = :claimId",
+                new MapSqlParameterSource("claimId", claimId));
+    }
+
+    private static String clobToString(Clob clob) {
+        if (clob == null) {
+            return null;
+        }
+        try {
+            return clob.getSubString(1, (int) clob.length());
+        } catch (SQLException e) {
+            throw new IllegalStateException("Не удалось прочитать CLOB отчёта", e);
+        }
     }
 
     private static CreditReportResult toReportResult(Map<String, Object> out) {

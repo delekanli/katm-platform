@@ -15,4 +15,9 @@ public record CreditReportResponse(
     public boolean isPending() {
         return "05050".equals(code);
     }
+
+    /** Возвращает копию с заменённым телом отчёта (после конвертации формата). */
+    public CreditReportResponse withReport(byte[] newReport) {
+        return new CreditReportResponse(code, message, newReport, token);
+    }
 }

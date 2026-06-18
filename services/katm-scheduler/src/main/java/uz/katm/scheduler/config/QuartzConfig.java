@@ -9,7 +9,7 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.quartz.SpringBeanJobFactory;
-import uz.katm.scheduler.job.CreditSyncJob;
+import uz.katm.scheduler.job.EgovResendJob;
 import uz.katm.scheduler.job.SmsSendJob;
 
 @Configuration
@@ -20,25 +20,6 @@ public class QuartzConfig {
         AutowiringSpringBeanJobFactory factory = new AutowiringSpringBeanJobFactory();
         factory.setApplicationContext(applicationContext);
         return factory;
-    }
-
-    // ── CreditSyncJob: daily at 01:00 ────────────────────────────────────────
-
-    @Bean
-    public JobDetail creditSyncJobDetail() {
-        return JobBuilder.newJob(CreditSyncJob.class)
-                .withIdentity("creditSyncJob")
-                .storeDurably()
-                .build();
-    }
-
-    @Bean
-    public Trigger creditSyncTrigger(@Qualifier("creditSyncJobDetail") JobDetail creditSyncJobDetail) {
-        return TriggerBuilder.newTrigger()
-                .forJob(creditSyncJobDetail)
-                .withIdentity("creditSyncTrigger")
-                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 1 * * ?"))
-                .build();
     }
 
     // ── SmsSendJob: every 30 seconds ─────────────────────────────────────────
@@ -59,6 +40,25 @@ public class QuartzConfig {
                 .withSchedule(SimpleScheduleBuilder.simpleSchedule()
                         .withIntervalInSeconds(30)
                         .repeatForever())
+                .build();
+    }
+
+    // ── EgovResendJob: hourly ────────────────────────────────────────────────
+
+    @Bean
+    public JobDetail egovResendJobDetail() {
+        return JobBuilder.newJob(EgovResendJob.class)
+                .withIdentity("egovResendJob")
+                .storeDurably()
+                .build();
+    }
+
+    @Bean
+    public Trigger egovResendTrigger(@Qualifier("egovResendJobDetail") JobDetail egovResendJobDetail) {
+        return TriggerBuilder.newTrigger()
+                .forJob(egovResendJobDetail)
+                .withIdentity("egovResendTrigger")
+                .withSchedule(CronScheduleBuilder.cronSchedule("0 0 * * * ?"))
                 .build();
     }
 

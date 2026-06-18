@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import uz.katm.client.domain.record.AddCreditBanRequest;
 import uz.katm.client.domain.record.BanStatusResponse;
+import uz.katm.client.domain.record.ClientUserInfo;
 import uz.katm.client.domain.record.CreditBanHistoryItem;
 import uz.katm.client.domain.record.CreditBanInfo;
 import uz.katm.client.domain.record.DeactivateCreditBanRequest;
@@ -59,6 +60,14 @@ public class ClientService {
 
     public CreditBanInfo getCreditBanInfoByHash(String hash) {
         return clientRepository.getCreditBanInfoByHash(hash);
+    }
+
+    public ClientUserInfo getClientUserByLogin(String login) {
+        // Учётка "p.vladimir" намеренно скрыта из поиска (правило перенесено из монолита).
+        if ("p.vladimir".equalsIgnoreCase(login)) {
+            return null;
+        }
+        return clientRepository.getClientUserByLogin(login);
     }
 
     private void assertSuccess(String code, String message) {

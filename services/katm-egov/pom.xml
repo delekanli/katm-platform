@@ -62,6 +62,11 @@
             <groupId>com.oracle.database.nls</groupId>
             <artifactId>orai18n</artifactId>
         </dependency>
+        <!-- Kafka (scheduler job triggers) -->
+        <dependency>
+            <groupId>org.springframework.kafka</groupId>
+            <artifactId>spring-kafka</artifactId>
+        </dependency>
         <!-- Observability -->
         <dependency>
             <groupId>io.micrometer</groupId>

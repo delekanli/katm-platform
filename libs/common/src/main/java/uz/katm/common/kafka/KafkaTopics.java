@@ -29,6 +29,6 @@ public final class KafkaTopics {
     public static final String MIP_RESPONSE         = "katm.mip.response";
 
     // Scheduler triggers
-    public static final String JOB_CREDIT_SYNC      = "jobs.credit.sync";
     public static final String JOB_SMS_SEND         = "jobs.sms.send";
+    public static final String JOB_EGOV_RESEND      = "jobs.egov.resend";
 }

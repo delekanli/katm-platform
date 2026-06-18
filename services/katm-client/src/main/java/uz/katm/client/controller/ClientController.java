@@ -14,12 +14,15 @@ import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import uz.katm.client.domain.record.AddCreditBanRequest;
 import uz.katm.client.domain.record.BanStatusResponse;
+import uz.katm.client.domain.record.ClientUserInfo;
 import uz.katm.client.domain.record.CreditBanHistoryItem;
 import uz.katm.client.domain.record.CreditBanInfo;
 import uz.katm.client.domain.record.DeactivateCreditBanRequest;
+import uz.katm.client.domain.record.InpsReportResult;
 import uz.katm.client.domain.record.PassportDataRequest;
 import uz.katm.client.domain.record.ProcedureResult;
 import uz.katm.client.service.ClientService;
+import uz.katm.client.service.InpsService;
 import uz.katm.common.dto.ApiResponse;
 import uz.katm.common.security.JwtUtils;
 
@@ -33,6 +36,7 @@ import java.util.List;
 public class ClientController {
 
     private final ClientService clientService;
+    private final InpsService inpsService;
 
     @Operation(summary = "Сохранить паспортные данные из МИП")
     @PostMapping("/passport")
@@ -101,6 +105,35 @@ public class ClientController {
     @PreAuthorize("hasAnyRole('BANK', 'INSURANCE', 'ADMIN')")
     public ResponseEntity<ApiResponse<CreditBanInfo>> getCreditBanInfoByHash(@NotBlank @PathVariable String hash) {
         return ResponseEntity.ok(ApiResponse.ok(clientService.getCreditBanInfoByHash(hash)));
+    }
+
+    @Operation(summary = "Отчисления ИНПС для скоринга (Халк банк)")
+    @GetMapping("/inps/scoring")
+    @PreAuthorize("hasAnyRole('BANK', 'ADMIN')")
+    public ResponseEntity<ApiResponse<InpsReportResult>> getScoringInps(
+            @AuthenticationPrincipal Jwt jwt,
+            @NotBlank @RequestParam String claimId,
+            @NotBlank @RequestParam String reportId) {
+        return ResponseEntity.ok(ApiResponse.ok(
+                inpsService.getScoringInps(JwtUtils.head(jwt), JwtUtils.code(jwt), claimId, reportId)));
+    }
+
+    @Operation(summary = "Отчисления ИНПС для отчёта (Халк банк)")
+    @GetMapping("/inps")
+    @PreAuthorize("hasAnyRole('BANK', 'ADMIN')")
+    public ResponseEntity<ApiResponse<InpsReportResult>> getInps(
+            @AuthenticationPrincipal Jwt jwt,
+            @NotBlank @RequestParam String claimId,
+            @NotBlank @RequestParam String reportId) {
+        return ResponseEntity.ok(ApiResponse.ok(
+                inpsService.getInps(JwtUtils.head(jwt), JwtUtils.code(jwt), claimId, reportId)));
+    }
+
+    @Operation(summary = "Найти пользователя клиент-портала по логину")
+    @GetMapping("/users/{login}")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<ApiResponse<ClientUserInfo>> getClientUser(@NotBlank @PathVariable String login) {
+        return ResponseEntity.ok(ApiResponse.ok(clientService.getClientUserByLogin(login)));
     }
 
     private static String clientIp(HttpServletRequest request) {

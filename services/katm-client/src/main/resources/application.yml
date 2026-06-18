@@ -86,6 +86,22 @@ katm:
     token-uri: ${KEYCLOAK_URL:http://localhost:8180}/realms/katm/protocol/openid-connect/token
     client-id: ${SERVICE_CLIENT_ID:katm-service}
     client-secret: ${SERVICE_CLIENT_SECRET:changeme}
+  # Отчисления ИНПС через Халк банк (перенос настроек INPS_SERVICE_CHECK / INPS_SERVICE / INPS_SERVICE_1).
+  # В монолите хранились в БД (ExternalServiceSettings); в новой платформе — конфиг + env (BasicAuth).
+  client:
+    inps:
+      check:
+        url: ${INPS_CHECK_URL:}
+        username: ${INPS_CHECK_USER:}
+        password: ${INPS_CHECK_PASSWORD:}
+      scor:
+        url: ${INPS_SCOR_URL:}
+        username: ${INPS_SCOR_USER:}
+        password: ${INPS_SCOR_PASSWORD:}
+      inps:
+        url: ${INPS_URL:}
+        username: ${INPS_USER:}
+        password: ${INPS_PASSWORD:}
 
 springdoc:
   api-docs:

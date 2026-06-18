@@ -41,6 +41,36 @@ katm:
     url: ${FCBK_FICO_URL:}
     username: ${FCBK_FICO_USERNAME:}
     password: ${FCBK_FICO_PASSWORD:}
+  # Мониторинговый сервис UzCard (JSON-RPC card.counts.get). Перенос настроек UZCARD_SERVICE
+  # (в монолите — DB ExternalServiceSettings; в новой платформе — конфиг + env, BasicAuth + Host).
+  report:
+    uzcard:
+      url: ${UZCARD_URL:}
+      host: ${UZCARD_HOST:monitoring.uzcard.uz}
+      username: ${UZCARD_USER:}
+      password: ${UZCARD_PASSWORD:}
+    # HUMO (Bearer-токен) — перенос HUMO_SERVICE
+    humo:
+      cards-url: ${HUMO_CARDS_URL:}
+      scoring-url: ${HUMO_SCORING_URL:}
+      token: ${HUMO_TOKEN:}
+    # Beeline (OAuth) — перенос BEELINE_AUTH/SCOR/GET_PHONE/VERIF_SERVICE
+    beeline:
+      auth:
+        url: ${BEELINE_AUTH_URL:}
+        username: ${BEELINE_AUTH_USER:}
+        password: ${BEELINE_AUTH_PASSWORD:}
+        client-id: ${BEELINE_CLIENT_ID:}
+        client-secret: ${BEELINE_CLIENT_SECRET:}
+      scor:
+        url: ${BEELINE_SCOR_URL:}
+        url-check: ${BEELINE_SCOR_URL_CHECK:}
+      phones:
+        url: ${BEELINE_PHONES_URL:}
+        url-check: ${BEELINE_PHONES_URL_CHECK:}
+      verif:
+        url: ${BEELINE_VERIF_URL:}
+        url-check: ${BEELINE_VERIF_URL_CHECK:}
 
 management:
   endpoints:

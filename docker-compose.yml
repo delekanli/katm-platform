@@ -277,9 +277,14 @@ services:
       DB_USER: ${DB_USER}
       DB_PASSWORD: ${DB_PASSWORD}
       UCIN_SERVICE_URL: http://katm-ucin:8094
+      KAFKA_BOOTSTRAP_SERVERS: kafka:29092
+      EGOV_EPIGU_URL: ${EGOV_EPIGU_URL:-}
+      EGOV_EPIGU_USERNAME: ${EGOV_EPIGU_USERNAME:-}
+      EGOV_EPIGU_PASSWORD: ${EGOV_EPIGU_PASSWORD:-}
       ZIPKIN_URL: http://zipkin:9411
     depends_on:
       - keycloak
+      - kafka
     networks:
       - katm-network
 

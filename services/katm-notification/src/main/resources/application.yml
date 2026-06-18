@@ -49,6 +49,12 @@ katm:
     username: ${SMS_USERNAME}
     api-key: ${SMS_API_KEY}
     sender: ${SMS_SENDER:KATM.GOV.UZ}
+  # Ретрансляция уведомлений (freeze/оформление кредита) во внешний UCIN NOTIFICATION SERVICE.
+  # Перенос настроек UCIN_NOTIFICATION_FREEZE_SERVICE (в монолите оба типа уходили на этот сервис).
+  ucin:
+    url: ${UCIN_NOTIFICATION_URL:}
+    username: ${UCIN_NOTIFICATION_USER:}
+    password: ${UCIN_NOTIFICATION_PASSWORD:}
 
 management:
   endpoints:

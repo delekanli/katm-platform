@@ -16,6 +16,7 @@ public class RetailerClaimService {
 
     private final RetailerClaimRepository repository;
     private final MipClient mipClient;
+    private final MrzReaderService mrzReaderService;
 
     public OperationResult registerClaim(String head, String code, ClaimRegistrationRequest req) {
         log.info("registerClaim: code={}, claimId={}", code, req.claimId());
@@ -35,9 +36,13 @@ public class RetailerClaimService {
 
     public OperationResult registerClaimExt(String head, String code, ClaimRegistrationExtRequest req) {
         log.info("registerClaimExt: code={}, claimId={}", code, req.claimId());
+        // Личность субъекта извлекается из MRZ паспорта (как в монолите getDataFromMrz) и имеет приоритет
+        // над явными полями запроса. Не выводимые из MRZ поля (отчество, дата выдачи) берутся из запроса.
+        MrzData mrz = mrzReaderService.parse(req.mrz(), req.docType());
+
         ClaimRegistrationRequest initReq = new ClaimRegistrationRequest(
                 null,
-                req.docSeries(), req.docNumber(), req.docType(),
+                mrz.docSeries(), mrz.docNumber(), req.docType(),
                 req.claimId(), req.claimDate(),
                 req.agreementId(), req.agreementDate(),
                 req.region(), req.localRegion(), req.address(), req.inn()
@@ -47,8 +52,8 @@ public class RetailerClaimService {
 
         return repository.addClaim(
                 init.initialId(), code, req.claimId(),
-                req.lastName(), req.firstName(), req.middleName(),
-                req.male(), req.birthDate(), req.issueDocDate(), req.expiredDocDate(),
+                mrz.lastName(), mrz.firstName(), req.middleName(),
+                mrz.male(), mrz.birthDate(), req.issueDocDate(), mrz.expireDate(),
                 req.inn(), 0, "MANUAL", "EXT", req.docType()
         );
     }

@@ -87,6 +87,12 @@
             <groupId>org.springdoc</groupId>
             <artifactId>springdoc-openapi-starter-webmvc-ui</artifactId>
         </dependency>
+        <!-- org.json: конвертация XML<->JSON отчётов (перенос ConverterUtils.jsonFromXml / XML.toString монолита) -->
+        <dependency>
+            <groupId>org.json</groupId>
+            <artifactId>json</artifactId>
+            <version>20240303</version>
+        </dependency>
     </dependencies>
 
     <build>

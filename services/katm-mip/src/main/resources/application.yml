@@ -84,6 +84,71 @@ katm:
       oauth-password: ${MIP_PCD_OAUTH_PASSWORD:}
       client-username: ${MIP_PCD_CLIENT_USERNAME:}
       client-password: ${MIP_PCD_CLIENT_PASSWORD:}
+    # Отчёты ГНК через ПЦД (перенос настроек TAX_SERVICE.* и GNK_SERVICE монолита)
+    gnk:
+      salary-url: ${MIP_GNK_SALARY_URL:}
+      dividend-url: ${MIP_GNK_DIVIDEND_URL:}
+      rent-url: ${MIP_GNK_RENT_URL:}
+      account-report-1-url: ${MIP_GNK_ACCOUNT_REPORT_1_URL:}
+      account-report-2-url: ${MIP_GNK_ACCOUNT_REPORT_2_URL:}
+      ip-info-url: ${MIP_GNK_IP_INFO_URL:}
+      info-url: ${MIP_GNK_INFO_URL:}
+      pe-info-url: ${MIP_GNK_PE_INFO_URL:}
+      juridical-info-url: ${MIP_GNK_JURIDICAL_INFO_URL:}
+      pe-subject-url: ${MIP_GNK_PE_SUBJECT_URL:}
+      tax-report-url: ${MIP_GNK_TAX_REPORT_URL:}
+      staff-count-url: ${MIP_GNK_STAFF_COUNT_URL:}
+      nds-url: ${MIP_GNK_NDS_URL:}
+      self-employment-url: ${MIP_GNK_SELF_EMPLOYMENT_URL:}
+    # MIP2 через ПЦД: ЗАГС/МинТруд/алименты/МинЗдрав/авто/судимость
+    # (перенос JUSTICE_*_SERVICE, LABOUR/ALIMENT/NARKO/PSYCHO/VEHICLE_INFO/CONVICTION_SERVICE)
+    mip2:
+      justice-birth-url: ${MIP_JUSTICE_BIRTH_URL:}
+      justice-marriage-url: ${MIP_JUSTICE_MARRIAGE_URL:}
+      justice-divorce-url: ${MIP_JUSTICE_DIVORCE_URL:}
+      justice-death-url: ${MIP_JUSTICE_DEATH_URL:}
+      labour-url: ${MIP_LABOUR_URL:}
+      aliment-url: ${MIP_ALIMENT_URL:}
+      narko-url: ${MIP_NARKO_URL:}
+      psycho-url: ${MIP_PSYCHO_URL:}
+      vehicle-url: ${MIP_VEHICLE_URL:}
+      conviction-url: ${MIP_CONVICTION_URL:}
+      conviction-check-url: ${MIP_CONVICTION_CHECK_URL:}
+    # МИБ (Бюро принудительного исполнения) через ПЦД
+    # (перенос MIB_SERVICE_*_BAN / _DOC_* / SERVICE_LIST_*_INSOLVENT)
+    mib:
+      debt-ban-url: ${MIP_MIB_DEBT_BAN_URL:}
+      avto-ban-url: ${MIP_MIB_AVTO_BAN_URL:}
+      realty-ban-url: ${MIP_MIB_REALTY_BAN_URL:}
+      doc-avto-url: ${MIP_MIB_DOC_AVTO_URL:}
+      doc-creditor-url: ${MIP_MIB_DOC_CREDITOR_URL:}
+      doc-debtor-url: ${MIP_MIB_DOC_DEBTOR_URL:}
+      doc-action-url: ${MIP_MIB_DOC_ACTION_URL:}
+      list-pe-insolvent-url: ${MIP_MIB_LIST_PE_INSOLVENT_URL:}
+      list-le-insolvent-url: ${MIP_MIB_LIST_LE_INSOLVENT_URL:}
+    # Коммунальные задолженности через ПЦД (перенос ELECTRO/GAS/CLEAN_CITY/TOSHISSIQQUVVAT_SERVICE)
+    utility:
+      electro-url: ${MIP_UTILITY_ELECTRO_URL:}
+      gas-url: ${MIP_UTILITY_GAS_URL:}
+      ecology-url: ${MIP_UTILITY_ECOLOGY_URL:}
+      toshissiqquvvat-url: ${MIP_UTILITY_TOSHISSIQQUVVAT_URL:}
+    # Кадастр — собственный HTTP с BasicAuth (перенос CADASTRE_SERVICE)
+    cadastre:
+      url: ${MIP_CADASTRE_URL:}
+      username: ${MIP_CADASTRE_USERNAME:}
+      password: ${MIP_CADASTRE_PASSWORD:}
+    # Прочее через ПЦД: Мой дом, E-Invoice ККМ физ/юр, кэшбек (MY_HOME_SERVICE, TAX_SERVICE.*)
+    misc:
+      my-home-url: ${MIP_MY_HOME_URL:}
+      einvoice-pe-url: ${MIP_EINVOICE_PE_URL:}
+      einvoice-le-url: ${MIP_EINVOICE_LE_URL:}
+      cashback-url: ${MIP_CASHBACK_URL:}
+    # UZ-ASBO — собственный HTTP с BasicAuth (перенос UZ_ASBO_SERVICE)
+    uzasbo:
+      url: ${MIP_UZASBO_URL:}
+      url-check: ${MIP_UZASBO_URL_CHECK:}
+      username: ${MIP_UZASBO_USERNAME:}
+      password: ${MIP_UZASBO_PASSWORD:}
   http:
     ssl-verify: ${KATM_HTTP_SSL_VERIFY:true}
 

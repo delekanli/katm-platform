@@ -14,5 +14,7 @@ public record CreditReportRequest(
         String loanSubject,
         String personalCode,
         String inn,
-        String ownerId
+        String ownerId,
+        // Формат выдачи: 0=XML, 1=JSON, 2=HTML (Constants.REPORT_*). Отсутствует в JSON → 0 (XML).
+        int reportFormat
 ) {}
